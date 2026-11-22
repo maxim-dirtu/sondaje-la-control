@@ -1,1 +1,7 @@
 election_id,scope,entity_id,votes,source_url,source_type,retrieved_at,verified,notes
+pres-2025-r2,domestic,nicusor-dan,5445052,https://prezenta.roaep.ro/prezidentiale18052025/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+pres-2025-r2,domestic,george-simion,4426247,https://prezenta.roaep.ro/prezidentiale18052025/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+pres-2025-r2,diaspora,george-simion,912806,https://prezenta.roaep.ro/prezidentiale18052025/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+pres-2025-r2,diaspora,nicusor-dan,723590,https://prezenta.roaep.ro/prezidentiale18052025/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+pres-2025-r2,total,nicusor-dan,6168642,https://prezenta.roaep.ro/prezidentiale18052025/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+pres-2025-r2,total,george-simion,5339053,https://prezenta.roaep.ro/prezidentiale18052025/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
