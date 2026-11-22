@@ -1,11 +1,11 @@
 ---
 id: T-001
 title: Define data model and CSV schemas
-status: todo
+status: in-progress
 phase: 0
 depends_on: []
-owner: null
-branch: null
+owner: agent-t001
+branch: task/T-001-data-model
 methodology: [M-1, M-5.3]
 created: 2026-11-22
 updated: 2026-11-22
