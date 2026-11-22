@@ -1,1 +1,7 @@
 election_id,poll_entity_id,relation,result_entity_id,effective_date,source_url,source_type,retrieved_at,verified,notes
+pres-2025-r1,calin-georgescu,excluded,,2025-03-11,https://prezidentiale2025.bec.ro/wp-content/uploads/2025/03/PV_479C.pdf,official,2026-11-22,true,BEC decision 18D/09.03.2025 rejected the candidacy; final through Constitutional Court decision no. 7 of 11.03.2025 (per PV 479C).
+pres-2025-r1,diana-iovanovici-sosoaca,excluded,,2025-03-17,https://prezidentiale2025.bec.ro/wp-content/uploads/2025/03/PV_479C.pdf,official,2026-11-22,true,BEC decision 34D/15.03.2025 rejected the candidacy; final after the Constitutional Court ruling of 17.03.2025 (per PV 479C).
+pres-2025-r1,anamaria-gavrila,withdrawn,,2025-03-19,https://prezidentiale2025.bec.ro/wp-content/uploads/2025/03/PV_479C.pdf,official,2026-11-22,true,Candidacy registered by BEC decision 37D/17.03.2025; renunciation filed on 19.03.2025 (per PV 479C).
+pres-2025-r1,george-becali,not_registered,,,https://prezidentiale2025.bec.ro/wp-content/uploads/2025/03/PV_479C.pdf,official,2026-11-22,true,Not among the 30 candidacies filed with BEC listed in PV 479C.
+pres-2025-r1,ilie-bolojan,not_registered,,,https://prezidentiale2025.bec.ro/wp-content/uploads/2025/03/PV_479C.pdf,official,2026-11-22,true,Not among the 30 candidacies filed with BEC listed in PV 479C.
+pres-2025-r1,ana-birchall,not_registered,,,https://prezidentiale2025.bec.ro/wp-content/uploads/2025/03/PV_479C.pdf,official,2026-11-22,true,Not among the 30 candidacies filed with BEC listed in PV 479C.
