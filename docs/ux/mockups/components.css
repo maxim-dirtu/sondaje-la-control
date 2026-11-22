@@ -88,6 +88,7 @@ small, .text-small { font-size: var(--fs-sm); }
   font-weight: var(--fw-regular);
   max-width: 46rem;
   margin: var(--space-4) 0 var(--space-2);
+  font-variant-numeric: lining-nums tabular-nums;
 }
 .finding strong { font-weight: var(--fw-bold); }
 .finding--page { font-size: 1.5rem; }
