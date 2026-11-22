@@ -1,11 +1,11 @@
 ---
 id: T-007
 title: Schema amendments from Phase 0 follow-ups
-status: todo
+status: in-progress
 phase: 0
 depends_on: [T-003, T-004, T-005]
-owner: null
-branch: null
+owner: agent-t007
+branch: task/T-007-schema-amendments
 methodology: [M-1.5]
 created: 2026-11-22
 updated: 2026-11-22
