@@ -1,0 +1,128 @@
+@charset "UTF-8";
+/*
+ * Design tokens: T-031 UX concept (ADR-0009).
+ * Light mode is the primary theme. Dark mode is an optional mapping of the
+ * same token names, documented in ../visual-language.md (not used in mock-ups).
+ *
+ * Rules:
+ * - Components use tokens only, never raw hex values.
+ * - Colour is reserved for data. UI chrome stays neutral (ink + greys).
+ * - Text tokens meet WCAG AA (>= 4.5:1) on both --color-bg and --color-surface.
+ */
+
+:root {
+  color-scheme: light;
+
+  /* ---------- Neutral UI ---------- */
+  --color-bg: #f4f5f7;              /* page background, cool off-white */
+  --color-surface: #ffffff;         /* cards, tables, charts */
+  --color-surface-sunken: #eef0f3;  /* table header, disclosure body, wells */
+  --color-border: #dde1e6;          /* hairlines, card outline */
+  --color-border-strong: #b8bfc8;   /* axis lines, input outlines */
+  --color-gridline: #e9ecef;        /* chart gridlines */
+
+  --color-text: #1a1f29;            /* 16.5:1 on surface */
+  --color-text-muted: #4e5866;      /* 7.2:1 on surface: secondary text */
+  --color-text-subtle: #5f6875;     /* 5.2:1 on bg: captions, axis labels */
+  --color-link: var(--color-text);  /* links are ink + underline, not colour */
+  --color-focus: #2563eb;           /* focus ring only */
+
+  /* ---------- Data: direction of deviation (diverging, colour-blind safe) ---------- */
+  /* Left = underestimates (orange), right = overestimates (blue). Always paired
+     with a sign (+/−), a position (left/right of zero), and a word. */
+  --color-over: #2e6db4;            /* bar fill, 5.3:1 */
+  --color-over-strong: #1f5594;     /* text on light bg */
+  --color-over-soft: #dce8f5;       /* tint, area fill */
+  --color-under: #c8651b;           /* bar fill, 3.9:1 (graphic object, >= 3:1) */
+  --color-under-strong: #9a4a0e;    /* text on light bg */
+  --color-under-soft: #f8e3d2;      /* tint, area fill */
+
+  /* Heatmap ramp: 5 steps per side + neutral middle. Steps 1-3 take ink text,
+     steps 4-5 take white text (all >= 4.5:1). */
+  --heat-over-1: #eaf1f9;
+  --heat-over-2: #bcd3ec;
+  --heat-over-3: #7fa9d8;
+  --heat-over-4: #3e78bd;
+  --heat-over-5: #1f5594;
+  --heat-zero: #f7f7f8;
+  --heat-under-1: #fbede2;
+  --heat-under-2: #f2c9a6;
+  --heat-under-3: #e59b5e;
+  --heat-under-4: #b85a14;
+  --heat-under-5: #93450b;
+
+  /* ---------- Data: references and states ---------- */
+  --color-result: #1a1f29;          /* the official result (the "zero") */
+  --color-market: #8a939f;          /* market / other houses (3.1:1 on surface) */
+  --color-market-soft: #e3e6ea;
+  --color-house: #1a1f29;           /* the house in focus: ink, never a brand colour */
+  --color-window: #f1ede4;          /* final 21-day accuracy window (M-1.3) */
+  --color-hatch: #c5cbd3;           /* "insufficient data" hatching */
+
+  /* ---------- Party identity (placeholder palette for FICTITIOUS parties) ---------- */
+  /* Real party colours are set per party in data; they are used ONLY as a
+     small chip next to the party name, never to encode values. Hues here are
+     chosen away from the over/under blue-orange pair. */
+  --party-a: #7a3e78;
+  --party-b: #5f6f1f;
+  --party-c: #a83a5f;
+  --party-d: #4b5563;
+  --party-e: #1f7a5c;
+
+  /* ---------- Notices ---------- */
+  --color-notice-bg: #fff4cc;       /* fictitious-data banner, "preliminary" callout */
+  --color-notice-text: #6b5300;     /* 6.7:1 on notice bg */
+  --color-notice-border: #e8d27a;
+
+  /* ---------- Typography ---------- */
+  /* No web fonts are loaded (no CDN). Inter is used if installed locally. */
+  --font-sans: "Inter", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  /* Serif is used ONLY for the headline finding: it marks "this is the answer". */
+  --font-serif: "Source Serif 4", "Source Serif Pro", Charter, "Sitka Text", Cambria, Georgia, serif;
+  --font-mono: "JetBrains Mono", "Cascadia Mono", Consolas, "SFMono-Regular", monospace;
+
+  --fs-xs: 0.75rem;     /* 12px: eyebrow, axis ticks */
+  --fs-sm: 0.875rem;    /* 14px: captions, table */
+  --fs-base: 1rem;      /* 16px: body */
+  --fs-md: 1.125rem;    /* 18px: lead text */
+  --fs-lg: 1.375rem;    /* 22px: card headline finding */
+  --fs-xl: 1.75rem;     /* 28px: page title */
+  --fs-2xl: 2.25rem;    /* 36px: big numbers, grade letter */
+
+  --lh-tight: 1.2;
+  --lh-snug: 1.35;
+  --lh-body: 1.55;
+
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  --tracking-eyebrow: 0.08em;
+
+  /* ---------- Spacing (4px base) ---------- */
+  --space-1: 0.25rem;   /* 4 */
+  --space-2: 0.5rem;    /* 8 */
+  --space-3: 0.75rem;   /* 12 */
+  --space-4: 1rem;      /* 16 */
+  --space-5: 1.5rem;    /* 24 */
+  --space-6: 2rem;      /* 32 */
+  --space-7: 3rem;      /* 48 */
+  --space-8: 4rem;      /* 64 */
+
+  /* ---------- Radius ---------- */
+  --radius-sm: 6px;     /* chips, badges, heat cells */
+  --radius-md: 10px;    /* callouts, inputs */
+  --radius-lg: 14px;    /* cards */
+  --radius-pill: 999px;
+
+  /* ---------- Elevation ---------- */
+  --shadow-0: none;
+  --shadow-1: 0 1px 2px rgba(16, 24, 40, 0.05), 0 1px 3px rgba(16, 24, 40, 0.06); /* cards */
+  --shadow-2: 0 4px 14px rgba(16, 24, 40, 0.08);  /* hovered card, popover */
+  --shadow-3: 0 12px 32px rgba(16, 24, 40, 0.12); /* modal (rare) */
+
+  /* ---------- Layout ---------- */
+  --container-max: 72rem;   /* 1152px */
+  --measure: 40rem;         /* max line length for prose */
+}

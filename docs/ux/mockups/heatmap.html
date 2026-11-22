@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Harta abaterilor · machetă T-031</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="components.css">
+<style>
+  .heat-layout { display: grid; grid-template-columns: minmax(0, 1fr) 20rem; gap: var(--space-5); align-items: start; }
+  @media (max-width: 60rem) { .heat-layout { grid-template-columns: minmax(0, 1fr); } }
+  .heatmap .row-low th { color: var(--color-text-muted); }
+  .heat.is-selected { outline: 2px solid var(--color-text); outline-offset: 1px; }
+</style>
+</head>
+<body>
+<div class="fiction-banner" role="note">Date fictive — doar pentru ilustrare. Institutele, partidele și valorile nu sunt reale.</div>
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="index.html"><svg class="brand__mark" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="4" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="13" cy="8" r="2" fill="currentColor"/></svg>Sondaje la control</a>
+    <nav class="nav" aria-label="Principal">
+      <a href="leaderboard.html">Clasament</a>
+      <a href="pollster-card.html">Institute</a>
+      <a href="heatmap.html" aria-current="page">Harta abaterilor</a>
+      <a href="target-plot.html">Alegeri</a>
+      <a href="timeline.html">Campanii</a>
+      <a href="methodology.html">Cum măsurăm</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <p class="breadcrumb"><a href="index.html">Acasă</a> / Harta abaterilor</p>
+
+  <div class="page-head">
+    <p class="eyebrow">Harta abaterilor · institute × partide</p>
+    <h1>Cine se abate, la ce partid și în ce direcție</h1>
+    <p class="question">Care institut dă sistematic mai mult sau mai puțin unui anumit partid decât celelalte institute?</p>
+    <p class="finding finding--page"><strong>Trei abateri ies clar în evidență:</strong> Institutul Alfa supraestimează Partidul A (+3,1 p.p.), iar Beta Research supraestimează Partidul B (+2,4 p.p.) și subestimează Partidul C (−2,9 p.p.). Celelalte diferențe sunt prea mici pentru a fi sigure.</p>
+    <p class="finding-meta">Media celor 3 alegeri analizate, sondajele finale (ultimele 21 de zile), comparate cu media institutelor.</p>
+  </div>
+
+  <div class="heat-layout">
+    <section class="card" aria-labelledby="hm-title">
+      <div class="card__head" style="align-items:center; flex-wrap:wrap">
+        <h2 class="card__title" id="hm-title">Abaterea față de media institutelor (puncte procentuale)</h2>
+        <div class="segmented" role="group" aria-label="Perioada">
+          <button type="button" aria-pressed="true">Sondajele finale</button>
+          <button type="button" aria-pressed="false">Toată campania</button>
+        </div>
+      </div>
+
+      <div class="table-wrap" style="margin-top:var(--space-4)">
+        <table class="heatmap">
+          <caption class="visually-hidden">Abaterea fiecărui institut față de media institutelor, pe partide. Valorile cu „≈” nu se pot deosebi de zero.</caption>
+          <thead>
+            <tr>
+              <td></td>
+              <th scope="col"><span class="party party--a"><span class="party__swatch"></span>Partidul A</span></th>
+              <th scope="col"><span class="party party--b"><span class="party__swatch"></span>Partidul B</span></th>
+              <th scope="col"><span class="party party--c"><span class="party__swatch"></span>Partidul C</span></th>
+              <th scope="col"><span class="party party--d"><span class="party__swatch"></span>Partidul D</span></th>
+              <th scope="col"><span class="party party--e"><span class="party__swatch"></span>Partidul E</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row"><a href="pollster-card.html">Institutul Alfa</a><br><small class="subtle">3 alegeri</small></th>
+              <td class="heat h-o4 is-selected" tabindex="0">+3,1<small>+1,2 … +4,8</small></td>
+              <td class="heat is-ns" tabindex="0">≈ −1,4<small>−3,2 … +0,4</small></td>
+              <td class="heat is-ns" tabindex="0">≈ −0,6<small>−2,0 … +0,9</small></td>
+              <td class="heat is-ns" tabindex="0">≈ −0,8<small>−2,1 … +0,6</small></td>
+              <td class="heat is-ns" tabindex="0">≈ −0,3<small>−1,5 … +0,9</small></td>
+            </tr>
+            <tr>
+              <th scope="row">Beta Research<br><small class="subtle">3 alegeri</small></th>
+              <td class="heat is-ns" tabindex="0">≈ −0,9<small>−2,6 … +0,8</small></td>
+              <td class="heat h-o3" tabindex="0">+2,4<small>+0,7 … +4,1</small></td>
+              <td class="heat h-u3" tabindex="0">−2,9<small>−4,6 … −1,1</small></td>
+              <td class="heat is-ns" tabindex="0">≈ +0,7<small>−0,6 … +2,0</small></td>
+              <td class="heat is-ns" tabindex="0">≈ +0,7<small>−0,5 … +1,9</small></td>
+            </tr>
+            <tr class="row-low">
+              <th scope="row">Gamma Data<br><small class="subtle">2 alegeri · certitudine scăzută</small></th>
+              <td class="heat is-ns is-low" tabindex="0">≈ −1,6<small>−4,9 … +1,7</small></td>
+              <td class="heat is-ns is-low" tabindex="0">≈ −0,5<small>−3,4 … +2,4</small></td>
+              <td class="heat is-ns is-low" tabindex="0">≈ +2,2<small>−1,0 … +5,4</small></td>
+              <td class="heat is-ns is-low" tabindex="0">≈ +0,4<small>−2,0 … +2,8</small></td>
+              <td class="heat is-ns is-low" tabindex="0">≈ −0,5<small>−2,6 … +1,6</small></td>
+            </tr>
+            <tr class="row-low">
+              <th scope="row">Delta Opinion<br><small class="subtle">1 alegere</small></th>
+              <td class="heat is-insufficient" colspan="5" style="width:auto">date insuficiente: un singur sondaj final, la o singură alegere</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="legend" style="margin-top:var(--space-4)">
+        <span class="legend__item"><span class="under" style="font-weight:600">← subestimează</span>
+          <span class="ramp" aria-hidden="true"><i style="background:var(--heat-under-5)"></i><i style="background:var(--heat-under-4)"></i><i style="background:var(--heat-under-3)"></i><i style="background:var(--heat-under-2)"></i><i style="background:var(--heat-under-1)"></i><i style="background:var(--heat-zero)"></i><i style="background:var(--heat-over-1)"></i><i style="background:var(--heat-over-2)"></i><i style="background:var(--heat-over-3)"></i><i style="background:var(--heat-over-4)"></i><i style="background:var(--heat-over-5)"></i></span>
+          <span class="over" style="font-weight:600">supraestimează →</span></span>
+        <span class="legend__item"><span class="legend__swatch" style="background:var(--color-surface);border-color:var(--color-border)"></span>≈ nu se poate deosebi de zero</span>
+        <span class="legend__item"><span class="legend__swatch" style="border:1.5px dashed var(--color-text-muted)"></span>certitudine scăzută</span>
+        <span class="legend__item"><span class="legend__swatch swatch-insufficient"></span>date insuficiente</span>
+      </div>
+      <p class="subtle text-small" style="margin-top:var(--space-2)">Sub fiecare valoare: intervalul probabil (90%). Culoarea apare doar acolo unde abaterea e clară.</p>
+
+      <div style="margin-top:var(--space-4)">
+        <details class="disclosure">
+          <summary>Cum citesc harta?</summary>
+          <div class="disclosure__body">
+            <p>Fiecare pătrat compară un institut cu celelalte, pentru un partid. Albastru: institutul i-a dat partidului mai mult decât celelalte institute. Portocaliu: mai puțin. Cu cât culoarea e mai închisă, cu atât diferența e mai mare.</p>
+            <p>Pătratele albe, cu „≈”, au o diferență prea mică sau prea nesigură ca să putem spune în ce direcție este.</p>
+          </div>
+        </details>
+        <details class="disclosure">
+          <summary>De ce comparăm cu celelalte institute și nu cu rezultatul?</summary>
+          <div class="disclosure__body">
+            <p>Uneori toate institutele greșesc în aceeași direcție, de exemplu când mulți alegători se hotărăsc în ultima zi. Asta nu spune nimic despre un institut anume. De aceea scădem mai întâi greșeala comună tuturor și ne uităm doar la ce rămâne. <a href="methodology.html#comparatie">Mai multe</a></p>
+          </div>
+        </details>
+        <details class="disclosure">
+          <summary>„Toată campania” față de „Sondajele finale”</summary>
+          <div class="disclosure__body">
+            <p>„Sondajele finale” compară ultimele sondaje dinaintea votului cu rezultatul. „Toată campania” compară fiecare sondaj cu media celorlalte institute din aceeași perioadă, pe ultimele 120 de zile. Un institut poate fi aproape de celelalte la final, dar departe de ele în restul campaniei. <a href="timeline.html">Vezi un exemplu</a></p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <aside class="stack" aria-label="Detaliu pentru pătratul selectat">
+      <div class="card">
+        <p class="eyebrow">Pătratul selectat</p>
+        <h2 class="card__title">Institutul Alfa × <span class="party party--a"><span class="party__swatch"></span>Partidul A</span></h2>
+        <p style="margin-top:var(--space-3)">În fiecare dintre cele 3 alegeri, Institutul Alfa a dat Partidului A mai mult decât media celorlalte institute.</p>
+        <svg class="chart chart--mini" viewBox="0 0 300 120" role="img" aria-label="Abaterea pe fiecare alegere: Alegerea 1 +2,7, Alegerea 2 +3,4, Alegerea 3 +3,2 puncte procentuale; media +3,1">
+          <!-- x(v) = 110 + 26·v -->
+          <line class="grid" x1="162" y1="6" x2="162" y2="92"/>
+          <line class="grid" x1="214" y1="6" x2="214" y2="92"/>
+          <line class="grid" x1="266" y1="6" x2="266" y2="92"/>
+          <line x1="190.6" y1="6" x2="190.6" y2="92" stroke="var(--color-over)" stroke-dasharray="3 3"/>
+          <text x="0" y="24" class="t-label">Alegerea 1</text>
+          <line class="im-whisker" x1="104.8" y1="20" x2="255.6" y2="20"/>
+          <circle class="im-dot is-ns" cx="180.2" cy="20" r="5"/>
+          <text x="0" y="52" class="t-label">Alegerea 2</text>
+          <line class="im-whisker" x1="123" y1="48" x2="273.8" y2="48"/>
+          <circle class="im-dot" cx="198.4" cy="48" r="5"/>
+          <text x="0" y="80" class="t-label">Alegerea 3</text>
+          <line class="im-whisker" x1="117.8" y1="76" x2="268.6" y2="76"/>
+          <circle class="im-dot" cx="193.2" cy="76" r="5"/>
+          <line class="zero" x1="110" y1="6" x2="110" y2="92"/>
+          <text x="110" y="108" text-anchor="middle" class="t-strong">0</text>
+          <text x="162" y="108" text-anchor="middle">+2</text>
+          <text x="214" y="108" text-anchor="middle">+4</text>
+          <text x="266" y="108" text-anchor="middle">+6</text>
+        </svg>
+        <p class="subtle text-small">Linia punctată albastră: media, +3,1 p.p. Un singur rezultat (Alegerea 1) nu se deosebește clar de zero; împreună, cele trei arată aceeași direcție.</p>
+        <p class="text-small"><a href="pollster-card.html">Fișa Institutului Alfa</a> · <a href="target-plot.html">Alegerea 1 în detaliu</a></p>
+      </div>
+      <aside class="callout callout--caveat">
+        <p class="callout__title">Ce nu spunem</p>
+        <p>Harta arată unde un institut se depărtează constant de celelalte. Nu arată de ce și nu spune care institut „are dreptate”: comparația e cu media lor.</p>
+      </aside>
+      <aside class="callout callout--preliminary">
+        <p class="callout__title">Puține institute, puține alegeri</p>
+        <p>Media institutelor se calculează deocamdată din doar 4 institute și 3 alegeri. Valorile sunt preliminare.</p>
+      </aside>
+    </aside>
+  </div>
+  <p class="annot">Desktop: clicking a cell fills the side panel (keyboard: cells are focusable). Mobile: the panel opens as a bottom sheet; the table scrolls horizontally with the pollster column sticky. Colour appears only for cells whose 90% interval excludes zero, so the eye lands on the three clear findings. The "Toată campania" toggle swaps M-2.5 (final polls) for M-3.2 (campaign house effect) with the same encoding.</p>
+</main>
+
+<footer class="site-footer">
+  <div class="container">Machetă T-031 · date fictive · <a href="index.html">toate machetele</a></div>
+</footer>
+</body>
+</html>

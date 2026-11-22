@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Campania (cronologie) · machetă T-031</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="components.css">
+<style>
+  .controls { display: flex; flex-wrap: wrap; gap: var(--space-4); align-items: center; margin-top: var(--space-3); }
+  .controls label { font-size: var(--fs-sm); color: var(--color-text-muted); display: inline-flex; gap: var(--space-2); align-items: center; }
+  .controls select { font: inherit; font-size: var(--fs-sm); padding: var(--space-1) var(--space-3); border: 1px solid var(--color-border-strong); border-radius: var(--radius-md); background: var(--color-surface); color: var(--color-text); }
+  .market-line { fill: none; stroke: var(--color-market); stroke-width: 2.5; }
+  .market-band { fill: var(--color-market-soft); opacity: 0.7; }
+  .house-line { fill: none; stroke: var(--color-house); stroke-width: 2; }
+  .gap-over { fill: var(--color-over-soft); }
+  .gap-under { fill: var(--color-under-soft); }
+  .window { fill: var(--color-window); }
+</style>
+</head>
+<body>
+<div class="fiction-banner" role="note">Date fictive — doar pentru ilustrare. Institutele, partidele și valorile nu sunt reale.</div>
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="index.html"><svg class="brand__mark" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="4" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="13" cy="8" r="2" fill="currentColor"/></svg>Sondaje la control</a>
+    <nav class="nav" aria-label="Principal">
+      <a href="leaderboard.html">Clasament</a>
+      <a href="pollster-card.html">Institute</a>
+      <a href="heatmap.html">Harta abaterilor</a>
+      <a href="target-plot.html">Alegeri</a>
+      <a href="timeline.html" aria-current="page">Campanii</a>
+      <a href="methodology.html">Cum măsurăm</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <p class="breadcrumb"><a href="index.html">Acasă</a> / <a href="#">Campanii</a> / Alegerea 1</p>
+
+  <div class="page-head">
+    <p class="eyebrow">Campania, zi cu zi · Alegerea 1</p>
+    <h1>Beta Research și Partidul A, în ultimele 120 de zile</h1>
+    <p class="question">A arătat acest institut altceva decât celelalte în timpul campaniei, nu doar în ultima săptămână?</p>
+    <p class="finding finding--page">Timp de trei luni, Beta Research a arătat Partidul A cu <strong>aproximativ 4 p.p. peste celelalte institute</strong>. În ultimele 3 săptămâni, cifrele sale s-au apropiat de ale celorlalte și de rezultat.</p>
+    <div class="controls">
+      <label>Institut <select aria-label="Institut"><option>Beta Research</option><option>Institutul Alfa</option><option>Gamma Data</option><option>Delta Opinion</option></select></label>
+      <label>Partid <select aria-label="Partid"><option>Partidul A</option><option>Partidul B</option><option>Partidul C</option><option>Partidul D</option><option>Partidul E</option></select></label>
+      <label>Alegerea <select aria-label="Alegerea"><option>Alegerea 1</option><option>Alegerea 2</option><option>Alegerea 3</option></select></label>
+    </div>
+  </div>
+
+  <section class="card" aria-labelledby="tl-title">
+    <div class="card__head" style="flex-wrap:wrap">
+      <h2 class="card__title" id="tl-title"><span class="party party--a"><span class="party__swatch"></span>Partidul A</span>: Beta Research față de celelalte institute</h2>
+      <span class="tag">Tipar: apropiere de celelalte institute la final</span>
+    </div>
+
+    <svg class="chart" viewBox="0 0 780 350" role="img" aria-labelledby="tl-svg-title tl-svg-desc" style="margin-top:var(--space-4)">
+      <title id="tl-svg-title">Sondajele Beta Research pentru Partidul A, comparate cu media celorlalte institute și cu rezultatul</title>
+      <desc id="tl-svg-desc">Între 115 și 45 de zile înainte de vot, Beta Research a dat Partidului A între 34,9% și 35,8%, iar media celorlalte institute a fost între 30,2% și 32,4%. În ultimele 30 de zile, Beta Research a coborât la 33,6%, 33,0% și 32,6%, aproape de media celorlalte (33,6%). Rezultatul oficial: 32,0%.</desc>
+      <!-- x(d) = 720 + 5.5·d (d = days before the vote, −120..0); y(s) = 300 − 26·(s − 28) -->
+      <rect class="window" x="604.5" y="40" width="115.5" height="260"/>
+      <text x="662" y="54" text-anchor="middle" style="font-size:11px">ultimele 21 de zile</text>
+
+      <line class="grid" x1="60" y1="40" x2="720" y2="40"/>
+      <line class="grid" x1="60" y1="92" x2="720" y2="92"/>
+      <line class="grid" x1="60" y1="144" x2="720" y2="144"/>
+      <line class="grid" x1="60" y1="196" x2="720" y2="196"/>
+      <line class="grid" x1="60" y1="248" x2="720" y2="248"/>
+      <line class="axis" x1="60" y1="300" x2="720" y2="300"/>
+      <text x="52" y="44" text-anchor="end">38%</text>
+      <text x="52" y="96" text-anchor="end">36%</text>
+      <text x="52" y="148" text-anchor="end">34%</text>
+      <text x="52" y="200" text-anchor="end">32%</text>
+      <text x="52" y="252" text-anchor="end">30%</text>
+      <text x="52" y="304" text-anchor="end">28%</text>
+
+      <!-- market band (±1 pp) and line: other houses only (leave-one-house-out) -->
+      <polygon class="market-band" points="60,222 142.5,214.2 225,201.2 307.5,185.6 390,172.6 472.5,159.6 555,144 637.5,133.6 720,123.2 720,175.2 637.5,185.6 555,196 472.5,211.6 390,224.6 307.5,237.6 225,253.2 142.5,266.2 60,274"/>
+      <!-- gap shading -->
+      <polygon class="gap-over" points="87.5,118 181,105 280,97.2 379,112.8 472.5,120.6 555,154.4 602.5,164 555,170 472.5,185.6 379,200.3 280,216.8 181,234.1 87.5,245.4"/>
+      <polygon class="gap-under" points="602.5,164 632,170 670.5,180.4 670.5,155.4 632,160.3"/>
+      <polyline class="market-line" points="60,248 142.5,240.2 225,227.2 307.5,211.6 390,198.6 472.5,185.6 555,170 637.5,159.6 720,149.2"/>
+      <polyline class="house-line" points="87.5,118 181,105 280,97.2 379,112.8 472.5,120.6 555,154.4 632,170 670.5,180.4"/>
+      <g>
+        <circle class="im-dot" cx="87.5" cy="118" r="4.5"/>
+        <circle class="im-dot" cx="181" cy="105" r="4.5"/>
+        <circle class="im-dot" cx="280" cy="97.2" r="4.5"/>
+        <circle class="im-dot" cx="379" cy="112.8" r="4.5"/>
+        <circle class="im-dot" cx="472.5" cy="120.6" r="4.5"/>
+        <circle class="im-dot" cx="555" cy="154.4" r="4.5"/>
+        <circle class="im-dot" cx="632" cy="170" r="4.5"/>
+        <circle class="im-dot" cx="670.5" cy="180.4" r="4.5"/>
+      </g>
+      <!-- result -->
+      <line class="zero" x1="712" y1="196" x2="736" y2="196" style="stroke-width:3"/>
+      <text x="740" y="192" class="t-strong">rezultat</text>
+      <text x="740" y="207" class="t-strong">32,0%</text>
+
+      <!-- direct labels -->
+      <text x="280" y="84" text-anchor="middle" class="t-strong">Beta Research</text>
+      <text x="310" y="252" text-anchor="middle" style="fill:var(--color-text-subtle)">media celorlalte institute</text>
+      <text x="230" y="168" text-anchor="middle" class="t-over">≈ +4 p.p. peste celelalte</text>
+      <text x="740" y="146" style="font-size:11px">33,8%</text>
+
+      <text x="60" y="320" text-anchor="middle">120 de zile</text>
+      <text x="225" y="320" text-anchor="middle">90</text>
+      <text x="390" y="320" text-anchor="middle">60</text>
+      <text x="555" y="320" text-anchor="middle">30</text>
+      <text x="720" y="320" text-anchor="middle" class="t-strong">ziua votului</text>
+      <text x="390" y="342" text-anchor="middle">zile până la vot</text>
+    </svg>
+
+    <div class="legend" style="margin-top:var(--space-3)">
+      <span class="legend__item"><svg width="28" height="10" aria-hidden="true"><line x1="0" y1="5" x2="28" y2="5" stroke="var(--color-house)" stroke-width="2"/><circle cx="14" cy="5" r="3.5" fill="var(--color-house)"/></svg>sondajele Beta Research</span>
+      <span class="legend__item"><svg width="28" height="12" aria-hidden="true"><rect x="0" y="1" width="28" height="10" fill="var(--color-market-soft)"/><line x1="0" y1="6" x2="28" y2="6" stroke="var(--color-market)" stroke-width="2.5"/></svg>media celorlalte institute (și marja ei)</span>
+      <span class="legend__item"><span class="legend__swatch" style="background:var(--color-over-soft)"></span>peste celelalte</span>
+      <span class="legend__item"><span class="legend__swatch" style="background:var(--color-under-soft)"></span>sub celelalte</span>
+      <span class="legend__item"><span class="legend__swatch" style="background:var(--color-window)"></span>fereastra sondajelor finale</span>
+    </div>
+
+    <div class="card__section">
+      <dl class="stats">
+        <div class="stat"><dt>Toată campania</dt><dd class="over">+2,3 p.p. <small>față de celelalte institute</small></dd></div>
+        <div class="stat"><dt>Primele 3 luni</dt><dd class="over">+3,9 p.p.</dd></div>
+        <div class="stat"><dt>Ultimele 21 de zile</dt><dd>−0,7 p.p. <small>(aproape de celelalte)</small></dd></div>
+        <div class="stat"><dt>Sondaje în campanie</dt><dd>8</dd></div>
+      </dl>
+    </div>
+
+    <div class="card__section">
+      <details class="disclosure" open>
+        <summary>Ce înseamnă „apropiere de celelalte institute la final”?</summary>
+        <div class="disclosure__body">
+          <p>Semnalăm acest tipar când un institut a fost departe de celelalte cel puțin 2 p.p. în cea mai mare parte a campaniei, iar în ultimele 3 săptămâni diferența a scăzut la cel mult o treime. Aici: de la +3,9 la −0,7 p.p.</p>
+          <p>Tiparul are explicații obișnuite: o schimbare de metodă, alegători care se hotărăsc târziu sau o întâmplare. El arată doar că sondajele finale ale institutului spun mai puțin despre restul campaniei sale.</p>
+        </div>
+      </details>
+      <details class="disclosure">
+        <summary>Cum se calculează media celorlalte institute?</summary>
+        <div class="disclosure__body">
+          <p>Pentru fiecare zi, facem o medie netezită a sondajelor publicate de <em>celelalte</em> institute. Sondajele Beta Research nu intră în această medie, ca să nu se compare institutul cu el însuși. Banda gri arată cât de sigură e media: e mai lată acolo unde au fost puține sondaje.</p>
+        </div>
+      </details>
+      <details class="disclosure">
+        <summary>Datele: cele 8 sondaje</summary>
+        <div class="disclosure__body"><p>Tabel cu data terenului, eșantionul, metoda și sursa fiecărui sondaj · <a href="#">descarcă (CSV)</a></p></div>
+      </details>
+    </div>
+
+    <div class="card__section grid-2">
+      <aside class="callout callout--caveat">
+        <p class="callout__title">Ce nu spunem</p>
+        <p>Nu spunem de ce s-a produs apropierea și nici că a fost voită. Spunem doar ce arată cifrele: o diferență mare și constantă, care a dispărut aproape de vot.</p>
+      </aside>
+      <aside class="callout callout--preliminary">
+        <p class="callout__title">De ce contează campania</p>
+        <p>Multe clasamente se uită doar la ultimul sondaj. Dar alegătorii citesc sondaje toată campania. De aceea ne uităm și la cele 120 de zile dinainte.</p>
+      </aside>
+    </div>
+  </section>
+  <p class="annot">The house is ink, the market is grey, the result is a black tick on the right edge: three roles, no brand colours. The gap between house and market is tinted blue/orange (same meaning as everywhere: over/under). The final 21-day window (M-1.3) is a warm neutral band so the reader can see where "accuracy" is measured. Metrics: M-3.1 market (leave-one-house-out), M-3.2 campaign house effect, M-3.3 convergence flag (c1 = 2 pp, c2 = 0.33).</p>
+
+  <section class="stack" style="margin-top:var(--space-7)" aria-labelledby="tl-states">
+    <div>
+      <p class="eyebrow">Stări ale graficului</p>
+      <h2 id="tl-states">Puține sondaje</h2>
+    </div>
+    <div class="grid-2">
+      <article class="card card--dashed">
+        <p class="card__title">Delta Opinion · Partidul A</p>
+        <p class="card__meta">2 sondaje în campanie</p>
+        <svg class="chart chart--mini" viewBox="0 0 400 170" role="img" aria-label="Doar două sondaje Delta Opinion, la 100 și la 34 de zile înainte de vot, ambele aproape de media celorlalte institute">
+          <!-- x(d) = 370 + 2.75·d ; y(s) = 150 − 13·(s − 28) -->
+          <rect class="window" x="312.25" y="10" width="57.75" height="140"/>
+          <line class="axis" x1="40" y1="150" x2="370" y2="150"/>
+          <polygon class="market-band" points="40,111 122.5,104.5 205,96.7 287.5,87.6 370,80.8 370,106.8 287.5,113.6 205,122.7 122.5,130.5 40,137"/>
+          <polyline class="market-line" points="40,124 122.5,117.5 205,109.7 287.5,100.6 370,93.8"/>
+          <circle class="im-dot" cx="95" cy="114" r="4.5"/>
+          <circle class="im-dot" cx="276.5" cy="98" r="4.5"/>
+          <text x="40" y="166">120 de zile</text>
+          <text x="370" y="166" text-anchor="end">vot</text>
+        </svg>
+        <p class="text-small muted">Cu doar 2 sondaje arătăm punctele, fără linie și fără umbrire: nu putem spune cum a evoluat institutul în campanie.</p>
+        <p class="annot">Below 3 polls in the campaign window: dots only, no connecting line, no gap shading, no campaign metric. Below 5 polls: no herding check (M-3.4 minimum).</p>
+      </article>
+      <article class="card card--dashed">
+        <p class="card__title">Când media celorlalte e subțire</p>
+        <p class="card__meta">perioade cu puține sondaje</p>
+        <aside class="callout callout--insufficient">
+          <p class="callout__title">Media celorlalte institute e nesigură aici</p>
+          <p>În unele săptămâni au apărut foarte puține sondaje. Banda gri devine mai lată, iar diferențele din acea perioadă cântăresc mai puțin în calcul.</p>
+        </aside>
+        <p class="annot">With only 2–4 houses in the MVP (I-013), the leave-one-house-out market can rest on 1–3 houses. Proposal: show the band width honestly and hatch periods where fewer than 2 other houses published.</p>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">Machetă T-031 · date fictive · <a href="index.html">toate machetele</a></div>
+</footer>
+</body>
+</html>

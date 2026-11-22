@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>O alegere în detaliu (ținta) · machetă T-031</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="components.css">
+<style>
+  .target-layout { display: grid; grid-template-columns: minmax(0, 1fr) 19rem; gap: var(--space-5); align-items: start; }
+  @media (max-width: 60rem) { .target-layout { grid-template-columns: minmax(0, 1fr); } }
+  .band-1 { fill: var(--color-market-soft); }
+  .band-3 { fill: var(--color-surface-sunken); }
+  .band-5 { fill: #f7f8fa; }
+  .market-tick { stroke: var(--color-market); stroke-width: 4; stroke-linecap: round; }
+  .shape-key { display: inline-block; vertical-align: middle; }
+</style>
+</head>
+<body>
+<div class="fiction-banner" role="note">Date fictive — doar pentru ilustrare. Institutele, partidele și valorile nu sunt reale.</div>
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="index.html"><svg class="brand__mark" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="4" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="13" cy="8" r="2" fill="currentColor"/></svg>Sondaje la control</a>
+    <nav class="nav" aria-label="Principal">
+      <a href="leaderboard.html">Clasament</a>
+      <a href="pollster-card.html">Institute</a>
+      <a href="heatmap.html">Harta abaterilor</a>
+      <a href="target-plot.html" aria-current="page">Alegeri</a>
+      <a href="timeline.html">Campanii</a>
+      <a href="methodology.html">Cum măsurăm</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <p class="breadcrumb"><a href="index.html">Acasă</a> / <a href="#">Alegeri</a> / Alegerea 1</p>
+
+  <div class="page-head">
+    <p class="eyebrow">O alegere în detaliu</p>
+    <h1>Alegerea 1 · parlamentare</h1>
+    <p class="question">La această alegere, cât de aproape au fost ultimele sondaje de rezultat și au greșit toate în aceeași direcție?</p>
+    <p class="finding finding--page"><strong>Toate institutele au subestimat Partidul B</strong>, în medie cu 3,0 p.p.: o greșeală comună. Separat, Institutul Alfa a supraestimat Partidul A cu 4,2 p.p., mult peste media institutelor (+1,5).</p>
+    <div class="segmented" role="group" aria-label="Alegerea" style="margin-top:var(--space-3)">
+      <button type="button" aria-pressed="true">Alegerea 1</button>
+      <button type="button" aria-pressed="false">Alegerea 2</button>
+      <button type="button" aria-pressed="false">Alegerea 3</button>
+    </div>
+  </div>
+
+  <div class="target-layout">
+    <section class="card" aria-labelledby="tp-title">
+      <h2 class="card__title" id="tp-title">Cât de departe de rezultat a fost ultimul sondaj al fiecărui institut</h2>
+      <p class="muted text-small">Linia neagră e rezultatul oficial al fiecărui partid. Cu cât un semn e mai aproape de ea, cu atât sondajul a fost mai precis. Benzile gri arată ±1, ±3 și ±5 puncte procentuale.</p>
+
+      <svg class="chart" viewBox="0 0 760 362" role="img" aria-labelledby="tp-svg-title tp-svg-desc">
+        <title id="tp-svg-title">Eroarea sondajului final, pe partide și institute, la Alegerea 1</title>
+        <desc id="tp-svg-desc">Partidul A: Alfa +4,2, Beta +0,6, Gamma −0,3, media institutelor +1,5. Partidul B: Alfa −3,5, Beta −1,2, Gamma −4,4, media −3,0. Partidul C: Alfa −0,8, Beta −2,5, Gamma +2,9. Partidul D: Alfa +0,4, Beta +1,8, Gamma +0,9. Partidul E: Alfa −0,3, Beta +1,3, Gamma +0,9. Delta Opinion nu a avut sondaj în ultimele 21 de zile.</desc>
+        <!-- x(v) = 440 + 45·v ; rows at y = 50, 110, 170, 230, 290 -->
+        <text x="430" y="12" text-anchor="end" class="t-under">← sub rezultat</text>
+        <text x="450" y="12" text-anchor="start" class="t-over">peste rezultat →</text>
+        <rect class="band-5" x="215" y="22" width="450" height="296"/>
+        <rect class="band-3" x="305" y="22" width="270" height="296"/>
+        <rect class="band-1" x="395" y="22" width="90" height="296"/>
+        <text x="232" y="34" text-anchor="middle" style="font-size:10px">±5</text>
+        <text x="322" y="34" text-anchor="middle" style="font-size:10px">±3</text>
+        <text x="410" y="34" text-anchor="middle" style="font-size:10px">±1</text>
+        <line class="grid" x1="170" y1="80" x2="710" y2="80"/>
+        <line class="grid" x1="170" y1="140" x2="710" y2="140"/>
+        <line class="grid" x1="170" y1="200" x2="710" y2="200"/>
+        <line class="grid" x1="170" y1="260" x2="710" y2="260"/>
+
+        <!-- Party A, result 32,0% -->
+        <rect x="0" y="40" width="10" height="10" rx="2" style="fill:var(--party-a)"/>
+        <text x="16" y="49" class="t-label">Partidul A</text>
+        <text x="16" y="65">rezultat: 32,0%</text>
+        <line class="market-tick" x1="507.5" y1="32" x2="507.5" y2="68"/>
+        <line class="im-whisker is-muted" x1="498.5" y1="38" x2="710" y2="38"/>
+        <circle class="im-dot" cx="629" cy="38" r="5.5"/>
+        <text x="640" y="34" class="t-over" style="font-size:11px">Alfa +4,2</text>
+        <line class="im-whisker is-muted" x1="336.5" y1="50" x2="597.5" y2="50"/>
+        <rect class="im-dot is-ns" x="462" y="45" width="10" height="10"/>
+        <line class="im-whisker is-muted" x1="296" y1="62" x2="557" y2="62"/>
+        <polygon class="im-dot is-ns" points="426.5,56 420.5,66 432.5,66"/>
+
+        <!-- Party B, result 24,5% -->
+        <rect x="0" y="100" width="10" height="10" rx="2" style="fill:var(--party-b)"/>
+        <text x="16" y="109" class="t-label">Partidul B</text>
+        <text x="16" y="125">rezultat: 24,5%</text>
+        <line class="market-tick" x1="305" y1="92" x2="305" y2="128"/>
+        <line class="im-whisker is-muted" x1="170" y1="98" x2="404" y2="98"/>
+        <circle class="im-dot" cx="282.5" cy="98" r="5.5"/>
+        <line class="im-whisker is-muted" x1="264.5" y1="110" x2="507.5" y2="110"/>
+        <rect class="im-dot is-ns" x="381" y="105" width="10" height="10"/>
+        <line class="im-whisker is-muted" x1="170" y1="122" x2="363.5" y2="122"/>
+        <polygon class="im-dot" points="242,116 236,126 248,126"/>
+        <text x="200" y="92" class="t-under" style="font-size:11px" text-anchor="middle">toate sub rezultat</text>
+
+        <!-- Party C, result 18,0% -->
+        <rect x="0" y="160" width="10" height="10" rx="2" style="fill:var(--party-c)"/>
+        <text x="16" y="169" class="t-label">Partidul C</text>
+        <text x="16" y="185">rezultat: 18,0%</text>
+        <line class="market-tick" x1="434.2" y1="152" x2="434.2" y2="188"/>
+        <line class="im-whisker is-muted" x1="296" y1="158" x2="512" y2="158"/>
+        <circle class="im-dot is-ns" cx="404" cy="158" r="5.5"/>
+        <line class="im-whisker is-muted" x1="219.5" y1="170" x2="435.5" y2="170"/>
+        <rect class="im-dot" x="322.5" y="165" width="10" height="10"/>
+        <line class="im-whisker is-muted" x1="462.5" y1="182" x2="678.5" y2="182"/>
+        <polygon class="im-dot" points="570.5,176 564.5,186 576.5,186"/>
+
+        <!-- Party D, result 14,5% -->
+        <rect x="0" y="220" width="10" height="10" rx="2" style="fill:var(--party-d)"/>
+        <text x="16" y="229" class="t-label">Partidul D</text>
+        <text x="16" y="245">rezultat: 14,5%</text>
+        <line class="market-tick" x1="486.4" y1="212" x2="486.4" y2="248"/>
+        <line class="im-whisker is-muted" x1="359" y1="218" x2="557" y2="218"/>
+        <circle class="im-dot is-ns" cx="458" cy="218" r="5.5"/>
+        <line class="im-whisker is-muted" x1="422" y1="230" x2="620" y2="230"/>
+        <rect class="im-dot is-ns" x="516" y="225" width="10" height="10"/>
+        <line class="im-whisker is-muted" x1="381.5" y1="242" x2="579.5" y2="242"/>
+        <polygon class="im-dot is-ns" points="480.5,236 474.5,246 486.5,246"/>
+
+        <!-- Party E, result 11,0% -->
+        <rect x="0" y="280" width="10" height="10" rx="2" style="fill:var(--party-e)"/>
+        <text x="16" y="289" class="t-label">Partidul E</text>
+        <text x="16" y="305">rezultat: 11,0%</text>
+        <line class="market-tick" x1="468.4" y1="272" x2="468.4" y2="308"/>
+        <line class="im-whisker is-muted" x1="336.5" y1="278" x2="516.5" y2="278"/>
+        <circle class="im-dot is-ns" cx="426.5" cy="278" r="5.5"/>
+        <line class="im-whisker is-muted" x1="408.5" y1="290" x2="588.5" y2="290"/>
+        <rect class="im-dot is-ns" x="493.5" y="285" width="10" height="10"/>
+        <line class="im-whisker is-muted" x1="390.5" y1="302" x2="570.5" y2="302"/>
+        <polygon class="im-dot is-ns" points="480.5,296 474.5,306 486.5,306"/>
+
+        <line class="zero" x1="440" y1="22" x2="440" y2="318"/>
+        <text x="170" y="336" text-anchor="middle">−6</text>
+        <text x="260" y="336" text-anchor="middle">−4</text>
+        <text x="350" y="336" text-anchor="middle">−2</text>
+        <text x="440" y="336" text-anchor="middle" class="t-strong">rezultat</text>
+        <text x="530" y="336" text-anchor="middle">+2</text>
+        <text x="620" y="336" text-anchor="middle">+4</text>
+        <text x="710" y="336" text-anchor="middle">+6</text>
+        <text x="440" y="356" text-anchor="middle">eroarea ultimului sondaj, în puncte procentuale</text>
+      </svg>
+
+      <div class="legend" style="margin-top:var(--space-3)">
+        <span class="legend__item"><svg class="shape-key" width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="5.5" fill="var(--color-house)"/></svg>Institutul Alfa</span>
+        <span class="legend__item"><svg class="shape-key" width="14" height="14" aria-hidden="true"><rect x="2" y="2" width="10" height="10" fill="var(--color-house)"/></svg>Beta Research</span>
+        <span class="legend__item"><svg class="shape-key" width="14" height="14" aria-hidden="true"><polygon points="7,1 1,12 13,12" fill="var(--color-house)"/></svg>Gamma Data</span>
+        <span class="legend__item"><svg class="shape-key" width="14" height="22" aria-hidden="true"><line x1="7" y1="2" x2="7" y2="20" stroke="var(--color-market)" stroke-width="4" stroke-linecap="round"/></svg>media institutelor</span>
+        <span class="legend__item"><svg class="shape-key" width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="#fff" stroke="var(--color-house)" stroke-width="1.5"/></svg>semn gol: eroare în marja normală a sondajului</span>
+      </div>
+      <p class="subtle text-small" style="margin-top:var(--space-2)">Liniile gri orizontale: marja de eroare a fiecărui sondaj (90%). Delta Opinion nu apare: nu a publicat niciun sondaj în ultimele 21 de zile dinaintea votului.</p>
+
+      <div style="margin-top:var(--space-4)">
+        <details class="disclosure">
+          <summary>Cum citesc ținta?</summary>
+          <div class="disclosure__body">
+            <p>Imaginați-vă o țintă: centrul (linia neagră) este rezultatul oficial. Fiecare semn este ultimul sondaj al unui institut. Un semn la dreapta înseamnă că sondajul i-a dat partidului mai mult decât a primit la vot; la stânga, mai puțin.</p>
+            <p>Bara groasă gri arată unde a fost, în medie, ansamblul institutelor. Când toate semnele sunt de aceeași parte, ca la Partidul B, avem o greșeală comună, nu a unui institut anume.</p>
+          </div>
+        </details>
+        <details class="disclosure">
+          <summary>Ce înseamnă „semn gol”?</summary>
+          <div class="disclosure__body">
+            <p>Orice sondaj are o marjă de eroare, pentru că întreabă doar o parte dintre alegători. Un semn gol înseamnă că eroarea se încadrează în această marjă: poate fi doar întâmplare. Un semn plin înseamnă că eroarea e mai mare decât ar explica întâmplarea, pentru acel sondaj.</p>
+          </div>
+        </details>
+        <details class="disclosure">
+          <summary>Datele: sondajele finale folosite</summary>
+          <div class="disclosure__body">
+            <div class="table-wrap">
+              <table class="table">
+                <thead><tr><th>Institut</th><th>Teren încheiat</th><th class="num">Eșantion</th><th>Sursa</th></tr></thead>
+                <tbody>
+                  <tr><td>Institutul Alfa</td><td>cu 6 zile înainte</td><td class="num">1.100</td><td><a href="#">raport (arhivat)</a></td></tr>
+                  <tr><td>Beta Research</td><td>cu 9 zile înainte</td><td class="num">1.020</td><td><a href="#">raport (arhivat)</a></td></tr>
+                  <tr><td>Gamma Data</td><td>cu 5 zile înainte</td><td class="num">900</td><td><a href="#">articol de presă</a></td></tr>
+                  <tr><td>Delta Opinion</td><td colspan="3" class="subtle">ultimul sondaj: cu 34 de zile înainte (în afara ferestrei de 21 de zile)</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <aside class="stack" aria-label="Rezumatul alegerii">
+      <div class="card">
+        <p class="eyebrow">Pe scurt</p>
+        <table class="table">
+          <thead><tr><th>Institut</th><th class="num">Eroare medie</th></tr></thead>
+          <tbody>
+            <tr><td><a href="pollster-card.html">Institutul Alfa</a></td><td class="num">1,8 p.p.</td></tr>
+            <tr><td>Beta Research</td><td class="num">1,5 p.p.</td></tr>
+            <tr><td>Gamma Data</td><td class="num">1,9 p.p.</td></tr>
+            <tr><td>Delta Opinion</td><td class="num subtle">fără sondaj final</td></tr>
+            <tr><th>Media institutelor</th><th class="num">1,7 p.p.</th></tr>
+          </tbody>
+        </table>
+        <p class="subtle text-small" style="margin-top:var(--space-2)">Eroarea medie: cu cât s-a înșelat, în medie, sondajul la fiecare partid. Diferențele de câteva zecimi nu sunt semnificative.</p>
+      </div>
+      <aside class="callout">
+        <p class="callout__title">Greșeala comună</p>
+        <p>La Partidul B, toate institutele au fost sub rezultat. Când toată lumea greșește la fel, cauza poate ține de momentul votului (de exemplu, alegători hotărâți în ultimele zile) sau de o dificultate comună tuturor institutelor, nu de un institut anume. De aceea, în fișele institutelor scădem această greșeală comună.</p>
+      </aside>
+      <aside class="callout callout--caveat">
+        <p class="callout__title">Ce nu spunem</p>
+        <p>Un singur sondaj, la o singură alegere, poate greși din întâmplare. Concluziile despre un institut le tragem doar din mai multe alegeri: vezi <a href="heatmap.html">harta abaterilor</a>.</p>
+      </aside>
+    </aside>
+  </div>
+  <p class="annot">The "target" is a 1-D cross-section of a bullseye: rings = ±1/±3/±5 pp bands, centre = official result (M-2.1 signed error, final poll per house, M-1.3 window). Pollsters are distinguished by shape + label, never by colour. The grey tick is the industry mean error, so the reader sees the shared miss (M-2.5) before judging any single house. Hovering a mark highlights one house across all rows and dims the others.</p>
+</main>
+
+<footer class="site-footer">
+  <div class="container">Machetă T-031 · date fictive · <a href="index.html">toate machetele</a></div>
+</footer>
+</body>
+</html>

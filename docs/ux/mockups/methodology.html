@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cum măsurăm · machetă T-031</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="components.css">
+<style>
+  .method-layout { display: grid; grid-template-columns: 14rem minmax(0, 1fr); gap: var(--space-6); align-items: start; }
+  @media (max-width: 52rem) { .method-layout { grid-template-columns: minmax(0, 1fr); } .toc { position: static !important; } }
+  .toc { position: sticky; top: 5rem; font-size: var(--fs-sm); }
+  .toc ol { list-style: none; padding: 0; margin: 0; border-left: 2px solid var(--color-border); }
+  .toc li a { display: block; padding: var(--space-1) var(--space-3); text-decoration: none; color: var(--color-text-muted); }
+  .toc li a:hover { color: var(--color-text); }
+  .toc li a[aria-current="true"] { color: var(--color-text); font-weight: var(--fw-semibold); border-left: 2px solid var(--color-text); margin-left: -2px; }
+  .method-section { scroll-margin-top: 5rem; }
+  .method-section h2 { font-size: var(--fs-lg); margin-bottom: var(--space-3); }
+  .example { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-5); align-items: center; margin: var(--space-4) 0; }
+  @media (max-width: 40rem) { .example { grid-template-columns: minmax(0, 1fr); } }
+  .example__label { font-size: var(--fs-xs); font-weight: var(--fw-bold); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--color-text-subtle); margin-bottom: var(--space-1); }
+  .formula { font-family: var(--font-mono); font-size: var(--fs-sm); background: var(--color-surface-sunken); padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm); display: inline-block; }
+  .levels { width: 100%; }
+</style>
+</head>
+<body>
+<div class="fiction-banner" role="note">Date fictive — doar pentru ilustrare. Institutele, partidele și valorile nu sunt reale.</div>
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="index.html"><svg class="brand__mark" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="4" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="13" cy="8" r="2" fill="currentColor"/></svg>Sondaje la control</a>
+    <nav class="nav" aria-label="Principal">
+      <a href="leaderboard.html">Clasament</a>
+      <a href="pollster-card.html">Institute</a>
+      <a href="heatmap.html">Harta abaterilor</a>
+      <a href="target-plot.html">Alegeri</a>
+      <a href="timeline.html">Campanii</a>
+      <a href="methodology.html" aria-current="page">Cum măsurăm</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <p class="breadcrumb"><a href="index.html">Acasă</a> / Cum măsurăm</p>
+
+  <div class="page-head">
+    <p class="eyebrow">Cum măsurăm</p>
+    <h1>Cum verificăm sondajele, pe înțelesul tuturor</h1>
+    <p class="question">De unde vin cifrele de pe acest site și cât de mult mă pot baza pe ele?</p>
+    <p class="finding finding--page">Comparăm ce au spus sondajele cu ce au votat oamenii. Apoi separăm greșelile pe care le-au făcut toate institutele de cele care țin de un singur institut și spunem de fiecare dată <strong>cât de siguri suntem</strong>.</p>
+  </div>
+
+  <div class="method-layout">
+    <nav class="toc" aria-label="Cuprins">
+      <ol>
+        <li><a href="#eroare" aria-current="true">1. Cât de departe a fost sondajul</a></li>
+        <li><a href="#comparatie">2. De ce ne comparăm cu celelalte institute</a></li>
+        <li><a href="#campanie">3. Ce urmărim în campanie</a></li>
+        <li><a href="#sigur">4. Cât de siguri suntem</a></li>
+        <li><a href="#nota">5. Cum se calculează nota</a></li>
+        <li><a href="#nu-spunem">6. Ce nu spunem</a></li>
+        <li><a href="#date">7. Datele și sursele</a></li>
+      </ol>
+    </nav>
+
+    <div class="stack">
+      <!-- 1 -->
+      <section class="card method-section" id="eroare" aria-labelledby="h-eroare">
+        <h2 id="h-eroare">1. Cât de departe a fost sondajul?</h2>
+        <div class="prose">
+          <p>Luăm ultimul sondaj publicat de un institut în cele 21 de zile dinaintea votului și îl punem lângă rezultatul oficial. Diferența, în puncte procentuale, este eroarea sondajului pentru acel partid.</p>
+        </div>
+        <div class="example">
+          <div>
+            <p class="example__label">Exemplu</p>
+            <p>Sondajul dă Partidului A <strong>34%</strong>. La vot, partidul ia <strong>32%</strong>. Eroarea este <strong class="over">+2 puncte procentuale</strong>: sondajul l-a supraestimat.</p>
+            <p class="muted text-small">„Puncte procentuale” (p.p.) înseamnă diferența dintre două procente: 34% − 32% = 2 p.p.</p>
+          </div>
+          <svg class="chart chart--mini" viewBox="0 0 380 110" role="img" aria-label="Bară pentru sondaj, 34%, și bară pentru rezultat, 32%; diferența este +2 puncte procentuale">
+            <!-- width = 8 px per % ; bars start at x=80 -->
+            <text x="0" y="33" class="t-label">Sondajul</text>
+            <rect x="80" y="18" width="272" height="22" rx="3" style="fill:var(--color-market-soft)"/>
+            <text x="88" y="34" class="t-strong">34%</text>
+            <text x="0" y="73" class="t-label">Rezultatul</text>
+            <rect x="80" y="58" width="256" height="22" rx="3" style="fill:var(--color-result)"/>
+            <text x="88" y="74" style="fill:#fff;font-weight:600">32%</text>
+            <line x1="336" y1="50" x2="352" y2="50" style="stroke:var(--color-over);stroke-width:2"/>
+            <line x1="336" y1="44" x2="336" y2="86" style="stroke:var(--color-over);stroke-dasharray:2 2"/>
+            <line x1="352" y1="14" x2="352" y2="56" style="stroke:var(--color-over);stroke-dasharray:2 2"/>
+            <text x="344" y="102" text-anchor="middle" class="t-over">+2 p.p.</text>
+          </svg>
+        </div>
+        <details class="disclosure">
+          <summary>Ce facem cu cei nehotărâți?</summary>
+          <div class="disclosure__body">
+            <p>Sondajele includ și „nu știu” sau „nu răspund”; rezultatele oficiale, nu. Înainte de comparație, îi scoatem pe nehotărâți și recalculăm procentele doar între cei care au ales un partid. Exemplu: dacă 85% dintre respondenți aleg un partid și 30% aleg Partidul A, atunci Partidul A are 30 ÷ 85 ≈ 35,3% din opțiunile exprimate.</p>
+            <p>Comparăm cu rezultatul din țară, pentru că majoritatea sondajelor nu întreabă alegătorii din diaspora.</p>
+          </div>
+        </details>
+        <details class="disclosure">
+          <summary>Detalii tehnice</summary>
+          <div class="disclosure__body">
+            <p><span class="formula">e = 100 · (s − r)</span> pentru fiecare partid; fereastra de 21 de zile și „sondajul final”. <span class="tag tag--method">M-1.1</span> <span class="tag tag--method">M-1.3</span> <span class="tag tag--method">M-1.4</span> <span class="tag tag--method">M-2.1</span></p>
+          </div>
+        </details>
+      </section>
+
+      <!-- 2 -->
+      <section class="card method-section" id="comparatie" aria-labelledby="h-comparatie">
+        <h2 id="h-comparatie">2. De ce ne comparăm cu celelalte institute?</h2>
+        <div class="prose">
+          <p>Uneori toate institutele greșesc în aceeași direcție, de exemplu când mulți alegători se hotărăsc în ultimele zile. Asta nu spune nimic despre un institut anume. De aceea, scădem mai întâi greșeala comună tuturor. Ce rămâne este <strong>abaterea proprie a institutului</strong>.</p>
+        </div>
+        <div class="example">
+          <div>
+            <p class="example__label">Exemplu</p>
+            <p>La Partidul B, toate institutele au fost, în medie, cu <strong class="under">3,0 p.p. sub rezultat</strong>. Institutul Alfa a fost cu 3,5 p.p. sub. Abaterea proprie a lui Alfa este doar <strong class="under">−0,5 p.p.</strong>: aproape toată greșeala a fost comună.</p>
+          </div>
+          <svg class="chart chart--mini" viewBox="0 0 380 120" role="img" aria-label="Pe o axă, rezultatul la zero, media institutelor la −3,0 și Institutul Alfa la −3,5. Greșeala comună este −3,0, partea lui Alfa este −0,5">
+            <!-- x(v) = 330 + 70·v -->
+            <line class="axis" x1="10" y1="60" x2="360" y2="60"/>
+            <line class="zero" x1="330" y1="30" x2="330" y2="80"/>
+            <text x="330" y="96" text-anchor="middle" class="t-strong">rezultat</text>
+            <line class="market-tick" x1="120" y1="44" x2="120" y2="76" style="stroke:var(--color-market);stroke-width:4;stroke-linecap:round"/>
+            <text x="120" y="96" text-anchor="middle">media: −3,0</text>
+            <circle class="im-dot" cx="85" cy="60" r="6"/>
+            <text x="85" y="114" text-anchor="middle" class="t-strong">Alfa: −3,5</text>
+            <path d="M120 24 H330" style="stroke:var(--color-market);stroke-width:2;fill:none"/>
+            <text x="225" y="18" text-anchor="middle">greșeala comună</text>
+            <path d="M85 40 H120" style="stroke:var(--color-under);stroke-width:3;fill:none"/>
+            <text x="60" y="34" text-anchor="middle" class="t-under">partea lui Alfa</text>
+          </svg>
+        </div>
+        <details class="disclosure">
+          <summary>Detalii tehnice</summary>
+          <div class="disclosure__body">
+            <p><span class="formula">abatere = e(institut) − media ponderată a erorilor tuturor institutelor</span>, separat pe partid și pe alegere. Deocamdată „toate institutele” înseamnă cele 4 din analiză. <span class="tag tag--method">M-2.5</span> <span class="tag tag--method">M-2.6</span></p>
+          </div>
+        </details>
+      </section>
+
+      <!-- 3 -->
+      <section class="card method-section" id="campanie" aria-labelledby="h-campanie">
+        <h2 id="h-campanie">3. Ce urmărim în campanie?</h2>
+        <div class="prose">
+          <p>Alegătorii citesc sondaje toată campania, nu doar în ultima săptămână. De aceea comparăm fiecare sondaj cu media celorlalte institute din aceeași perioadă, pe ultimele 120 de zile. Semnalăm două tipare, fără a le atribui o cauză:</p>
+          <ul>
+            <li><strong>Apropiere la final:</strong> un institut e departe de celelalte cea mai mare parte a campaniei, apoi se apropie brusc de ele în ultimele 3 săptămâni.</li>
+            <li><strong>Sondaje neobișnuit de stabile:</strong> cifrele unui institut variază mai puțin decât ar fi normal pentru niște sondaje pe eșantioane, chiar și ținând cont de cât s-au schimbat preferințele în campanie.</li>
+          </ul>
+        </div>
+        <div class="example">
+          <div>
+            <p class="example__label">Exemplu</p>
+            <p>Un institut arată un partid cu 4 p.p. peste celelalte timp de trei luni, apoi, în ultimele 3 săptămâni, ajunge la mai puțin de 1 p.p. de ele. <a href="timeline.html">Vezi graficul</a></p>
+          </div>
+          <svg class="chart chart--mini" viewBox="0 0 380 110" role="img" aria-label="Linia institutului pornește mult deasupra mediei celorlalte și se apropie de ea în ultimele 3 săptămâni">
+            <rect x="300" y="8" width="70" height="82" style="fill:var(--color-window)"/>
+            <polygon points="10,30 120,24 230,34 300,44 300,70 230,76 120,82 10,86" style="fill:var(--color-over-soft)"/>
+            <polyline points="10,86 120,82 230,76 300,70 370,62" style="fill:none;stroke:var(--color-market);stroke-width:2.5"/>
+            <polyline points="10,30 120,24 230,34 300,44 340,64 370,66" style="fill:none;stroke:var(--color-house);stroke-width:2"/>
+            <text x="120" y="16" text-anchor="middle" class="t-strong">institutul</text>
+            <text x="120" y="102" text-anchor="middle">celelalte institute</text>
+            <text x="335" y="104" text-anchor="middle" style="font-size:11px">ultimele 21 de zile</text>
+          </svg>
+        </div>
+        <details class="disclosure">
+          <summary>Detalii tehnice</summary>
+          <div class="disclosure__body">
+            <p>Media celorlalte institute exclude sondajele institutului analizat. Apropiere la final: diferența timpurie ≥ 2 p.p. și diferența finală ≤ o treime din ea. Sondaje stabile: varianța observată sub jumătate din cea așteptată, minimum 5 sondaje. Ambele praguri vor fi calibrate. <span class="tag tag--method">M-3.1</span> <span class="tag tag--method">M-3.2</span> <span class="tag tag--method">M-3.3</span> <span class="tag tag--method">M-3.4</span></p>
+          </div>
+        </details>
+      </section>
+
+      <!-- 4 -->
+      <section class="card method-section" id="sigur" aria-labelledby="h-sigur">
+        <h2 id="h-sigur">4. Cât de siguri suntem?</h2>
+        <div class="prose">
+          <p>Un sondaj întreabă aproximativ 1.000 de oameni, nu milioane. De aceea, chiar și un sondaj foarte bine făcut poate greși cu 2–3 p.p. din simplă întâmplare. Pentru fiecare cifră arătăm un <strong>interval probabil</strong>: zona în care se află, cel mai probabil, valoarea reală.</p>
+        </div>
+        <div class="example">
+          <div>
+            <p class="example__label">Cum arată pe site</p>
+            <p><strong>Semn plin:</strong> intervalul nu atinge zero; abaterea are o direcție clară.</p>
+            <p><strong>Semn gol, cu „≈”:</strong> intervalul trece de zero; nu putem spune în ce direcție este abaterea.</p>
+            <p><strong>Hașurat:</strong> nu avem destule date ca să calculăm ceva.</p>
+          </div>
+          <svg class="chart chart--mini" viewBox="0 0 380 130" role="img" aria-label="Exemplu de interval clar, de la +1,2 la +4,8, și de interval care trece de zero, de la −3,2 la +0,4; dedesubt, o zonă hașurată pentru date insuficiente">
+            <defs>
+              <pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                <rect width="7" height="7" style="fill:var(--color-surface)"/>
+                <line x1="0" y1="0" x2="0" y2="7" style="stroke:var(--color-hatch);stroke-width:2"/>
+              </pattern>
+            </defs>
+            <!-- x(v) = 190 + 30·v -->
+            <line class="zero" x1="190" y1="6" x2="190" y2="76"/>
+            <line class="im-whisker" x1="226" y1="22" x2="334" y2="22"/>
+            <circle class="im-dot" cx="283" cy="22" r="6"/>
+            <text x="342" y="26" class="t-over">clar</text>
+            <line class="im-whisker" x1="94" y1="56" x2="202" y2="56"/>
+            <circle class="im-dot is-ns" cx="148" cy="56" r="6"/>
+            <text x="86" y="60" text-anchor="end" class="t-ns">neclar</text>
+            <rect x="94" y="90" width="240" height="26" rx="4" style="fill:url(#hatch);stroke:var(--color-border)"/>
+            <text x="214" y="107" text-anchor="middle">date insuficiente</text>
+          </svg>
+        </div>
+        <p class="prose">Contează și <strong>la câte alegeri</strong> am putut verifica un institut. O singură alegere poate fi o întâmplare; mai multe alegeri cu aceeași abatere arată un tipar.</p>
+        <table class="table levels" style="margin-top:var(--space-3)">
+          <thead><tr><th>Certitudine</th><th>Când</th><th>Cum arată</th></tr></thead>
+          <tbody>
+            <tr><td><span class="certainty"><span class="certainty__meter" aria-hidden="true"><i class="on"></i><i></i><i></i></span>scăzută</span></td><td>sub 3 alegeri</td><td>Contur punctat, nota marcată „provizorie”, formulări prudente („pare să”)</td></tr>
+            <tr><td><span class="certainty"><span class="certainty__meter" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i></span>medie</span></td><td>3–5 alegeri</td><td>Contur plin; mențiunea „rezultate preliminare” cât timp avem doar 3 alegeri</td></tr>
+            <tr><td><span class="certainty"><span class="certainty__meter" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i></span>ridicată</span></td><td>6 alegeri sau mai multe</td><td>Contur plin, fără avertismente suplimentare</td></tr>
+          </tbody>
+        </table>
+        <details class="disclosure" style="margin-top:var(--space-4)">
+          <summary>Detalii tehnice</summary>
+          <div class="disclosure__body">
+            <p>Eroarea de eșantionare a unui sondaj ține cont de un efect de design de 1,5. Intervalele sunt de 90%. Pentru abateri pe mai multe alegeri folosim un test de semn, un test t și, ulterior, un model ierarhic bayesian. Unitatea de analiză este perechea (institut, alegere). <span class="tag tag--method">M-1.6</span> <span class="tag tag--method">M-4</span> <span class="tag tag--method">M-5.2</span></p>
+          </div>
+        </details>
+      </section>
+
+      <!-- 5 -->
+      <section class="card method-section" id="nota" aria-labelledby="h-nota">
+        <h2 id="h-nota">5. Cum se calculează nota?</h2>
+        <div class="prose">
+          <p>Nota, de la A la F, adună cinci lucruri, fiecare cu greutatea lui:</p>
+        </div>
+        <svg class="chart" viewBox="0 0 680 70" role="img" aria-label="Ponderi: acuratețe 35%, abatere sistematică 30%, transparență 15%, comportament în campanie 10%, istoric 10%" style="max-width:44rem">
+          <!-- 6.8 px per % -->
+          <rect x="0" y="6" width="236" height="30" style="fill:var(--color-text)"/>
+          <rect x="238" y="6" width="202" height="30" style="fill:var(--color-text-muted)"/>
+          <rect x="442" y="6" width="100" height="30" style="fill:var(--color-text-subtle)"/>
+          <rect x="544" y="6" width="66" height="30" style="fill:var(--color-border-strong)"/>
+          <rect x="612" y="6" width="68" height="30" style="fill:var(--color-border)"/>
+          <text x="10" y="26" style="fill:#fff;font-weight:600">35%</text>
+          <text x="248" y="26" style="fill:#fff;font-weight:600">30%</text>
+          <text x="452" y="26" style="fill:#fff;font-weight:600">15%</text>
+          <text x="552" y="26" class="t-strong">10%</text>
+          <text x="620" y="26" class="t-strong">10%</text>
+          <text x="0" y="56" class="t-label">acuratețe</text>
+          <text x="238" y="56" class="t-label">abatere sistematică</text>
+          <text x="442" y="56" class="t-label">transparență</text>
+          <text x="544" y="56" class="t-label">campanie</text>
+          <text x="612" y="56" class="t-label">istoric</text>
+        </svg>
+        <div class="example">
+          <div>
+            <p class="example__label">Puține alegeri? Nota pornește de la mijloc</p>
+            <p>Un institut verificat la puține alegeri nu poate primi o notă extremă. Pornim de la 50 (mijlocul scalei) și ne apropiem de scorul real pe măsură ce adăugăm alegeri.</p>
+            <p class="muted text-small">Exemplu: scor brut 64. Cu 1 alegere, nota finală e 54 (D); cu 3 alegeri, 57 (C); cu 9 alegeri, 60 (C).</p>
+          </div>
+          <svg class="chart chart--mini" viewBox="0 0 380 110" role="img" aria-label="Scorul final se apropie de scorul brut 64 pe măsură ce crește numărul de alegeri: 54 la o alegere, 57 la trei, 60 la nouă">
+            <!-- x(score) = 20 + 18·(score − 45) -->
+            <line class="axis" x1="20" y1="70" x2="370" y2="70"/>
+            <line x1="110" y1="20" x2="110" y2="78" style="stroke:var(--color-market);stroke-dasharray:3 3"/>
+            <text x="110" y="94" text-anchor="middle">50</text>
+            <line x1="362" y1="20" x2="362" y2="78" style="stroke:var(--color-text);stroke-width:2"/>
+            <text x="362" y="94" text-anchor="middle" class="t-strong">brut: 64</text>
+            <circle class="im-dot is-ns" cx="173" cy="34" r="5"/><text x="173" y="24" text-anchor="middle" style="font-size:11px">1 alegere: 54</text>
+            <circle class="im-dot" cx="236" cy="48" r="5"/><text x="236" y="38" text-anchor="middle" style="font-size:11px">3: 57</text>
+            <circle class="im-dot" cx="299" cy="62" r="5"/><text x="299" y="52" text-anchor="middle" style="font-size:11px">9: 60</text>
+            <text x="20" y="108">scorul final</text>
+          </svg>
+        </div>
+        <details class="disclosure">
+          <summary>Detalii tehnice</summary>
+          <div class="disclosure__body">
+            <p>Fiecare componentă e transformată într-un percentil 0–100 între institutele evaluate. <span class="formula">scor = (N · brut + 3 · 50) / (N + 3)</span>, N = numărul de alegeri. Praguri: A ≥ 85, B ≥ 70, C ≥ 55, D ≥ 40, F &lt; 40. Ponderile vor fi validate pe alegeri viitoare. <span class="tag tag--method">M-5.1</span> <span class="tag tag--method">M-5.2</span> <span class="tag tag--method">M-5.3</span> <span class="tag tag--method">M-5.4</span></p>
+          </div>
+        </details>
+      </section>
+
+      <!-- 6 -->
+      <section class="callout callout--caveat method-section" id="nu-spunem" aria-labelledby="h-nu-spunem" style="font-size:var(--fs-base);padding:var(--space-5) var(--space-6)">
+        <h2 id="h-nu-spunem" class="callout__title" style="font-size:var(--fs-lg)">6. Ce nu spunem</h2>
+        <ul class="prose">
+          <li>Nu spunem <strong>de ce</strong> se abate un institut. Statistica arată cât și în ce direcție, nu motivul.</li>
+          <li>Nu spunem că o abatere este <strong>voită</strong>. Poate ține de metodă, de eșantion, de momentul sondajului sau de întâmplare.</li>
+          <li>Nu spunem care institut „are dreptate” la următoarele alegeri. Măsurăm doar ce s-a întâmplat la alegerile trecute.</li>
+          <li>Nu tragem concluzii dintr-un singur sondaj. Un tipar înseamnă aceeași abatere la mai multe alegeri.</li>
+        </ul>
+      </section>
+
+      <!-- 7 -->
+      <section class="card method-section" id="date" aria-labelledby="h-date">
+        <h2 id="h-date">7. Datele și sursele</h2>
+        <div class="prose">
+          <p>Fiecare sondaj din analiză are sursa lui: raportul institutului, arhivat, sau articolul de presă în care a apărut. Rezultatele oficiale vin de la Autoritatea Electorală Permanentă și Biroul Electoral Central.</p>
+          <p>Toate datele și tot codul de calcul sunt publice. Oricine poate reface calculele. <a href="#">Descarcă datele (CSV)</a> · <a href="#">Metodologia completă (în engleză)</a></p>
+          <p>Institutele primesc analiza înainte de publicare și pot răspunde. Răspunsurile apar pe fișa fiecărui institut.</p>
+        </div>
+      </section>
+    </div>
+  </div>
+  <p class="annot">Layered explainer: plain sentence → worked example with one small diagram → "Detalii tehnice" with the formula and M-IDs. Section anchors (#comparatie, #sigur, #nota) are the targets of every "Mai multe" link on the other screens. Final Romanian wording belongs to T-051.</p>
+</main>
+
+<footer class="site-footer">
+  <div class="container">Machetă T-031 · date fictive · <a href="index.html">toate machetele</a></div>
+</footer>
+</body>
+</html>
