@@ -603,3 +603,23 @@ def test_issue_locations(fixture_copy: DataDirFactory) -> None:
 def test_missing_data_directory(tmp_path: Path) -> None:
     issues = validate(tmp_path / "nope", ValidationConfig(reference_date=dt.date(2099, 1, 1)))
     assert rules(issues) == {("R-05", E)}
+
+
+FIXTURE_FILES = [
+    (name, path.relative_to(FIXTURES / name).as_posix())
+    for name in (EXAMPLE, PRESIDENTIAL)
+    for path in sorted((FIXTURES / name).rglob("*.csv"))
+    if path.read_bytes().count(b"\n") > 1
+]
+
+
+@pytest.mark.parametrize("filler", ["", "x", "-1"])
+@pytest.mark.parametrize(("fixture", "rel"), FIXTURE_FILES)
+def test_garbage_rows_are_reported_not_fatal(
+    fixture_copy: DataDirFactory, fixture: str, rel: str, filler: str
+) -> None:
+    data = fixture_copy(fixture)
+    header, rows = data.read(rel)
+    data.write(rel, header, [[filler] * len(header), *rows])
+    issues = data.issues()
+    assert any(issue.severity is E and issue.path.endswith(rel) for issue in issues)
