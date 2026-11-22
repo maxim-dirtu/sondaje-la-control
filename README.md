@@ -1,5 +1,7 @@
 # Sondaje la control
 
+[![CI](https://github.com/maxim-dirtu/sondaje-la-control/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/maxim-dirtu/sondaje-la-control/actions/workflows/ci.yml)
+
 An investigative case study of Romanian political pollsters, measured against
 actual election results. It shows how accurate each polling firm has been,
 which parties it systematically over- or under-estimates, and how much its

@@ -1,0 +1,79 @@
+# Runs the same checks as AGENTS.md §8 on every pull request to main and every push to main.
+# Branch protection should require the "Required checks" job (see tasks/T-008-ci.md).
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  # A new push to a PR supersedes its running checks; every commit on main gets a full run.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  checks:
+    name: Checks (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    env:
+      # Use the uv-managed interpreter, as developers do, rather than the runner's own Python.
+      UV_PYTHON_PREFERENCE: only-managed
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # Full history so that origin/main exists for `validate --against`.
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@1db35dd8eee11c5894872e0b383ae6c406cf738d # v10.4.0
+        with:
+          # Same uv as the team; the interpreter comes from .python-version.
+          version: "0.12.21"
+          enable-cache: true
+          cache-python: true
+
+      - name: Install (uv sync --locked)
+        run: uv sync --locked
+
+      - name: Tests (pytest)
+        run: uv run pytest
+
+      - name: Lint (ruff check)
+        run: uv run ruff check .
+
+      - name: Formatting (ruff format --check)
+        run: uv run ruff format --check .
+
+      - name: Validate data
+        run: uv run sondaje validate
+
+      - name: Validate append-only files against origin/main
+        if: github.event_name == 'pull_request'
+        run: uv run sondaje validate --against origin/main
+
+  required:
+    # One stable status check for branch protection, independent of the matrix.
+    name: Required checks
+    if: always()
+    needs: [checks]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: All matrix jobs succeeded
+        env:
+          RESULT: ${{ needs.checks.result }}
+        run: |
+          echo "checks: $RESULT"
+          test "$RESULT" = "success"
