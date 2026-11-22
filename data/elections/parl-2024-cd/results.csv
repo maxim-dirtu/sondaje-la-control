@@ -1,1 +1,304 @@
 election_id,scope,entity_id,votes,source_url,source_type,retrieved_at,verified,notes
+parl-2024-cd,domestic,psd,1999293,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,aur,1463732,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,pnl,1219810,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,usr,958897,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,udmr,573722,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,sos,558204,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,pot,492259,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,sens,246776,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,psdu,173730,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,fd,171756,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,reper,98831,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,drept,91732,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,patriotii-poporului-roman,40960,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,pncr,39604,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,per,31854,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,psdi,31724,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,pra,26160,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,anc,23014,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,pnr,14107,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,asociatia-macedonenilor-din-romania,13388,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,asociatia-partida-romilor-pro-europa,13103,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,rs,11525,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,ioan-sarmas,10581,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,asociatia-liga-albanezilor-din-romania,8971,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,vasile-vlasin,8648,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,uniunea-ucrainenilor-din-romania,8293,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,forumul-democrat-al-germanilor-din-romania,7838,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,adn,7747,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,uniunea-sarbilor-din-romania,7698,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,uniunea-democratica-a-slovacilor-si-cehilor-din-romania,7136,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,uniunea-elena-din-romania,7129,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,comunitatea-rusilor-lipoveni-din-romania,6895,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,daniel-bodnar,6681,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,uniunea-bulgara-din-banat-romania,4885,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,federatia-comunitatilor-evreiesti-din-romania,4778,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,uniunea-democrata-a-tatarilor-turco-musulmani-din-romania,4722,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,uniunea-armenilor-din-romania,4574,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,uniunea-democrata-turca-din-romania,4432,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,uniunea-culturala-a-rutenilor-din-romania,4369,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,uniunea-croatilor-din-romania,4136,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,uniunea-polonezilor-din-romania,4001,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,mircea-cirt,3917,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,roasit,3797,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,plan,2912,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,forumul-cehilor-din-romania,2684,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,stefan-burlea,2581,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,romeo-bosneagu,2553,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,virgil-pirvulescu,1721,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,stefan-stancu,1715,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,oana-secara,1677,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,marinica-cazacu,1630,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,ilie-ciobanu,1564,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,dorin-curtean,1489,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,geanina-hagima,1449,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,gheorghe-baciu,1389,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,dumitrel-tita,1335,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,andrei-nesculescu,1177,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,partidul-oamenilor-credinciosi,1143,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,nelu-balas,1107,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,ringo-damureanu,1084,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,matei-negoita,1011,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,cosmin-olarasu,970,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,eugen-david,934,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,silvian-spiridon,877,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,tom-dragan,859,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,ovidius-dinulescu,853,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,vasile-stefan,820,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,george-stoian,795,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,danut-rusu,792,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,gheorghe-voinea,757,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,mihai-tirnoveanu,694,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,florin-lisaru,678,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,dumitru-bogdan,641,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,ovidiu-moldovanu,632,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,adrian-fanaca,603,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,aurelian-dan,597,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,valentin-spiru,596,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,vasile-aga,593,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,ciprian-stegaru,569,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,mircea-ion,549,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,florin-maneanu,542,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,mihai-toader,530,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,roberto-dan,529,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,laura-iusein,482,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,partidul-uniunea-geto-dacilor,435,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,ionel-abrudan,395,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,partidul-patria,391,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,marin-renghea,374,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,vasile-iancu,359,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,partidul-republican-din-romania,279,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,john-banu-muscel,273,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,partidul-national-taranesc-crestin-democrat,270,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,erich-mocanu-gollent,257,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,stan-dumitrica,249,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,janos-szucs,248,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,partidul-verde,248,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,partidul-pensionarilor-uniti,229,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,partidul-dreptatii,184,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,geapon-karani,104,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,claudia-puiu-barraud,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,domestic,florin-andreicut,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,Sum of the in-country constituency PVs.
+parl-2024-cd,diaspora,aur,201411,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,usr,187460,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,sos,121763,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,pot,104486,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,psd,30851,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,sens,29718,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,fd,17922,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,drept,15742,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,reper,15392,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,udmr,11675,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,pncr,6083,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,psdu,3407,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,florin-andreicut,2892,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,per,2787,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,anc,2775,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,pra,2344,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,claudia-puiu-barraud,1691,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,psdi,1648,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,rs,1324,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,asociatia-partida-romilor-pro-europa,778,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,forumul-democrat-al-germanilor-din-romania,739,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,comunitatea-rusilor-lipoveni-din-romania,539,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,federatia-comunitatilor-evreiesti-din-romania,503,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,uniunea-ucrainenilor-din-romania,457,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,uniunea-elena-din-romania,436,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,asociatia-macedonenilor-din-romania,412,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,roasit,331,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,uniunea-democratica-a-slovacilor-si-cehilor-din-romania,284,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,uniunea-croatilor-din-romania,277,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,uniunea-sarbilor-din-romania,264,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,uniunea-polonezilor-din-romania,214,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,asociatia-liga-albanezilor-din-romania,206,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,uniunea-bulgara-din-banat-romania,204,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,uniunea-culturala-a-rutenilor-din-romania,202,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,uniunea-democrata-a-tatarilor-turco-musulmani-din-romania,186,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,uniunea-armenilor-din-romania,173,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,forumul-cehilor-din-romania,133,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,uniunea-democrata-turca-din-romania,115,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,adn,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,adrian-fanaca,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,andrei-nesculescu,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,aurelian-dan,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,ciprian-stegaru,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,cosmin-olarasu,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,daniel-bodnar,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,danut-rusu,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,dorin-curtean,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,dumitrel-tita,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,dumitru-bogdan,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,erich-mocanu-gollent,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,eugen-david,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,florin-lisaru,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,florin-maneanu,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,geanina-hagima,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,geapon-karani,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,george-stoian,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,gheorghe-baciu,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,gheorghe-voinea,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,ilie-ciobanu,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,ioan-sarmas,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,ionel-abrudan,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,janos-szucs,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,john-banu-muscel,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,laura-iusein,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,marin-renghea,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,marinica-cazacu,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,matei-negoita,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,mihai-tirnoveanu,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,mihai-toader,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,mircea-cirt,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,mircea-ion,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,nelu-balas,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,oana-secara,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,ovidiu-moldovanu,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,ovidius-dinulescu,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,partidul-dreptatii,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,partidul-national-taranesc-crestin-democrat,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,partidul-oamenilor-credinciosi,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,partidul-patria,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,partidul-pensionarilor-uniti,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,partidul-republican-din-romania,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,partidul-uniunea-geto-dacilor,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,partidul-verde,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,patriotii-poporului-roman,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,plan,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,pnl,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,pnr,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,ringo-damureanu,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,roberto-dan,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,romeo-bosneagu,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,silvian-spiridon,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,stan-dumitrica,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,stefan-burlea,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,stefan-stancu,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,tom-dragan,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,valentin-spiru,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,vasile-aga,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,vasile-iancu,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,vasile-stefan,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,vasile-vlasin,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,diaspora,virgil-pirvulescu,0,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,PV of the constituency abroad (incl. postal votes).
+parl-2024-cd,total,psd,2030144,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,aur,1665143,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,pnl,1219810,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,usr,1146357,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,sos,679967,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,pot,596745,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,udmr,585397,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,sens,276494,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,fd,189678,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,psdu,177137,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,reper,114223,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,drept,107474,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,pncr,45687,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,patriotii-poporului-roman,40960,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,per,34641,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,psdi,33372,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,pra,28504,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,anc,25789,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,pnr,14107,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,asociatia-partida-romilor-pro-europa,13881,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,asociatia-macedonenilor-din-romania,13800,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,rs,12849,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,ioan-sarmas,10581,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,asociatia-liga-albanezilor-din-romania,9177,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,uniunea-ucrainenilor-din-romania,8750,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,vasile-vlasin,8648,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,forumul-democrat-al-germanilor-din-romania,8577,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,uniunea-sarbilor-din-romania,7962,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,adn,7747,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,uniunea-elena-din-romania,7565,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,comunitatea-rusilor-lipoveni-din-romania,7434,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,uniunea-democratica-a-slovacilor-si-cehilor-din-romania,7420,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,daniel-bodnar,6681,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,federatia-comunitatilor-evreiesti-din-romania,5281,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,uniunea-bulgara-din-banat-romania,5089,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,uniunea-democrata-a-tatarilor-turco-musulmani-din-romania,4908,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,uniunea-armenilor-din-romania,4747,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,uniunea-culturala-a-rutenilor-din-romania,4571,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,uniunea-democrata-turca-din-romania,4547,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,uniunea-croatilor-din-romania,4413,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,uniunea-polonezilor-din-romania,4215,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,roasit,4128,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,mircea-cirt,3917,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,plan,2912,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,florin-andreicut,2892,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,forumul-cehilor-din-romania,2817,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,stefan-burlea,2581,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,romeo-bosneagu,2553,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,virgil-pirvulescu,1721,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,stefan-stancu,1715,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,claudia-puiu-barraud,1691,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,oana-secara,1677,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,marinica-cazacu,1630,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,ilie-ciobanu,1564,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,dorin-curtean,1489,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,geanina-hagima,1449,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,gheorghe-baciu,1389,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,dumitrel-tita,1335,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,andrei-nesculescu,1177,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,partidul-oamenilor-credinciosi,1143,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,nelu-balas,1107,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,ringo-damureanu,1084,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,matei-negoita,1011,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,cosmin-olarasu,970,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,eugen-david,934,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,silvian-spiridon,877,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,tom-dragan,859,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,ovidius-dinulescu,853,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,vasile-stefan,820,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,george-stoian,795,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,danut-rusu,792,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,gheorghe-voinea,757,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,mihai-tirnoveanu,694,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,florin-lisaru,678,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,dumitru-bogdan,641,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,ovidiu-moldovanu,632,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,adrian-fanaca,603,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,aurelian-dan,597,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,valentin-spiru,596,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,vasile-aga,593,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,ciprian-stegaru,569,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,mircea-ion,549,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,florin-maneanu,542,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,mihai-toader,530,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,roberto-dan,529,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,laura-iusein,482,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,partidul-uniunea-geto-dacilor,435,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,ionel-abrudan,395,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,partidul-patria,391,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,marin-renghea,374,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,vasile-iancu,359,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,partidul-republican-din-romania,279,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,john-banu-muscel,273,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,partidul-national-taranesc-crestin-democrat,270,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,erich-mocanu-gollent,257,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,stan-dumitrica,249,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,janos-szucs,248,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,partidul-verde,248,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,partidul-pensionarilor-uniti,229,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,partidul-dreptatii,184,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.
+parl-2024-cd,total,geapon-karani,104,https://prezenta.roaep.ro/parlamentare01122024/data/json/sicpv/pv/pv.json,official,2026-11-22,true,BEC national PV.

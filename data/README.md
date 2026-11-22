@@ -51,3 +51,6 @@ created by the pollster tasks; copy the header lines from DATA_MODEL.md §6.14.
   ([ADR-0003](../docs/decisions/0003-neutral-language.md)).
 - Validate before committing: `uv run sondaje validate`. Add `--against main`
   to also check that append-only files were only appended to (R-34).
+- The election results files (`results.csv`, `results_totals.csv`,
+  `archive_manifest.csv`) are generated: never edit them by hand; re-run
+  `uv run sondaje ingest-results <election_id>` (downloads go to `data/raw/`).

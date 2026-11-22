@@ -1,0 +1,48 @@
+{
+  "info": {"note": "FICTITIOUS fixture in the shape of prezenta.roaep.ro SICPV pv.json"},
+  "scopes": {
+    "CNTY": {
+      "categories": {
+        "CD": {
+          "files": {},
+          "table": {
+            "1": {
+              "county_code": "AB", "report_type_code": "CD_CE", "report_stage_code": "FINAL",
+              "fields": [{"name": "a1", "value": "5000"}, {"name": "b", "value": "2380"}, {"name": "e", "value": "2320"}, {"name": "f", "value": "50"}, {"name": "g", "value": "10"}],
+              "candidates": [{"candidate": "PARTIDUL ALFA", "votes": "1000"}, {"candidate": "PARTIDUL BETA", "votes": "800"}, {"candidate": "ALIANȚA GAMA", "votes": "500"}, {"candidate": "PARTIDUL OMEGA", "votes": "20"}]
+            },
+            "42": {
+              "county_code": "B", "report_type_code": "CD_BEMB", "report_stage_code": "FINAL",
+              "fields": [{"name": "a1", "value": "3000"}, {"name": "b", "value": "1335"}, {"name": "e", "value": "1300"}, {"name": "f", "value": "30"}, {"name": "g", "value": "5"}],
+              "candidates": [{"candidate": "PARTIDUL ALFA", "votes": "600"}, {"candidate": "PARTIDUL BETA", "votes": "400"}, {"candidate": "ALIANȚA GAMA", "votes": "300"}]
+            },
+            "43": {
+              "county_code": "SR", "report_type_code": "CD_CE_43", "report_stage_code": "FINAL",
+              "fields": [{"name": "a1", "value": "10"}, {"name": "b", "value": "465"}, {"name": "e", "value": "455"}, {"name": "f", "value": "8"}, {"name": "g", "value": "2"}],
+              "candidates": [{"candidate": "PARTIDUL ALFA", "votes": "100"}, {"candidate": "PARTIDUL BETA", "votes": "150"}, {"candidate": "ALIANȚA GAMA", "votes": "205"}]
+            },
+            "44": {
+              "county_code": "S1", "report_type_code": "CD_BES", "report_stage_code": "FINAL",
+              "fields": [{"name": "a1", "value": "1000"}, {"name": "b", "value": "400"}, {"name": "e", "value": "390"}, {"name": "f", "value": "8"}, {"name": "g", "value": "2"}],
+              "candidates": [{"candidate": "PARTIDUL ALFA", "votes": "200"}, {"candidate": "PARTIDUL BETA", "votes": "100"}, {"candidate": "ALIANȚA GAMA", "votes": "90"}]
+            }
+          }
+        }
+      }
+    },
+    "CNTRY": {
+      "categories": {
+        "CD": {
+          "files": {},
+          "table": {
+            "RO": {
+              "report_type_code": "CD_BEC", "report_stage_code": "FINAL",
+              "fields": [{"name": "a1", "value": "8010"}, {"name": "b", "value": "4180"}, {"name": "e", "value": "4075"}, {"name": "f", "value": "91"}, {"name": "g", "value": "17"}, {"name": "e", "value": "4075"}],
+              "candidates": [{"candidate": "PARTIDUL ALFA", "votes": "1700"}, {"candidate": "PARTIDUL BETA", "votes": "1350"}, {"candidate": "ALIANŢA GAMA", "votes": "1005"}, {"candidate": "PARTIDUL OMEGA", "votes": "20"}]
+            }
+          }
+        }
+      }
+    }
+  }
+}
