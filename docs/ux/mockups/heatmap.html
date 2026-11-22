@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="components.css">
 <style>
   .heat-layout { display: grid; grid-template-columns: minmax(0, 1fr) 20rem; gap: var(--space-5); align-items: start; }
-  @media (max-width: 60rem) { .heat-layout { grid-template-columns: 1fr; } }
+  @media (max-width: 60rem) { .heat-layout { grid-template-columns: minmax(0, 1fr); } }
   .heatmap .row-low th { color: var(--color-text-muted); }
   .heat.is-selected { outline: 2px solid var(--color-text); outline-offset: 1px; }
 </style>
