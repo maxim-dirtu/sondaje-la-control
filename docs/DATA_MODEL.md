@@ -527,6 +527,49 @@ the model linked, the inventory should reference the existing IDs
 (`election_id`, `document_id` once archived, `poll_id` once extracted) and
 reuse the provenance block (§5.1) and the types of §3.2.
 
+### 6.14 Header lines (copy-paste reference)
+
+The exact first line of each file, in order (generated from the tables above;
+the tables win if they ever disagree):
+
+```text
+registry/elections.csv
+election_id,election_type,body,round,election_date,name,status,source_url,source_type,retrieved_at,verified,notes
+
+registry/entities.csv
+entity_id,entity_type,name,short_name,color,source_url,source_type,retrieved_at,verified,notes
+
+registry/pollsters.csv
+pollster_id,name,short_name,website,typical_modes,source_url,source_type,retrieved_at,verified,notes
+
+registry/pollster_aliases.csv
+pollster_id,alias,source_url,source_type,retrieved_at,verified,notes
+
+registry/pollster_affiliations.csv
+pollster_id,relation,counterpart_name,counterpart_entity_id,period_start,period_end,description,source_url,source_type,retrieved_at,verified,notes
+
+elections/<election_id>/entity_map.csv
+election_id,poll_entity_id,relation,result_entity_id,effective_date,source_url,source_type,retrieved_at,verified,notes
+
+elections/<election_id>/candidate_support.csv
+election_id,candidate_entity_id,party_entity_id,support_type,announced_date,source_url,source_type,retrieved_at,verified,notes
+
+elections/<election_id>/results.csv
+election_id,scope,entity_id,votes,source_url,source_type,retrieved_at,verified,notes
+
+elections/<election_id>/results_totals.csv
+election_id,scope,registered_voters,voters,valid_votes,invalid_votes,source_url,source_type,retrieved_at,verified,notes
+
+elections/<election_id>/archive_manifest.csv  and  polls/<pollster_id>/archive_manifest.csv
+document_id,title,published_date,format,archive_url,sha256,raw_path,source_url,source_type,retrieved_at,notes
+
+polls/<pollster_id>/polls.csv
+poll_id,pollster_id,election_id,headline,scenario,fieldwork_start,fieldwork_end,published_date,sample_size,sample_size_expressed,mode,population,population_geo,target_scope,question_type,question_wording,sponsor,sponsor_type,weighting_published,moe_published,margin_of_error,topline_coverage,document_id,extraction_method,source_url,source_type,retrieved_at,verified,notes
+
+polls/<pollster_id>/poll_results.csv
+poll_id,share_base,option_order,option_label,option_type,entity_id,share_raw,share_qualifier,source_url,source_type,retrieved_at,verified,notes
+```
+
 ## 7. Integrity rules (for T-003)
 
 Severity: **E** = error (validation fails), **W** = warning (reported, does
@@ -548,7 +591,7 @@ Parameters (T-003 exposes them as constants):
 | R-02 | E | The header equals the column list of §6 for that file, in order. |
 | R-03 | E | Every cell matches its column type (§3.2) and enum; `yes` columns are not empty. |
 | R-04 | E | No duplicate key within a file (keys given per table in §6). |
-| R-05 | E | Only the files of §2.1 exist under `data/` (ignoring `data/raw/`, `data/README.md`, and `.gitkeep` files). `candidate_support.csv` exists only for presidential elections. Each `data/polls/<pollster_id>/` has `polls.csv`, `poll_results.csv`, and `archive_manifest.csv`. Each directory name is a valid ID that exists in the matching registry. |
+| R-05 | E | Only the files of §2.1 exist under `data/` (ignoring `data/raw/`, `data/README.md`, and `.gitkeep` files). `candidate_support.csv` exists only for presidential elections. Each `data/polls/<pollster_id>/` has `polls.csv`, `poll_results.csv`, and `archive_manifest.csv`. Each directory name is a valid ID; once any file in the directory has rows, the ID must exist in the matching registry (header-only directories, such as the MVP election directories before T-004, pass). |
 | R-06 | E | Every column holding an `election_id`, `entity_id`, `pollster_id`, `poll_id`, or `document_id` from another table references an existing row (FK). |
 | R-07 | E | The `election_id` / `pollster_id` column of a per-directory file equals its directory name. |
 
