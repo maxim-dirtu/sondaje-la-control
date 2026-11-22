@@ -3,7 +3,7 @@ id: T-025
 title: First analysis report and parameter sensitivity
 status: todo
 phase: 2
-depends_on: [T-010, T-021, T-022, T-023, T-024]   # plus the per-pollster data tasks, added by the coordinator after T-006
+depends_on: [T-010, T-012, T-013, T-014, T-015, T-021, T-022, T-023, T-024]
 owner: null
 branch: null
 methodology: [M-1.3, M-1.2, M-2, M-3.2, M-4.1, M-4.2, M-4.3]
@@ -27,7 +27,8 @@ clearly.
 **In:**
 - A CLI command `sondaje report` that writes to `build/`
 - A committed summary `docs/reports/first-analysis.md`
-- Sensitivity runs: `window_days` ∈ {14, 21, 30}, `tau` ∈ {5, 7, 10}, and
+- Sensitivity runs: `window_days` ∈ {21, 28, 35} (the default is 28, per
+  ADR-0012), `tau` ∈ {5, 7, 10}, and
   `small_party_threshold` ∈ {0.5, 1, 2}%
 
 **Out:**
