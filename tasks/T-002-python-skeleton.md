@@ -1,11 +1,11 @@
 ---
 id: T-002
 title: Python project skeleton
-status: todo
+status: in-progress
 phase: 0
 depends_on: []
-owner: null
-branch: null
+owner: agent-t002
+branch: task/T-002-python-skeleton
 methodology: []
 created: 2026-11-22
 updated: 2026-11-22
