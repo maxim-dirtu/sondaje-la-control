@@ -1,11 +1,11 @@
 ---
 id: T-010
 title: "Results ingestion: Parliamentary 2024 and Presidential 2025 (R1, R2)"
-status: todo
+status: in-progress
 phase: 1
 depends_on: [T-002, T-003, T-004]
-owner: null
-branch: null
+owner: agent-t010
+branch: task/T-010-results-ingestion
 methodology: [M-1.4]
 created: 2026-11-22
 updated: 2026-11-22
