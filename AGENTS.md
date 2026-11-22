@@ -27,7 +27,7 @@ Idea (I-xxx) ──► Decision (ADR-xxxx) ──► Task (T-xxx) ──► Bran
    docs/IDEAS.md    docs/decisions/        tasks/          task/T-xxx-slug   "T-xxx: ..."
 ```
 
-- **Every commit** message starts with the task ID: `T-012: add 2024 EP poll data`.
+- **Every commit** message starts with the task ID: `T-010: add parl-2024-cd results`.
   Coordinator housekeeping (merges, new IDs, plan updates) uses `T-000`.
 - **Every metric implementation** cites the methodology section it implements,
   in its docstring (e.g. `Implements METHODOLOGY M-2.3`). If code and spec
@@ -86,8 +86,10 @@ Statistics can show *systematic deviation*. They **cannot** prove intent.
 - Every row records `source_url` and `retrieved_at` (ISO date). Polls also
   record where the source came from (e.g. pollster site, media article, or
   Wikipedia).
-- Wikipedia is an **index, not a source**. Verify against the original
-  publication whenever possible.
+- Wikipedia and aggregators (e.g. sondajeromania.ro) are **indexes, not
+  sources**. Verify against the original publication whenever possible.
+- Polls are recorded as **full toplines**: every option exactly as published.
+  The original report is archived ([ADR-0007](docs/decisions/0007-mvp-scope.md)).
 - Official results come from AEP/BEC. Keep domestic, diaspora, and total
   results separate.
 - Canonical data is versioned CSV in git ([ADR-0004](docs/decisions/0004-data-storage-csv-in-git.md)).

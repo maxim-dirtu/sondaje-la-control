@@ -20,3 +20,7 @@ Only the coordinator adds new IDs. Agents propose ideas in their task's
 | I-010 | Right of reply for pollsters before publishing ratings | planned | T-053 |
 | I-011 | Compare polls to the domestic result (exclude diaspora) by default | planned | M-1.4 |
 | I-012 | Visuals: diverging bar per party, house × party heatmap, target plot per election, timeline vs. market | planned | T-030, T-052 |
+| I-013 | Reference market built from the toplines of *all* houses (index-level verification), so that house effects for the MVP houses don't depend on only 2–4 peers | captured | M-2.5, M-3.1, ADR-0007 |
+| I-014 | Extract crosstabs (age, region, education…) from the archived reports | captured | ADR-0007 |
+| I-015 | Automated discovery and extraction of polls (RSS, LLM-assisted, human-verified) to scale beyond the MVP | captured | T-065 |
+| I-016 | Track a lean toward a *party* across election types by linking presidential candidates to the parties that supported them | planned | T-004 |

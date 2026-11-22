@@ -26,14 +26,15 @@ applies to every description.
 - The pollster registry file defined by T-001: ID, official name, aliases,
   website, typical survey modes, and known affiliations or regular clients
   (each with a source)
-- A seed list taken from the "Opinion polling" Wikipedia pages of the 5 MVP
-  elections (used as an index)
+- A list of every house that published at least one poll in the 3 MVP
+  elections, built from two discovery indexes: the "Opinion polling" Wikipedia
+  pages and sondajeromania.ro. T-006 picks the MVP houses from this list.
 
 **Out:**
 - Per-poll transparency fields, which the poll tasks capture.
 
 ## Acceptance criteria
-- [ ] Every pollster with at least one poll on the indexed pages is listed.
+- [ ] Every pollster with at least one poll in the indexed sources is listed.
 - [ ] Every affiliation or client claim has a `source_url`. Unsourced claims
       are left out.
 - [ ] The wording is factual and neutral.

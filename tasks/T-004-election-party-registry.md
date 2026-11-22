@@ -1,6 +1,6 @@
 ---
 id: T-004
-title: Election, party and alliance registry (2024–2025)
+title: Election, party and alliance registry (MVP elections)
 status: todo
 phase: 0
 depends_on: [T-001]
@@ -12,12 +12,14 @@ updated: 2026-11-22
 ---
 
 ## Goal
-Registry rows for the 5 MVP elections and for every party, candidate, and
-alliance that appears in their official results.
+Registry rows for the 3 MVP elections (`parl-2024-cd`, `pres-2025-r1`,
+`pres-2025-r2`; see [ADR-0007](../docs/decisions/0007-mvp-scope.md)) and for
+every party, candidate, and alliance that appears in their official results.
 
 ## Context
-MVP elections: see [PLAN.md](../docs/PLAN.md). The registry gives the Phase 1
-tasks a shared vocabulary of IDs.
+The registry gives the Phase 1 tasks a shared vocabulary of IDs. Linking each
+presidential candidate to the parties that supported them lets a lean toward a
+**party** be tracked across both parliamentary and presidential elections (I-002).
 
 ## Scope
 **In:**
@@ -25,15 +27,16 @@ tasks a shared vocabulary of IDs.
   mapping
 - Per entity: official name, short name, type (party/alliance/candidate/
   independent), and a chart color (hex)
-- The alliance mapping, e.g. joint lists in EP 2024, so that poll labels map to
-  result entities
+- The alliance mapping (electoral alliances in `parl-2024-cd`), so that poll
+  labels map to result entities
+- Candidate → supporting party/parties for both presidential rounds, each with
+  a source
 
 **Out:**
 - Results and polls (Phase 1). Pollsters (T-005).
 
 ## Acceptance criteria
-- [ ] All 5 MVP elections are present, with correct dates and round numbers.
-      The annulment of Presidential 2024 R1 is recorded.
+- [ ] All 3 MVP elections are present, with correct dates and round numbers.
 - [ ] Every party, candidate, and alliance in the official results is present,
       with a source (AEP/BEC).
 - [ ] Every alliance in these elections has a mapping.

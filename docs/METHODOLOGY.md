@@ -48,9 +48,14 @@ poll.
 ### M-1.5 Alliances, withdrawals, rounds
 - An alliance mapping table maps poll entities to result entities (e.g. joint
   lists).
-- A candidate who withdraws after the poll is excluded, and the remaining shares
-  are renormalized. The adjustment is logged.
+- A candidate who withdraws after the poll, or who is not on the final ballot,
+  is excluded, and the remaining shares are renormalized. The adjustment is
+  logged.
 - Each presidential round is a separate election `E`.
+- A lean toward a party in presidential elections is attributed through the
+  candidate → supporting-party mapping (I-016). When a candidate has several
+  supporting parties, the error is attributed to the candidate only, until a
+  rule is specified.
 
 ### M-1.6 Independence unit
 Polls from the same house for the same election are **not independent**. The
@@ -77,7 +82,8 @@ On this scale, errors on small and large parties are comparable.
 ### M-2.5 Relative house effect (final polls)
 `he_{h,j,E} = e_{h,j,E} − ē_{·,j,E}`, where `ē_{·,j,E}` is the recency-weighted
 mean signed error of **all houses** for `j` at election `E`. This separates the
-house's own error from an industry-wide miss.
+house's own error from an industry-wide miss. In the MVP, "all houses" means the
+houses in the dataset. Whether to use a broader reference market is open (I-013).
 
 ### M-2.6 Relative accuracy
 `RA_{h,E} = MAE_{h,E} − median_h'(MAE_{h',E})`. Negative values mean the house

@@ -1,8 +1,9 @@
 # Tasks
 
 One Markdown file per task: `T-XXX-short-slug.md`, based on
-[_TEMPLATE.md](_TEMPLATE.md). The front matter `status` field is the single
-source of truth for the task's status.
+[_TEMPLATE.md](_TEMPLATE.md). Per-pollster data tasks use
+[_TEMPLATE-pollster-data.md](_TEMPLATE-pollster-data.md). The front matter
+`status` field is the single source of truth for the task's status.
 
 - Workflow and locking rules: [AGENTS.md §4](../AGENTS.md)
 - Order and dependencies: [docs/PLAN.md](../docs/PLAN.md)

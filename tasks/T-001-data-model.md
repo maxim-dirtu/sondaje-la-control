@@ -17,7 +17,9 @@ analysis task can rely on without further discussion.
 
 ## Context
 - [ADR-0004](../docs/decisions/0004-data-storage-csv-in-git.md): canonical data is
-  CSV in git, one file per election per data type.
+  CSV in git, split into files so that agents don't collide.
+- [ADR-0007](../docs/decisions/0007-mvp-scope.md): MVP scope (3 elections, 2–4
+  pollsters), full toplines, and archived originals.
 - [METHODOLOGY M-1](../docs/METHODOLOGY.md) lists the fields the calculations need
   (sample size, fieldwork dates, target scope, alliances).
 - M-5.3 lists the transparency fields captured per poll.
@@ -27,18 +29,25 @@ analysis task can rely on without further discussion.
 - `docs/DATA_MODEL.md` (new; this task owns it)
 - `data/README.md` and the directory layout under `data/`, with header-only
   CSV files where useful
-- ID conventions: elections (e.g. `ep-2024`, `pres-2024-r1`, `parl-2024-cd`,
-  `pres-2025-r1`, `pres-2025-r2`), entities (parties/candidates), pollsters,
-  and polls
+- ID conventions: elections (MVP: `parl-2024-cd`, `pres-2025-r1`,
+  `pres-2025-r2`; the pattern must also fit future ones such as `ep-2024` and
+  `pres-2024-r1`), entities (parties/candidates), pollsters, and polls
 - Entities to cover: elections, entities (parties/candidates), per-election
   alliance/label mapping, pollsters, polls (one row per poll), poll results
-  (one row per poll × entity, raw published shares including undecided
-  buckets), and election results (scope: `domestic` | `diaspora` | `total`)
+  (one row per poll × option: the **full topline** as published, including
+  "other", undecided, and non-response, each tagged with an option type), and
+  election results (scope: `domestic` | `diaspora` | `total`)
 - Poll metadata: fieldwork start/end, publish date, sample size, mode, sampled
-  population, client/sponsor and sponsor type, question wording, whether the
-  weighting and the margin of error were published, `source_url`, `source_type`
-  (`pollster` | `media` | `wikipedia` | `other`), `verified` (whether checked
-  against the original source), `retrieved_at`, and `notes`
+  population (e.g. all adults / likely voters; residents / including the
+  diaspora), question type (prompted list / open), client/sponsor and sponsor
+  type, question wording, whether the weighting and the margin of error were
+  published, `source_url`, `source_type` (`pollster` | `media` | `wikipedia` |
+  `other`), `verified` (whether checked against the original source),
+  `retrieved_at`, and `notes`
+- Archive fields for the original report: `archive_url` (Web Archive),
+  `sha256`, and `extraction_method` (`pdf_text` | `html` | `manual_double_entry`)
+- File layout **per pollster** for poll data (ADR-0007), and per election for
+  results
 - Append-only rule for shared registry files (`entities`, `pollsters`)
 
 **Out:**

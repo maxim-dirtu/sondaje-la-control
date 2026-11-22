@@ -13,18 +13,34 @@ accuracy, systematic party lean, campaign behaviour, and a trust score with a
 certainty level. The methodology is fully published
 ([METHODOLOGY.md](METHODOLOGY.md)).
 
-## Initial data scope (MVP)
+## MVP scope ([ADR-0007](decisions/0007-mvp-scope.md))
 
-| Election | Date | Notes |
-|---|---|---|
-| European Parliament 2024 | 2024-06-09 | Held together with local elections |
-| Presidential 2024, round 1 | 2024-11-24 | Annulled by the Constitutional Court; polls still evaluable |
-| Parliamentary 2024 | 2024-12-01 | Chamber of Deputies list vote as the target |
-| Presidential 2025, round 1 | 2025-05-04 | |
-| Presidential 2025, round 2 | 2025-05-18 | |
+| Election | ID | Date | Notes |
+|---|---|---|---|
+| Parliamentary 2024 | `parl-2024-cd` | 2024-12-01 | The Chamber of Deputies list vote is the comparison target |
+| Presidential 2025, round 1 | `pres-2025-r1` | 2025-05-04 | |
+| Presidential 2025, round 2 | `pres-2025-r2` | 2025-05-18 | |
 
-Backfill (Phase 6): 2014 and 2019 presidential; 2016 and 2020 parliamentary;
-2019 European Parliament; selected local races (e.g. Bucharest mayor).
+**Pollsters:** 2–4 popular, transparent houses, chosen by a scorecard (T-006).
+**Polls:** full toplines (every option published), with the originals archived.
+
+**Known MVP limitations:** at most 3 (house, election) pairs per house, so
+significance results are preliminary. With only 2–4 houses, the market
+reference is thin (see I-013). The MVP proves the pipeline, the metrics, and
+the visuals; it does not give final verdicts.
+
+## Related work
+
+- **sondajeromania.ro** aggregates polls from 20+ houses and publishes a simple
+  accuracy table: the mean absolute error of each house's last poll, and the
+  candidate it "favored". This platform differs in that it measures error
+  relative to the market (separating house error from industry-wide misses),
+  looks at the whole campaign rather than only the final poll, adds
+  significance and uncertainty, herding/convergence detection, a trust score
+  with a certainty level, and full provenance. Both sites can be used as
+  discovery indexes.
+- **gov2-ro/prezenta.roaep.ro:** an open-source downloader for AEP results
+  data. Reference for T-010.
 
 ## Phases & tasks
 
@@ -38,25 +54,23 @@ they start.
 | T-001 | Define data model & CSV schemas | none |
 | T-002 | Python project skeleton (uv, ruff, pytest) | none |
 | T-003 | Data validation tooling | T-001, T-002 |
-| T-004 | Election, party & alliance registry (2024–2025) | T-001 |
+| T-004 | Election, party & alliance registry (MVP elections) | T-001 |
 | T-005 | Pollster registry & transparency metadata | T-001 |
+| T-006 | Select MVP pollsters (scorecard; needs owner approval) | T-005 |
 
-**Milestone M0:** schemas are frozen and validation runs on empty and sample data.
+**Milestone M0:** schemas are frozen, validation runs, and the MVP pollsters
+are approved.
 
-### Phase 1: Data collection 2024–2025
+### Phase 1: Data collection (MVP)
 | ID | Task | Depends on |
 |---|---|---|
-| T-010 | Results: EP 2024 | T-003, T-004 |
-| T-011 | Results: Presidential 2024 R1 | T-003, T-004 |
-| T-012 | Results: Parliamentary 2024 | T-003, T-004 |
-| T-013 | Results: Presidential 2025 R1 & R2 | T-003, T-004 |
-| T-014 | Polls: EP 2024 | T-003, T-004, T-005 |
-| T-015 | Polls: Presidential 2024 R1 | T-003, T-004, T-005 |
-| T-016 | Polls: Parliamentary 2024 | T-003, T-004, T-005 |
-| T-017 | Polls: Presidential 2025 R1 & R2 | T-003, T-004, T-005 |
+| T-010 | Results ingestion from AEP: all 3 MVP elections | T-002, T-003, T-004 |
+| T-011 | Poll ingestion toolkit (archive, extraction, double-entry protocol) | T-001, T-002, T-006 |
+| T-012…T-015 | Polls: one task per selected pollster, covering all 3 elections (created from [the template](../tasks/_TEMPLATE-pollster-data.md) after T-006) | T-003, T-004, T-005, T-011 |
 
-**Milestone M1:** all 5 elections have validated results and polls, with full
-provenance. All 8 tasks can run in parallel.
+**Milestone M1:** the 3 elections have validated results, and every selected
+pollster has validated full-topline polls with archived originals. T-010 runs in
+parallel with everything. The pollster tasks run in parallel with each other.
 
 ### Phase 2: Core metrics
 | ID | Task | Depends on |
@@ -68,7 +82,8 @@ provenance. All 8 tasks can run in parallel.
 | T-024 | Significance tests (M-4.1–M-4.3) | T-022 |
 | T-025 | First analysis report + parameter sensitivity | T-021–T-024, M1 |
 
-**Milestone M2:** a reproducible report ranks pollsters on 2024–2025 data.
+**Milestone M2:** a reproducible report compares the MVP pollsters on the 3
+elections.
 Development can start on synthetic fixtures before M1 is reached.
 
 ### Phase 3: Internal prototype
@@ -100,13 +115,18 @@ explanation.
 
 **Milestone M5:** public launch.
 
-### Phase 6: Expansion
+### Phase 6: Scale & expansion
+This phase is designed after the MVP. It solves the *quantity* problem: more
+pollsters, more elections, and less manual work.
+
 | ID | Task | Depends on |
 |---|---|---|
 | T-060 | Adjusted poll feature (M-6) | T-040, T-052 |
-| T-061 | Backfill 2014–2020 elections | M1 |
+| T-061 | Backfill elections: EP 2024, Presidential 2024 R1, then 2014–2020 | M1 |
 | T-062 | Local elections (selected races) | M1 |
 | T-063 | Ongoing ingestion of new polls | T-052 |
+| T-064 | Extend coverage to all active pollsters | M1 |
+| T-065 | Automated discovery & extraction (RSS, LLM-assisted, with verification) | T-011 |
 
 ## Open questions (owner)
 
@@ -116,3 +136,4 @@ explanation.
 | Q2 | License for code (e.g. MIT) and data (e.g. CC BY 4.0) | T-052 |
 | Q3 | Confirm proposed ADRs 0003–0006 | none (they are working defaults) |
 | Q4 | Publish pollster grades by name from day one, or only after the right-of-reply period? | T-053 |
+| Q5 | Approve the MVP pollster selection | T-011, the pollster data tasks |
