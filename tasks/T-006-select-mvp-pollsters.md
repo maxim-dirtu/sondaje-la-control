@@ -1,7 +1,7 @@
 ---
 id: T-006
 title: Select MVP pollsters (2–4)
-status: in-progress
+status: review
 phase: 0
 depends_on: [T-005]
 owner: agent-t006
@@ -127,3 +127,23 @@ Scorecard criteria (score each one, with links as evidence):
   changes the coverage result.
 
 ## Outcome
+Scorecard and draft ADR delivered; the owner's approval is pending.
+
+- `docs/reports/pollster-selection.md` (c5bfe4d, d03720b): all 15 registered
+  houses scored on criteria 1–5, with evidence links to the specific
+  final-window polls; criterion 6 (diversity) described factually; publication
+  formats and the extraction paths T-011 needs (§5); data-quality findings for
+  the poll tasks (§7).
+- `docs/decisions/draft-mvp-pollsters.md` (66c703e): proposes **AtlasIntel,
+  Sociopol, CURS**, with **Verifield** and **MKOR** as reserves, plus owner
+  questions Q-A to Q-E.
+- Key result: only AtlasIntel and Sociopol have a final-window poll in all
+  three elections. CURS is proposed as a campaign house (owner option A1), as
+  its parliamentary and round-1 polls end 26 and 24 days before the vote.
+- Checks: `uv run pytest -q` (252 passed), `uv run ruff check .`,
+  `uv run ruff format --check .`, `uv run sondaje validate --quiet` (0 errors;
+  the warnings come from existing data, which this task did not touch).
+
+Known limitations: poll counts are approximate; the vote shares of
+Noi, Cetățenii and DataEcho were not read (charts/images); popularity is a
+qualitative indicator. See the Log ("not verified").
