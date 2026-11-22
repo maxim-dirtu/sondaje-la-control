@@ -15,7 +15,7 @@ is only a short guide.
 | `registry/pollsters.csv` | polling firms | T-005 (+ pollster tasks) | append-only |
 | `registry/pollster_aliases.csv` | pollster name variants | T-005 (+ pollster tasks) | append-only |
 | `registry/pollster_affiliations.csv` | sourced client/ownership/personnel links | T-005 (+ pollster tasks) | append-only |
-| `elections/<election_id>/entity_map.csv` | polled entity → ballot contestant (alliances, withdrawals) | T-004 (+ pollster tasks) | append-only |
+| `elections/<election_id>/entity_map.csv` | polled entity → ballot contestant (alliances, parties on another party's lists, withdrawals) | T-004 (+ pollster tasks) | append-only |
 | `elections/<election_id>/candidate_support.csv` | presidential only: candidate → supporting parties | T-004 | owned |
 | `elections/<election_id>/results.csv` | votes per contestant, scope `domestic` / `diaspora` / `total` | T-010 | generated |
 | `elections/<election_id>/results_totals.csv` | valid/invalid votes and voters per scope | T-010 | generated |
