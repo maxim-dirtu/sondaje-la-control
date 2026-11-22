@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fișa institutului · machetă T-031</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="components.css">
+</head>
+<body>
+<div class="fiction-banner" role="note">Date fictive — doar pentru ilustrare. Institutele, partidele și valorile nu sunt reale.</div>
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="index.html"><svg class="brand__mark" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="4" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="13" cy="8" r="2" fill="currentColor"/></svg>Sondaje la control</a>
+    <nav class="nav" aria-label="Principal">
+      <a href="leaderboard.html">Clasament</a>
+      <a href="pollster-card.html" aria-current="page">Institute</a>
+      <a href="heatmap.html">Harta abaterilor</a>
+      <a href="target-plot.html">Alegeri</a>
+      <a href="timeline.html">Campanii</a>
+      <a href="methodology.html">Cum măsurăm</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <p class="breadcrumb"><a href="index.html">Acasă</a> / <a href="leaderboard.html">Institute</a> / Institutul Alfa</p>
+
+  <div class="page-head">
+    <p class="eyebrow">Fișa institutului</p>
+    <h1>Institutul Alfa</h1>
+    <p class="question">Cât mă pot baza pe sondajele acestui institut și în ce direcție se abat?</p>
+  </div>
+
+  <article class="card" aria-labelledby="finding-alfa">
+    <div class="card__head">
+      <div>
+        <p class="finding" id="finding-alfa">Institutul Alfa a <strong>supraestimat Partidul A</strong> în toate cele 3 alegeri analizate: în medie cu <strong>3,1 puncte procentuale</strong> mai mult decât celelalte institute.</p>
+        <p class="finding-meta">Interval probabil: între +1,2 și +4,8 p.p. · La celelalte partide, abaterile sunt mici și nu se pot deosebi de zero.</p>
+      </div>
+      <div class="grade" title="Nota C, certitudine medie">
+        <span class="grade__letter" aria-hidden="true">C</span>
+        <span class="grade__text">
+          <span class="grade__label">Nota C</span>
+          <span class="certainty"><span class="certainty__meter" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i></span>certitudine medie</span>
+          <span class="subtle">3 alegeri analizate</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="card__section">
+      <h2 class="card__title">Abaterea față de celelalte institute, pe partide</h2>
+      <p class="muted text-small">Media celor 3 alegeri, pe baza sondajelor finale. Bara arată cât s-a depărtat Institutul Alfa de media institutelor; linia subțire arată intervalul probabil.</p>
+      <svg class="chart" viewBox="0 0 680 250" role="img" aria-labelledby="db-title db-desc">
+        <title id="db-title">Abaterea Institutului Alfa față de media institutelor, pe partide</title>
+        <desc id="db-desc">Partidul A: +3,1 puncte procentuale, interval de la +1,2 la +4,8. Partidul B: −1,4, interval de la −3,2 la +0,4. Partidul C: −0,6. Partidul D: −0,8. Partidul E: −0,3. Doar abaterea la Partidul A se deosebește clar de zero.</desc>
+        <!-- direction labels -->
+        <text x="360" y="16" text-anchor="end" class="t-under">← subestimează</text>
+        <text x="380" y="16" text-anchor="start" class="t-over">supraestimează →</text>
+        <!-- grid: x(v) = 370 + 44·v -->
+        <line class="grid" x1="194" y1="30" x2="194" y2="208"/>
+        <line class="grid" x1="282" y1="30" x2="282" y2="208"/>
+        <line class="grid" x1="458" y1="30" x2="458" y2="208"/>
+        <line class="grid" x1="546" y1="30" x2="546" y2="208"/>
+        <!-- rows -->
+        <g>
+          <rect x="0" y="50" width="10" height="10" rx="2" style="fill:var(--party-a)"/>
+          <text x="18" y="59" class="t-label">Partidul A</text>
+          <rect class="db-over" x="370" y="48" width="136.4" height="14" rx="2"/>
+          <line class="whisker" x1="422.8" y1="55" x2="581.2" y2="55"/>
+          <line class="whisker" x1="422.8" y1="50" x2="422.8" y2="60"/><line class="whisker" x1="581.2" y1="50" x2="581.2" y2="60"/>
+          <text x="600" y="59" class="t-over">+3,1 p.p.</text>
+        </g>
+        <g>
+          <rect x="0" y="84" width="10" height="10" rx="2" style="fill:var(--party-b)"/>
+          <text x="18" y="93" class="t-label">Partidul B</text>
+          <rect class="db-under is-ns" x="308.4" y="82" width="61.6" height="14" rx="2"/>
+          <line class="whisker" x1="229.2" y1="89" x2="387.6" y2="89"/>
+          <line class="whisker" x1="229.2" y1="84" x2="229.2" y2="94"/><line class="whisker" x1="387.6" y1="84" x2="387.6" y2="94"/>
+          <text x="600" y="93" class="t-ns">≈ −1,4</text>
+        </g>
+        <g>
+          <rect x="0" y="118" width="10" height="10" rx="2" style="fill:var(--party-c)"/>
+          <text x="18" y="127" class="t-label">Partidul C</text>
+          <rect class="db-under is-ns" x="343.6" y="116" width="26.4" height="14" rx="2"/>
+          <line class="whisker" x1="282" y1="123" x2="409.6" y2="123"/>
+          <line class="whisker" x1="282" y1="118" x2="282" y2="128"/><line class="whisker" x1="409.6" y1="118" x2="409.6" y2="128"/>
+          <text x="600" y="127" class="t-ns">≈ −0,6</text>
+        </g>
+        <g>
+          <rect x="0" y="152" width="10" height="10" rx="2" style="fill:var(--party-d)"/>
+          <text x="18" y="161" class="t-label">Partidul D</text>
+          <rect class="db-under is-ns" x="334.8" y="150" width="35.2" height="14" rx="2"/>
+          <line class="whisker" x1="277.6" y1="157" x2="396.4" y2="157"/>
+          <line class="whisker" x1="277.6" y1="152" x2="277.6" y2="162"/><line class="whisker" x1="396.4" y1="152" x2="396.4" y2="162"/>
+          <text x="600" y="161" class="t-ns">≈ −0,8</text>
+        </g>
+        <g>
+          <rect x="0" y="186" width="10" height="10" rx="2" style="fill:var(--party-e)"/>
+          <text x="18" y="195" class="t-label">Partidul E</text>
+          <rect class="db-under is-ns" x="356.8" y="184" width="13.2" height="14" rx="2"/>
+          <line class="whisker" x1="304" y1="191" x2="409.6" y2="191"/>
+          <line class="whisker" x1="304" y1="186" x2="304" y2="196"/><line class="whisker" x1="409.6" y1="186" x2="409.6" y2="196"/>
+          <text x="600" y="195" class="t-ns">≈ −0,3</text>
+        </g>
+        <!-- zero line drawn last so it sits on top -->
+        <line class="zero" x1="370" y1="30" x2="370" y2="208"/>
+        <!-- ticks -->
+        <text x="194" y="226" text-anchor="middle">−4</text>
+        <text x="282" y="226" text-anchor="middle">−2</text>
+        <text x="370" y="226" text-anchor="middle" class="t-strong">0</text>
+        <text x="458" y="226" text-anchor="middle">+2</text>
+        <text x="546" y="226" text-anchor="middle">+4</text>
+        <text x="370" y="246" text-anchor="middle">puncte procentuale față de media institutelor</text>
+      </svg>
+      <div class="legend" style="margin-top: var(--space-3)">
+        <span class="legend__item"><span class="legend__swatch" style="background:var(--color-over)"></span>abatere clară</span>
+        <span class="legend__item"><span class="legend__swatch" style="background:var(--color-surface);border:1.5px solid var(--color-under)"></span>nu se poate deosebi de zero</span>
+        <span class="legend__item"><svg width="34" height="10" aria-hidden="true"><line x1="2" y1="5" x2="32" y2="5" stroke="currentColor" stroke-width="1.5"/><line x1="2" y1="1" x2="2" y2="9" stroke="currentColor" stroke-width="1.5"/><line x1="32" y1="1" x2="32" y2="9" stroke="currentColor" stroke-width="1.5"/></svg>interval probabil (90%)</span>
+      </div>
+    </div>
+
+    <div class="card__section">
+      <dl class="stats">
+        <div class="stat"><dt>Sondaje analizate</dt><dd>14</dd></div>
+        <div class="stat"><dt>Alegeri</dt><dd>3 <small>din 3</small></dd></div>
+        <div class="stat"><dt>Eroare medie</dt><dd>2,1 p.p. <small>(media institutelor: 2,4)</small></dd></div>
+        <div class="stat"><dt>Transparență</dt><dd>6 <small>din 7 informații publicate</small></dd></div>
+        <div class="stat"><dt>Tipare în campanie</dt><dd><span class="tag">niciunul semnalat</span></dd></div>
+      </dl>
+    </div>
+
+    <div class="card__section">
+      <details class="disclosure">
+        <summary>Cum citesc graficul?</summary>
+        <div class="disclosure__body">
+          <p>Linia neagră din mijloc înseamnă „la fel ca media celorlalte institute”. O bară spre dreapta înseamnă că Institutul Alfa a dat partidului un procent mai mare decât celelalte institute; spre stânga, mai mic.</p>
+          <p>Comparăm cu celelalte institute, nu direct cu rezultatul, pentru că uneori toate institutele greșesc în aceeași direcție. Aici ne interesează doar partea de abatere care îi aparține institutului.</p>
+          <p>Linia subțire arată intervalul în care se află, cel mai probabil, abaterea reală. Când intervalul trece de partea cealaltă a liniei de zero, bara e goală: nu putem spune în ce direcție se abate institutul.</p>
+        </div>
+      </details>
+      <details class="disclosure">
+        <summary>Pe fiecare alegere</summary>
+        <div class="disclosure__body">
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Alegerea</th><th>Ultimul sondaj</th><th class="num">Eroare medie</th><th class="num">Partidul A, față de institute</th></tr></thead>
+              <tbody>
+                <tr><td>Alegerea 1 · parlamentare</td><td>cu 6 zile înainte</td><td class="num">1,8 p.p. <span class="subtle">(2,2)</span></td><td class="num over">+2,7 p.p.</td></tr>
+                <tr><td>Alegerea 2 · prezidențiale, turul 1</td><td>cu 4 zile înainte</td><td class="num">2,4 p.p. <span class="subtle">(2,6)</span></td><td class="num over">+3,4 p.p.</td></tr>
+                <tr><td>Alegerea 3 · prezidențiale, turul 2</td><td>cu 3 zile înainte</td><td class="num">2,1 p.p. <span class="subtle">(2,4)</span></td><td class="num over">+3,2 p.p.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="subtle" style="margin-top:var(--space-2)">La alegerile prezidențiale, abaterea se atribuie partidului prin candidatul pe care l-a susținut. În paranteză: media institutelor.</p>
+        </div>
+      </details>
+      <details class="disclosure">
+        <summary>Cum s-a calculat nota</summary>
+        <div class="disclosure__body">
+          <table class="table">
+            <thead><tr><th>Componentă</th><th class="num">Pondere</th><th class="num">Scor (0–100)</th></tr></thead>
+            <tbody>
+              <tr><td>Acuratețe față de celelalte institute</td><td class="num">35%</td><td class="num">70</td></tr>
+              <tr><td>Abatere sistematică (cât de mare și cât de sigură)</td><td class="num">30%</td><td class="num">40</td></tr>
+              <tr><td>Transparență</td><td class="num">15%</td><td class="num">86</td></tr>
+              <tr><td>Comportament în campanie</td><td class="num">10%</td><td class="num">90</td></tr>
+              <tr><td>Istoric (câte alegeri)</td><td class="num">10%</td><td class="num">60</td></tr>
+              <tr><th>Scor brut</th><td></td><th class="num">64</th></tr>
+              <tr><th>Scor final, ajustat pentru numărul mic de alegeri</th><td></td><th class="num">57 → C</th></tr>
+            </tbody>
+          </table>
+          <p style="margin-top:var(--space-2)">Cu puține alegeri, scorul este tras spre mijloc (50). Astfel, un institut nu primește o notă foarte bună sau foarte slabă pe baza a doar unul-două rezultate.</p>
+        </div>
+      </details>
+      <details class="disclosure">
+        <summary>Date și metodă</summary>
+        <div class="disclosure__body">
+          <p>Toate sondajele folosite, cu sursa fiecăruia: <a href="#">descarcă datele (CSV)</a> · <a href="methodology.html">Cum măsurăm</a></p>
+          <p><span class="tag tag--method">M-2.5</span> <span class="tag tag--method">M-4</span> <span class="tag tag--method">M-5</span></p>
+        </div>
+      </details>
+    </div>
+
+    <div class="card__section grid-2">
+      <aside class="callout callout--caveat">
+        <p class="callout__title">Ce nu spunem</p>
+        <p>O abatere sistematică arată cât de mult și în ce direcție s-au depărtat sondajele de rezultat. Nu arată de ce: poate ține de metodă, de eșantion sau de momentul sondajului. Nu afirmăm că abaterea este intenționată.</p>
+      </aside>
+      <aside class="callout callout--preliminary">
+        <p class="callout__title">Rezultate preliminare</p>
+        <p>Analizăm deocamdată 3 alegeri. Nota și abaterile se pot schimba pe măsură ce adăugăm alegeri.</p>
+      </aside>
+    </div>
+
+    <div class="card__foot">
+      <span>Actualizat: 22 noiembrie (exemplu)</span>
+      <span>Răspunsul institutului: <a href="#">citește dreptul la replică</a></span>
+    </div>
+  </article>
+  <p class="annot">First view = headline finding + grade + one diverging bar chart. Everything under the "+" rows is the second layer (progressive disclosure). Pollsters never get a brand colour: the house is always ink, colour is reserved for over/under.</p>
+
+  <section class="stack" style="margin-top:var(--space-7)" aria-labelledby="states">
+    <div>
+      <p class="eyebrow">Stări ale fișei</p>
+      <h2 id="states">Certitudine scăzută și date insuficiente</h2>
+      <p class="muted">Aceeași fișă, când avem mai puține date.</p>
+    </div>
+    <div class="grid-2">
+      <article class="card card--dashed" aria-labelledby="finding-gamma">
+        <div class="card__head">
+          <div>
+            <p class="card__title">Gamma Data</p>
+            <p class="card__meta">2 alegeri analizate · 6 sondaje</p>
+          </div>
+          <div class="grade grade--sm is-low" title="Nota C, certitudine scăzută">
+            <span class="grade__letter" aria-hidden="true">C</span>
+            <span class="grade__text">
+              <span class="grade__label">Nota C (provizorie)</span>
+              <span class="certainty"><span class="certainty__meter" aria-hidden="true"><i class="on"></i><i></i><i></i></span>certitudine scăzută</span>
+            </span>
+          </div>
+        </div>
+        <p class="finding" id="finding-gamma" style="font-size:var(--fs-md)">Gamma Data pare să fi supraestimat Partidul C, cu aproximativ 2 p.p., dar datele nu sunt încă suficiente pentru o concluzie.</p>
+        <svg class="chart" viewBox="0 0 420 70" role="img" aria-label="Partidul C: +2,2 puncte procentuale, interval de la −1,0 la +5,4; nu se poate deosebi de zero">
+          <!-- x(v) = 220 + 24·v -->
+          <rect x="0" y="18" width="10" height="10" rx="2" style="fill:var(--party-c)"/>
+          <text x="16" y="27" class="t-label">Partidul C</text>
+          <rect class="db-over is-ns" x="220" y="16" width="52.8" height="14" rx="2"/>
+          <line class="whisker" x1="196" y1="23" x2="340" y2="23" stroke-dasharray="4 3"/>
+          <line class="whisker" x1="196" y1="18" x2="196" y2="28"/>
+          <line class="zero" x1="220" y1="6" x2="220" y2="40"/>
+          <text x="348" y="27" class="t-ns">≈ +2,2</text>
+          <text x="220" y="62" text-anchor="middle">interval: de la −1,0 la +5,4 p.p. (iese din grafic)</text>
+        </svg>
+        <aside class="callout callout--preliminary" style="margin-top:var(--space-4)">
+          <p class="callout__title">De ce „certitudine scăzută”?</p>
+          <p>Avem date doar de la 2 alegeri. Intervalul este larg și include zero, deci nu putem spune sigur în ce direcție se abate institutul. Tratați aceste cifre ca indicii, nu concluzii.</p>
+        </aside>
+        <p class="annot">Low certainty (N &lt; 3, M-5.2): dashed card and badge, "provizorie" next to the grade, a hedged verb ("pare să fi"), and a dashed interval that runs off the chart. Only the largest deviation is shown; the rest is behind "detalii".</p>
+      </article>
+
+      <article class="card card--dashed" aria-labelledby="title-delta">
+        <div class="card__head">
+          <div>
+            <p class="card__title" id="title-delta">Delta Opinion</p>
+            <p class="card__meta">1 alegere analizată · 2 sondaje</p>
+          </div>
+          <div class="grade grade--sm is-unrated" title="Fără notă: date insuficiente">
+            <span class="grade__letter" aria-hidden="true">–</span>
+            <span class="grade__text">
+              <span class="grade__label">Fără notă încă</span>
+              <span class="subtle">date insuficiente</span>
+            </span>
+          </div>
+        </div>
+        <aside class="callout callout--insufficient" style="margin-top:var(--space-4)">
+          <p class="callout__title">Nu avem încă destule date pentru o concluzie</p>
+          <p>Delta Opinion a publicat un singur sondaj în ultimele 21 de zile dinaintea unei alegeri. Pentru celelalte două alegeri nu are niciun sondaj în această perioadă, așa că nu îl putem compara cu rezultatul.</p>
+          <p>Lipsa unui sondaj final nu este o greșeală a institutului: înseamnă doar că nu avem ce măsura.</p>
+        </aside>
+        <dl class="stats" style="margin-top:var(--space-4)">
+          <div class="stat"><dt>Alegerea 1</dt><dd><span class="tag">fără sondaj final</span></dd></div>
+          <div class="stat"><dt>Alegerea 2</dt><dd>1 sondaj final</dd></div>
+          <div class="stat"><dt>Alegerea 3</dt><dd><span class="tag">fără sondaj final</span></dd></div>
+        </dl>
+        <p class="annot">Insufficient data: no grade letter, no bars, hatched tile. Proposed threshold: a grade needs final polls in at least 2 elections (open question for the owner; M-5.2 alone would still compute a score).</p>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">Machetă T-031 · date fictive · <a href="index.html">toate machetele</a></div>
+</footer>
+</body>
+</html>

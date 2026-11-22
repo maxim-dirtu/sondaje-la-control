@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /*
  * Component styles: T-031 UX concept. Uses tokens.css only.
  * Inventory (see ../visual-language.md §6): page chrome, card, grade badge with
@@ -78,7 +79,7 @@ small, .text-small { font-size: var(--fs-sm); }
 }
 /* The single question a screen answers, written on the screen. */
 .question { font-size: var(--fs-sm); color: var(--color-text-muted); margin: var(--space-2) 0 0; }
-.question::before { content: "Întrebarea: "; font-weight: var(--fw-semibold); color: var(--color-text); }
+.question::before { content: "\00CEntrebarea: "; font-weight: var(--fw-semibold); color: var(--color-text); }
 /* The answer: a plain-language headline finding, the only serif element. */
 .finding {
   font-family: var(--font-serif);
@@ -140,7 +141,7 @@ small, .text-small { font-size: var(--fs-sm); }
 }
 
 /* Certainty meter: 3 segments, filled = level. Always followed by a word. */
-.certainty { display: inline-flex; align-items: center; gap: var(--space-2); color: var(--color-text-muted); }
+.certainty { display: inline-flex; align-items: center; gap: var(--space-2); color: var(--color-text-muted); white-space: nowrap; }
 .certainty__meter { display: inline-flex; gap: 3px; }
 .certainty__meter i { width: 0.6rem; height: 0.6rem; border-radius: 50%; border: 1.5px solid var(--color-text-muted); display: block; }
 .certainty__meter i.on { background: var(--color-text-muted); }
@@ -261,7 +262,7 @@ small, .text-small { font-size: var(--fs-sm); }
 }
 .disclosure > summary::-webkit-details-marker { display: none; }
 .disclosure > summary::after { content: "+"; font-size: var(--fs-md); color: var(--color-text-muted); font-weight: var(--fw-regular); }
-.disclosure[open] > summary::after { content: "−"; }
+.disclosure[open] > summary::after { content: "\2212"; }
 .disclosure__body { padding: 0 0 var(--space-4); font-size: var(--fs-sm); color: var(--color-text-muted); }
 .disclosure__body p:last-child { margin-bottom: 0; }
 
@@ -297,7 +298,7 @@ small, .text-small { font-size: var(--fs-sm); }
   background: transparent;
   margin-top: var(--space-3);
 }
-.annot::before { content: "Design note · "; font-weight: var(--fw-bold); }
+.annot::before { content: "Design note \00B7  "; font-weight: var(--fw-bold); }
 
 /* ---------- Footer ---------- */
 .site-footer { margin-top: var(--space-8); border-top: 1px solid var(--color-border); background: var(--color-surface); padding: var(--space-6) 0; font-size: var(--fs-sm); color: var(--color-text-subtle); }
