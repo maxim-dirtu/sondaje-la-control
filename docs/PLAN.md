@@ -8,10 +8,12 @@ status, so that concurrent agents never conflict on it.
 
 ## Goal
 
-A public, explainable rating of Romanian political pollsters covering:
-accuracy, systematic party lean, campaign behaviour, and a trust score with a
-certainty level. The methodology is fully published
-([METHODOLOGY.md](METHODOLOGY.md)).
+An **investigative case study** of Romanian political pollsters: which ones
+deviate systematically, toward or against whom, and how much their polls can
+be trusted. The findings are **explained simply to the general public**, which
+is the top priority ([ADR-0008](decisions/0008-product-positioning.md)). The
+methodology is fully published ([METHODOLOGY.md](METHODOLOGY.md)). This is not
+a poll aggregator.
 
 ## MVP scope ([ADR-0007](decisions/0007-mvp-scope.md))
 
@@ -31,22 +33,23 @@ the visuals; it does not give final verdicts.
 
 ## Related work
 
-- **sondajeromania.ro** aggregates polls from 20+ houses and publishes a simple
-  accuracy table: the mean absolute error of each house's last poll, and the
-  candidate it "favored". This platform differs in that it measures error
-  relative to the market (separating house error from industry-wide misses),
-  looks at the whole campaign rather than only the final poll, adds
+- **sondajeromania.ro** is a poll **aggregator** (averages, trends, seat
+  projections, coalition simulations) with 20+ houses and a simple accuracy
+  table (the mean absolute error of each house's last poll, and the candidate
+  it "favored"). This project is an **investigation** instead. It measures
+  error relative to the market (separating house error from industry-wide
+  misses), looks at the whole campaign rather than only the final poll, adds
   significance and uncertainty, herding/convergence detection, a trust score
-  with a certainty level, and full provenance. Both sites can be used as
-  discovery indexes.
+  with a certainty level, and full provenance. Its clear UI is a design
+  reference (I-018), and it is a future discovery source (I-017).
 - **gov2-ro/prezenta.roaep.ro:** an open-source downloader for AEP results
   data. Reference for T-010.
 
 ## Phases & tasks
 
 Legend: tasks without dependencies inside the same phase can run **in parallel**.
-Task files exist for Phases 0–2. Later phases are refined into task files when
-they start.
+Task files exist for Phases 0–2 and T-031. Later phases are refined into task
+files when they start.
 
 ### Phase 0: Foundations
 | ID | Task | Depends on |
@@ -86,12 +89,14 @@ parallel with everything. The pollster tasks run in parallel with each other.
 elections.
 Development can start on synthetic fixtures before M1 is reached.
 
-### Phase 3: Internal prototype
+### Phase 3: Internal prototype & UX
 | ID | Task | Depends on |
 |---|---|---|
-| T-030 | Prototype dashboard (leaderboard, house × party heatmap, pollster card, timeline) | T-025 |
+| T-030 | Prototype dashboard (leaderboard, house × party heatmap, pollster card, timeline) | T-025, T-031 |
+| T-031 | UX concept & design references (storyboards, wireframes, visual language) | none: **can start now** |
 
-**Milestone M3:** the owner can explore every metric visually.
+**Milestone M3:** the owner can explore every metric visually, through the UX
+concept.
 
 ### Phase 4: Advanced models & trust score
 | ID | Task | Depends on |
@@ -126,7 +131,7 @@ pollsters, more elections, and less manual work.
 | T-062 | Local elections (selected races) | M1 |
 | T-063 | Ongoing ingestion of new polls | T-052 |
 | T-064 | Extend coverage to all active pollsters | M1 |
-| T-065 | Automated discovery & extraction (RSS, LLM-assisted, with verification) | T-011 |
+| T-065 | Automated discovery & extraction (RSS, LLM-assisted, sondajeromania.ro scraping per I-017, all with verification) | T-011 |
 
 ## Open questions (owner)
 

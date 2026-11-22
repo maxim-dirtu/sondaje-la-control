@@ -1,9 +1,11 @@
 # Sondaje la control
 
-A platform that evaluates Romanian political pollsters against actual election
-results. It shows how accurate each polling firm has been, which parties it
-systematically over- or under-estimates, and how much its polls can be trusted.
-The results are presented in a way the general public can understand.
+An investigative case study of Romanian political pollsters, measured against
+actual election results. It shows how accurate each polling firm has been,
+which parties it systematically over- or under-estimates, and how much its
+polls can be trusted. Above all, it **explains this simply to the general
+public**. It is not a poll aggregator; see
+[ADR-0008](docs/decisions/0008-product-positioning.md).
 
 > Working name. Public-facing UI will be in Romanian; all technical material
 > (code, docs, comments, commits, prompts) is in English. See
