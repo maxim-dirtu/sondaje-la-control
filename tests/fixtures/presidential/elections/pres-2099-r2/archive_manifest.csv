@@ -1,0 +1,2 @@
+document_id,title,published_date,format,archive_url,sha256,raw_path,source_url,source_type,retrieved_at,notes
+pres-2099-r2-doc-001,Rezultate finale turul 2,2099-11-18,csv,,e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855,data/raw/elections/pres-2099-r2/rezultate.csv,https://example.org/aep/pres-2099-r2/rezultate.csv,official,2099-11-20,

@@ -1,0 +1,4 @@
+election_id,scope,registered_voters,voters,valid_votes,invalid_votes,source_url,source_type,retrieved_at,verified,notes
+pres-2099-r1,domestic,18000000,8600000,8400000,150000,https://example.org/aep/pres-2099-r1/rezultate.csv,official,2099-11-20,true,
+pres-2099-r1,diaspora,,870000,850000,10000,https://example.org/aep/pres-2099-r1/rezultate.csv,official,2099-11-20,true,
+pres-2099-r1,total,,9470000,9250000,160000,https://example.org/aep/pres-2099-r1/rezultate.csv,official,2099-11-20,true,

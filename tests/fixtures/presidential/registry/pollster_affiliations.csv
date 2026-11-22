@@ -1,0 +1,2 @@
+pollster_id,relation,counterpart_name,counterpart_entity_id,period_start,period_end,description,source_url,source_type,retrieved_at,verified,notes
+exemplar,client,Partidul Alfa,alfa,2099-03,2099-10-27,Commissioned the poll published on 2099-10-27.,https://example.org/exemplar/raport-2099-10.pdf,pollster,2099-11-20,true,
