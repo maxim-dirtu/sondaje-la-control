@@ -43,15 +43,87 @@ Scorecard criteria (score each one, with links as evidence):
 - Collecting poll data, beyond what is needed to judge the criteria.
 
 ## Acceptance criteria
-- [ ] Every candidate pollster is scored on criteria 1–5, with evidence links.
-- [ ] The draft ADR proposes 2–4 houses, plus 1–2 reserves, with reasons.
-- [ ] The report lists the publication formats found for each house. T-011
+- [x] Every candidate pollster is scored on criteria 1–5, with evidence links.
+- [x] The draft ADR proposes 2–4 houses, plus 1–2 reserves, with reasons.
+- [x] The report lists the publication formats found for each house. T-011
       needs this to know which extraction paths to support.
 - [ ] The owner has approved the selection. The coordinator then numbers the ADR
       and creates one data task per pollster (T-012 onward).
 
 ## Follow-ups
+- **Owner decisions (draft ADR, Q-A to Q-E):** how CURS is used given the
+  21-day window (A1 campaign house / A2 wider window / A3 two houses only);
+  accepting media-only sources and expressed toplines for Sociopol; final-poll
+  eligibility of polls published on or after election day; diaspora default;
+  a 4th house.
+- **METHODOLOGY M-1.3 (proposal):** state whether a poll published on or after
+  election day can be a house's "final poll" (AtlasIntel 1–3 May 2025,
+  published 5 May). Suggested default: eligible only if `published_date` <
+  `election_date`; T-025 tests the alternative.
+- **METHODOLOGY / T-025 (proposal):** include `window_days` = 28 in the
+  sensitivity analysis; it is the smallest round value that covers CURS's
+  parliamentary (gap 26) and round-1 (gap 24) polls.
+- **DATA_MODEL §6.11 `topline_coverage` (proposal):** clarify how to record a
+  publication that shows parties/candidates + "other" summing to 100 but no
+  undecided share (Sociopol, CURS, IRSOP, ARA, INSCOP). Is that `full` (every
+  option the publication shows) or `partial`?
+- **DATA_MODEL §6.10 `format` (proposal):** values for broadcast video (ARA
+  23–28 Apr 2025) and for polls known only from a verbal statement reported in
+  an article (Sociopol round 2). Today they would be `other` / `html`.
+- **T-011:** extraction paths needed by the proposed set: `pdf_text`, `html`,
+  and manual double entry from images and rendered PDF pages (report §5).
+- **Data tasks (T-012+):** search beyond the indexes (Sociopol 20–22 Nov 2024,
+  BCS 26–29 Sep and 7–10 Nov 2024, AtlasIntel 1–3 May 2025 were missing);
+  resolve the source disagreements listed in report §7.
+- **T-005 Log note is superseded:** "AtlasIntel, CURS and Verifield have
+  pre-election polls in all three elections" holds for the 120-day windows
+  only, not for the 21-day final window.
 
 ## Log
+- **2026-11-22: setup.** Worktree `E:\Projects\sondaje-wt\T-006`, branch
+  `task/T-006-select-mvp-pollsters` from `main` (ecfde74). Every write used
+  absolute worktree paths.
+- **2026-11-22: windows.** Final windows from M-1.3 (`fieldwork_end` ≥
+  election day − 21): parl 2024-11-10, r1 2025-04-13, r2 2025-04-27. For
+  `pres-2025-r2`, R-84 also requires `fieldwork_start` after 2025-05-04, so
+  pre-round-1 Dan–Simion head-to-heads (AtlasIntel 28 Apr–1 May, MKOR
+  24–27 Apr, Noi, Cetățenii 24–30 Apr) do not count, although their fieldwork
+  ends inside the 21-day window. 120-day windows from M-3.2 for the poll counts.
+- **2026-11-22: sources.** Discovery: EN/RO Wikipedia wikitext (4 pages) and
+  the structured poll lists of all 31 sondajeromania.ro institute pages.
+  Gap searches: web search for each house lacking a final-window poll; the
+  WordPress REST post lists of curs.ro and inscop.ro for Nov 2024 and
+  Apr–May 2025; AtlasIntel's own poll pages (slugs found via search, as the
+  site has no crawlable list); bcs.com.ro. Originals opened: every
+  final-window poll of AtlasIntel, Sociopol, INSCOP, CIRA, BCS, ARA, IRSOP,
+  MKOR, Noi, Cetățenii, FlashData, DataEcho, CURS (r2), Verifield (r2), plus
+  CURS's, Verifield's and Avangarde's nearest earlier polls. PDFs checked with
+  `pypdf` (text layer) and chart pages rendered with `pypdfium2`, both via
+  `uv run --with` (no dependency change). Web Archive availability checked.
+  Scratch files in the git-ignored `build/t006/`.
+- **2026-11-22: coverage result.** Only AtlasIntel and Sociopol have a
+  final-window poll in all three elections. The T-005 note listed AtlasIntel,
+  CURS and Verifield; CURS's latest parl/r1 polls end 26/24 days before the
+  vote and Verifield's 53/37 days. Sociopol's parliamentary poll (20–22 Nov
+  2024, România TV) is not in any index; found by web search. Verifield's
+  three November 2024 polls are presidential only (checked in G4Media and
+  B1TV). INSCOP has no 2025 pre-election vote-intention poll (inscop.ro post
+  list).
+- **2026-11-22: scoring choices.** Transparency = the 7 M-5.3 items as
+  DATA_MODEL §6.11 would record them for the final-window poll(s); a generic
+  "calibration" sentence in AtlasIntel's boilerplate was **not** counted as a
+  weighting description. Topline: "Full" only if undecided / non-response
+  appear as options on some base; "Expressed" when parties + other sum to 100
+  without them. Popularity is qualitative (poll count + outlets seen); no
+  citation count was attempted.
+- **2026-11-22: proposal.** AtlasIntel + Sociopol (meet coverage) + CURS
+  (campaign house, owner option A1); reserves Verifield, MKOR. Reasons and
+  trade-offs in the draft ADR. Affiliation records were not used as a
+  criterion (ADR-0003; they feed M-5.1d).
+- **2026-11-22: not verified.** Vote shares of Noi, Cetățenii (Google Sheets
+  charts) and DataEcho (image PDF) were not read; AtlasIntel's own page for
+  the 28 Apr–1 May 2025 poll was not located (HotNews carries the slides);
+  the Avangarde March 2025 vote-question page was not checked. None of these
+  changes the coverage result.
 
 ## Outcome
