@@ -160,6 +160,10 @@ covered and `N0 = 3`.
 The certainty level is *low* when N < 3, *medium* when 3 ≤ N < 6, and *high*
 when N ≥ 6.
 Grades: A ≥ 85, B ≥ 70, C ≥ 55, D ≥ 40, F < 40 (± modifiers, defined later).
+**No grade is given when N < 3** ("no grade yet"); the findings and their
+uncertainty are still shown. While every pollster has N ≤ 3 (the MVP), grades
+are labelled **provisional**. With N = 3 and N0 = 3 the maximum score is 75,
+so grade A cannot be reached yet ([ADR-0010](decisions/0010-grades-and-card-framing.md)).
 
 ### M-5.3 Transparency checklist
 Each item scores 1 if published for the poll: sample size, fieldwork dates,

@@ -1,7 +1,7 @@
 ---
 id: T-031
 title: UX concept and design references
-status: review
+status: done
 phase: 3
 depends_on: []
 owner: agent-t031-2
@@ -46,7 +46,7 @@ good reference for clarity and tone.
 - [x] Every key screen has a wireframe with a plain-language headline example.
 - [x] Each screen states the single question it answers for a non-expert.
 - [x] Uncertainty and "low certainty" states are designed, not left for later.
-- [ ] The owner has reviewed the concept and recorded feedback in the Log.
+- [x] The owner has reviewed the concept and recorded feedback in the Log.
 
 ## Follow-ups
 - **T-043 / M-5.2 (grade ceiling in the MVP):** with `N0 = 3` and at most 3
@@ -114,6 +114,12 @@ good reference for clarity and tone.
   desktop layout (> 960 px) could not be screenshot at full width because the
   browser window was limited to ~800 px.
 - Owner review: pending.
+- 2026-11-22 (coordinator): owner review of the open UX questions, recorded
+  as ADR-0010. Grades are shown in the MVP marked "provisional". A grade needs
+  at least 3 elections, otherwise the card shows "no grade yet". The pollster
+  card leads with a balanced summary, not the strongest deviation. The
+  mock-ups still show the strongest-deviation lead; T-030 and T-052 apply the
+  new framing. The owner left no further visual comments.
 
 ## Outcome
 UX concept delivered in `docs/ux/`:
