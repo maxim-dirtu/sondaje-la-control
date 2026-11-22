@@ -1,7 +1,7 @@
 ---
 id: T-002
 title: Python project skeleton
-status: review
+status: done
 phase: 0
 depends_on: []
 owner: agent-t002
