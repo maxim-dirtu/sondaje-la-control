@@ -1,0 +1,2 @@
+pollster_id,alias,source_url,source_type,retrieved_at,verified,notes
+exemplar,Exemplar Research,https://example.org/agregator/exemplar,aggregator,2099-11-20,false,Name variant on an aggregator.

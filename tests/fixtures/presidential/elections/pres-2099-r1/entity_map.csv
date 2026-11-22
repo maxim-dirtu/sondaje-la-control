@@ -1,0 +1,2 @@
+election_id,poll_entity_id,relation,result_entity_id,effective_date,source_url,source_type,retrieved_at,verified,notes
+pres-2099-r1,vasile-exemplu,excluded,,2099-10-10,https://example.org/stiri/vasile-respins,media,2099-11-20,true,

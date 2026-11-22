@@ -1,0 +1,3 @@
+election_id,candidate_entity_id,party_entity_id,support_type,announced_date,source_url,source_type,retrieved_at,verified,notes
+pres-2099-r2,ion-exemplu,alfa,nominated,2099-09-01,https://example.org/bec/pres-2099/candidaturi,official,2099-11-20,true,
+pres-2099-r2,maria-exemplu,beta,nominated,2099-09-02,https://example.org/bec/pres-2099/candidaturi,official,2099-11-20,true,

@@ -1,0 +1,4 @@
+election_id,poll_entity_id,relation,result_entity_id,effective_date,source_url,source_type,retrieved_at,verified,notes
+parl-2099-cd,delta,alliance_member,gama,2099-04-10,https://example.org/bec/parl-2099/aliante,official,2099-06-20,true,
+parl-2099-cd,epsilon,alliance_member,gama,2099-04-10,https://example.org/bec/parl-2099/aliante,official,2099-06-20,true,
+parl-2099-cd,zeta,withdrawn,,2099-05-28,https://example.org/bec/parl-2099/retrageri,official,2099-06-20,true,

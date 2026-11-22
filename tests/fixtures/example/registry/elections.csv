@@ -1,0 +1,2 @@
+election_id,election_type,body,round,election_date,name,status,source_url,source_type,retrieved_at,verified,notes
+parl-2099-cd,parliamentary,chamber_of_deputies,1,2099-06-07,"Parliamentary election 2099, Chamber of Deputies",held,https://example.org/bec/parl-2099,official,2099-06-20,true,Fictitious example.

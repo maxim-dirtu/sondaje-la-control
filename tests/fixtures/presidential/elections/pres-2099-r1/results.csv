@@ -1,0 +1,10 @@
+election_id,scope,entity_id,votes,source_url,source_type,retrieved_at,verified,notes
+pres-2099-r1,domestic,ion-exemplu,4000000,https://example.org/aep/pres-2099-r1/rezultate.csv,official,2099-11-20,true,
+pres-2099-r1,domestic,maria-exemplu,3500000,https://example.org/aep/pres-2099-r1/rezultate.csv,official,2099-11-20,true,
+pres-2099-r1,domestic,ana-exemplu,900000,https://example.org/aep/pres-2099-r1/rezultate.csv,official,2099-11-20,true,
+pres-2099-r1,diaspora,maria-exemplu,500000,https://example.org/aep/pres-2099-r1/rezultate.csv,official,2099-11-20,true,
+pres-2099-r1,diaspora,ion-exemplu,300000,https://example.org/aep/pres-2099-r1/rezultate.csv,official,2099-11-20,true,
+pres-2099-r1,diaspora,ana-exemplu,50000,https://example.org/aep/pres-2099-r1/rezultate.csv,official,2099-11-20,true,
+pres-2099-r1,total,ion-exemplu,4300000,https://example.org/aep/pres-2099-r1/rezultate.csv,official,2099-11-20,true,
+pres-2099-r1,total,maria-exemplu,4000000,https://example.org/aep/pres-2099-r1/rezultate.csv,official,2099-11-20,true,
+pres-2099-r1,total,ana-exemplu,950000,https://example.org/aep/pres-2099-r1/rezultate.csv,official,2099-11-20,true,
