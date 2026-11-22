@@ -1,11 +1,11 @@
 ---
 id: T-004
 title: Election, party and alliance registry (MVP elections)
-status: todo
+status: in-progress
 phase: 0
 depends_on: [T-001]
-owner: null
-branch: null
+owner: agent-t004
+branch: task/T-004-registry
 methodology: [M-1.2, M-1.5]
 created: 2026-11-22
 updated: 2026-11-22
