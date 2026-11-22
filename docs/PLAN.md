@@ -61,6 +61,8 @@ files when they start.
 | T-004 | Election, party & alliance registry (MVP elections) | T-001 |
 | T-005 | Pollster registry & transparency metadata | T-001 |
 | T-006 | Select MVP pollsters (scorecard; needs owner approval) | T-005 |
+| T-007 | Schema amendments from Phase 0 follow-ups (incl. "ran on another party's list") | T-003, T-004, T-005 |
+| T-008 | Continuous integration: tests, lint, and validation on every PR | T-003 |
 
 **Milestone M0:** schemas are frozen, validation runs, and the MVP pollsters
 are approved.
