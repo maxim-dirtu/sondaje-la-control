@@ -1,7 +1,7 @@
 ---
 id: T-005
 title: Pollster registry and transparency metadata
-status: in-progress
+status: review
 phase: 0
 depends_on: [T-001]
 owner: agent-t005
