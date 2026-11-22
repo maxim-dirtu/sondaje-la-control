@@ -1,53 +1,77 @@
 # Design references
 
-**Task:** T-031 · **Reviewed:** 2026-11-22 · **Related:** ADR-0008, I-018
+**Task:** T-031 · **Reviewed:** 2026-11-22 (revised the same day for ADR-0009)
+· **Related:** ADR-0003, ADR-0008, ADR-0009, I-018
 
 This review covers four references that explain polls or pollster quality to
 non-experts. For each one it records what works for a general audience and
-why, and what this project should avoid. Following ADR-0008 and I-018, we take
-**general ideas only**. No code, assets, logos, colours, or text are copied.
-Quotations are kept to single UI labels, so that the observation can be
-checked.
+why, and what this project should avoid.
+
+**Scope of the inspiration ([ADR-0009](../decisions/0009-design-direction-light-first.md)).**
+From sondajeromania.ro we take ideas for the **visual design, the design
+system, and the UX** only: layout, typography, spacing, component style,
+readability, navigation, and theming (its light mode). We do **not** adopt its
+product logic or mechanisms. It is a poll aggregator; this project is an
+investigation ([ADR-0008](../decisions/0008-product-positioning.md)), and every
+feature must serve [METHODOLOGY.md](../METHODOLOGY.md). Section 1 makes this
+split explicit. From every reference we take general ideas only: no code,
+assets, logos, colour values, or text are copied. Quotations are kept to single
+UI labels, so that the observation can be checked.
 
 The question behind the review: *what makes a person who has never heard of a
 "house effect" understand, within seconds, how far a pollster can be trusted?*
 
 ---
 
-## 1. sondajeromania.ro (primary reference)
+## 1. sondajeromania.ro (primary design reference)
 
-Pages reviewed: home, `/parlamentare` (averages, trends, polls table, accuracy
-section), `/institute` (pollster directory), `/institute/<slug>` (pollster
-page), `/metodologie`.
+Pages reviewed: home, `/parlamentare`, `/institute` (pollster directory),
+`/institute/<slug>` (pollster page), `/metodologie`. The site opens in dark
+mode and offers a light mode through a toggle in the header. Following ADR-0009,
+**the light mode is the one we study**; dark mode is out of scope for our
+mock-ups.
 
-It is a poll **aggregator** (see [PLAN: Related work](../PLAN.md#related-work)).
-The owner considers it the reference for clarity and tone.
+### 1.1 Design ideas we take (visual design, design system, UX)
 
-### What works for non-experts, and why
+| Idea | What we observed (light mode) | Why it works | How we use it |
+|---|---|---|---|
+| **Calm light canvas** | A cool off-white page background, content on white cards with a large radius, a soft and diffuse shadow, and hairline separators. | Separates content blocks without heavy borders. Feels calm and not like a template. | `--color-bg`, `--color-surface`, `--radius-lg`, `--shadow-1` ([visual-language §2, §5](visual-language.md)). |
+| **One sans-serif family, few weights** | A single sans-serif for everything; size and weight carry the hierarchy, not colour. | Highly readable on phones; nothing competes with the numbers. | One UI sans (`--font-sans`), a 7-step type scale. Our own addition: a serif only for the one-sentence finding. |
+| **Numbers first, in large type** | Big figures on tiles; full names and units in small muted text underneath or beside. | The reader gets the answer before any chart. | Stat strips (`.stats`) and the grade letter. |
+| **Small uppercase "eyebrow" labels** | Short tracked uppercase labels above section titles. | Orients the reader ("where am I, what is this block") without a second heading. | `.eyebrow` on every screen and card. |
+| **Compact meta lines** | Bold number + muted label, separated by thin dividers ("77 sondaje · 2017–2026"). | Dense facts stay scannable. | Card meta lines ("3 alegeri analizate · 14 sondaje"). |
+| **Quiet sticky header** | White bar, brand on the left, plain text links on the right; the active page is marked by colour/weight. | Navigation is always there but never loud. | `.site-header`; we mark the active page with ink + an underline instead of an accent colour (colour is reserved for data). |
+| **Breadcrumbs and directory → detail** | Directory of pollster cards, each opening a pollster page. | Users learn one pattern and reuse it. | Leaderboard → pollster card → detail screens. |
+| **One question per block** | Section titles phrased as plain questions ("how precise are the pollsters?"). | A question tells the reader why the block exists. | Every screen states its question; disclosures are titled as questions ("Cum citesc graficul?"). |
+| **"How to read this" at the point of use** | A one-sentence reading guide under dense tables and charts. | No trip to a separate page. | `details.disclosure` "Cum citesc…?" under every chart. |
+| **Chart captions and an annotated reference line** | A short caption under each chart; the election day is a labelled vertical line. | The chart explains itself. | Timeline: the result tick and the shaded final-window band are labelled directly. |
+| **Honest suppression when data is thin** | An interval is not drawn when there are too few data points. | It avoids drawing meaningless precision. | The *principle* drives our insufficient-data states (hatched, no number). |
+| **Plain-prose methodology with a worked example** | Short sections, one formula each, a concrete numeric example. | The example makes the formula concrete. | [Cum măsurăm](mockups/methodology.html): sentence → example + diagram → technical details. |
+| **Disclosure as a fact on the row** | The sponsor of each poll is shown on its row, without commentary. | Transparency without judgement. | Client/sponsor appears in our data tables and in the transparency score (M-5.3). |
 
-| Pattern | Why it works |
-|---|---|
-| **Numbers first, in large type.** Each party gets a tile with its share in big figures, the full party name, and a small change indicator. | The reader gets the answer before any chart. The number is the headline. |
-| **One question per block.** The accuracy block is titled as a plain question ("how precise are the pollsters?") with a short ranked bar list underneath. | A question as a title tells the reader why the block exists. The bar list can be read in one glance. |
-| **A "how to read this" note under the accuracy table.** One sentence explains what the header row and the cells mean. | Readers are told how to read a dense table at the point of use, not on a separate page. |
-| **Sponsor disclosure on every poll row** ("commissioned by …" or "undeclared client"). Documented political affiliations are marked with a small info marker. | Transparency is shown as a fact on the row, without commentary. The methodology page says plainly that an affiliation is not a quality judgement. |
-| **Intervals on averages, and suppression when data is thin.** The averages chart shows a 95% range, and the range is hidden when a party has fewer than 3 polls. | It is an honest default: no interval is drawn when it would be meaningless. We reuse the *principle* for our insufficient-data states. |
-| **Plain-prose methodology page.** Short sections ("how are averages calculated?"), each with one formula and a worked example (e.g. 30% official vs. 32% polled means 2 points of error). | The worked example makes the formula concrete. Every section is short enough to read on a phone. |
-| **Pollster page = history + accuracy.** Activity span, number of polls per election type, the error per past election as a bar, then the full poll table. | It answers "who is this pollster and how did they do?" in one scroll. |
-| **Calm visual tone.** Dark neutral background, a single sans-serif family, thin rules, few decorations, direct labels. | Nothing competes with the data. |
+### 1.2 Mechanisms we deliberately don't adopt (different purpose)
 
-### What to avoid (and what we do instead)
+These are product features, not design. They serve an aggregator; they do not
+serve an investigation of pollster accuracy.
+
+| Mechanism on the reference site | Why we don't adopt it | What we have instead |
+|---|---|---|
+| **Poll averages as a headline feature** (party tiles with the current average, trend charts as the main view) | We don't tell readers who is ahead. That is the aggregator's job. | A market average exists only as a **reference** for measuring houses: leave-one-house-out, campaign window only (M-3.1, M-3.2). It is never shown as "the current standings". |
+| **Seat projections** | Out of scope: they forecast, we audit. | None. |
+| **Coalition simulations** (Monte Carlo simulator, majority threshold) | Out of scope. | None. |
+| **Accuracy approach**: the mean absolute error of each house's *last poll* per election, a 1–N rank, and a "favored party/candidate" column | A single last poll ignores the campaign; a rank without uncertainty overstates precision; "favored" implies intent (ADR-0003). It also mixes the industry-wide miss into each house's score. | Relative house effect (M-2.5) that removes the shared miss, campaign house effect (M-3.2), significance and intervals (M-4), a grade with a certainty level (M-5), and neutral wording ("overestimated by +3,1 p.p."). |
+| **Aggregator-style poll feed** ("latest polls", counters of polls aggregated / institutes monitored as hero stats) | A feed invites horse-race reading; counters signal coverage, not findings. | The home view leads with findings; poll lists appear only as the evidence behind a finding ("Datele: sondajele folosite"). |
+
+### 1.3 Presentation details we do differently
 
 | Observed | Problem for our purpose | Our approach |
 |---|---|---|
-| The accuracy table labels a column "favored party" (the party a house overestimated most). | "Favored" suggests intent. ADR-0003 forbids implying intent. | "Overestimated most: X (+2.8 pp)" with an interval. |
-| Accuracy bars are green for the best house and red for all the others, so an error of 3.4 and one of 4.0 look equally "bad". | A traffic-light colour turns small, possibly insignificant differences into a verdict. | Neutral bars. The colour encodes direction (over/under), never good/bad. Differences that are within the uncertainty are drawn as such. |
-| Houses are ranked 1–5 on a single election's final poll, without uncertainty. | A rank suggests a precision that one poll cannot give. | Grades with a certainty level. No ordinal ranks inside a grade group (see [leaderboard](mockups/leaderboard.html)). |
-| The "last poll before the election" can be several weeks old (one row has fieldwork about 7 weeks before the vote). | Opinion moves; an old poll is penalised for real change. | The accuracy window (M-1.3, 21 days by default) is stated on the chart. A house without a poll in the window is shown as "no final poll", not as inaccurate. |
-| The mean absolute error is written as "±2.0". | "±" reads as a margin of error, which is a different concept. | Write "2.0 pp average error". Use "±" only for real intervals. |
-| English terms mixed into the Romanian UI ("Avg Error", "Delta", "Bias"). | Jargon stops non-experts. | A Romanian glossary (T-051). Technical terms appear only in the "details" layer. |
-| Some party colours have low contrast on the dark background (a navy party colour on near-black). | It fails WCAG contrast. Colour-blind readers lose the party identity. | A light background. Party colours are checked for ≥ 4.5:1 contrast and are always paired with a text label. |
-| Ads and pop-ins appear between, and on top of, charts. | They break the reading flow and lower credibility. | No ads inside the investigative content (Follow-up for T-050/T-052). |
+| Accuracy bars are green for the best house and red for the others. | A traffic light turns small, possibly insignificant differences into a verdict. | Neutral grade badges. Colour encodes direction (over = blue, under = orange), never good/bad. |
+| The mean absolute error is written as "±2.0". | "±" reads as a margin of error. | "2,0 p.p. eroare medie"; "±" only for real intervals. |
+| English terms in the Romanian UI ("Avg Error", "Delta", "Bias"). | Jargon stops non-experts. | Romanian glossary (T-051); technical names only in "Detalii tehnice". |
+| Party colours as the line colours of multi-party charts. | Several party colours are close (red/orange, blue/navy) and collide with the over/under colours. | Party colour only as a small chip next to the label ([visual-language §3.3](visual-language.md)). |
+| Ads and pop-ins between and over charts. | Breaks the reading flow and lowers credibility. | No ads inside investigative content (Follow-up for T-050/T-052). |
+| Dark mode as the default. | The owner finds dark-first "AI-ish" (ADR-0009). | Light mode is primary; dark mode is an optional token mapping. |
 
 ---
 
@@ -136,17 +160,22 @@ Example: the explainer on the margin of error in election polls.
 2. **One screen, one question.** The question is written on the screen (see
    [storyboard](storyboard.md)).
 3. **One visual, then details on demand.** Progressive disclosure through
-   "how to read this", "details", "data", and "methodology" layers.
+   "Cum citesc…?", "Detalii", "Datele" and "Detalii tehnice" layers.
 4. **Colour encodes data, never verdicts.** No traffic lights. Over/under is
-   blue/orange; party identity is a small chip next to the label.
-5. **Uncertainty is part of the picture.** Intervals, hollow marks for
-   "cannot be told apart from zero", dashed outlines for low certainty, and a
-   hatched area for insufficient data. Each state has its own visual.
+   blue/orange; party identity is a small chip next to the label; pollsters
+   are never colour-coded (ink + shape + label).
+5. **Uncertainty is part of the picture.** Intervals, hollow marks and "≈" for
+   "cannot be told apart from zero", dashed outlines for low certainty, and
+   hatching for insufficient data. Each state has its own visual.
 6. **Show the comparison.** We separate the house's own deviation from the
    industry-wide miss. This is our main difference from existing accuracy tables.
 7. **Neutral wording.** Every statement describes a measured deviation; none
-   describes a motive.
-8. **Restraint.** A light paper-like background, serif headlines, tabular
-   figures, thin rules. No gradients, glass effects, or decorative icons.
+   describes a motive. Every screen carries a "Ce nu spunem" box.
+8. **Restraint, light-first.** A cool off-white page, white cards, hairlines,
+   one sans-serif family for the UI, a serif reserved for the headline finding,
+   tabular figures. No gradients, glass effects, or decorative icons.
+9. **Design from the reference, purpose from the methodology.** Visual and UX
+   patterns may come from sondajeromania.ro; features come only from
+   METHODOLOGY.md (ADR-0009).
 
 Details: [visual-language.md](visual-language.md).
