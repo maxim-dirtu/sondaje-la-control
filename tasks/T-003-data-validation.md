@@ -1,7 +1,7 @@
 ---
 id: T-003
 title: Data validation tooling
-status: review
+status: done
 phase: 0
 depends_on: [T-001, T-002]
 owner: agent-t003
