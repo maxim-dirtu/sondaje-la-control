@@ -1,11 +1,11 @@
 ---
 id: T-031
 title: UX concept and design references
-status: todo
+status: in-progress
 phase: 3
 depends_on: []
-owner: null
-branch: null
+owner: agent-t031
+branch: task/T-031-ux-concept
 methodology: [M-2.5, M-3.2, M-5]
 created: 2026-11-22
 updated: 2026-11-22
