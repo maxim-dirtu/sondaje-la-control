@@ -3,7 +3,8 @@
 - **Status:** Accepted
 - **Date:** 2026-11-22
 - **Related:** T-006, T-010, T-011; supersedes the initial 5-election backlog
-  (commit `095d7cd`, restructured before any work started)
+  (the bootstrap commit "T-000: bootstrap plan, methodology spec, ADRs and task
+  backlog", restructured before any work started)
 
 ## Context
 The initial plan covered 5 elections and every pollster. That is too much
