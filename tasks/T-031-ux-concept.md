@@ -4,7 +4,7 @@ title: UX concept and design references
 status: in-progress
 phase: 3
 depends_on: []
-owner: agent-t031
+owner: agent-t031-2
 branch: task/T-031-ux-concept
 methodology: [M-2.5, M-3.2, M-5]
 created: 2026-11-22
