@@ -55,9 +55,12 @@ def test_invalid_reference_date_is_rejected() -> None:
 def test_default_data_dir_is_the_repository_data(
     monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
+    """Real data may carry warnings (e.g. R-33), so only the absence of errors is asserted."""
     monkeypatch.chdir(REPO_ROOT)
-    assert main(["validate"]) == 0
-    assert capsys.readouterr().out.splitlines() == ["0 error(s), 0 warning(s)"]
+    assert main(["validate", "--quiet"]) == 0
+    lines = capsys.readouterr().out.splitlines()
+    assert re.fullmatch(r"0 error\(s\), \d+ warning\(s\)", lines[-1])
+    assert lines[:-1] == []
 
 
 def test_help_lists_validate(capsys: pytest.CaptureFixture[str]) -> None:

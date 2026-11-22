@@ -570,9 +570,11 @@ def test_presidential_fixture_is_valid(fixture_copy: DataDirFactory) -> None:
     assert fixture_copy(PRESIDENTIAL).issues() == []
 
 
-def test_repository_data_is_valid() -> None:
+def test_repository_data_has_no_errors() -> None:
+    """The real data/ must have no errors; warnings (e.g. R-33) are legitimate there."""
     issues = validate(REPO_ROOT / "data", ValidationConfig(reference_date=dt.date.today()))
-    assert issues == [], "\n".join(issue.format() for issue in issues)
+    errors = [issue.format() for issue in issues if issue.severity is E]
+    assert errors == [], "\n".join(errors)
 
 
 def test_reference_date_is_injectable(fixture_copy: DataDirFactory) -> None:
