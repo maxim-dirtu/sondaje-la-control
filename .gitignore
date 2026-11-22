@@ -1,0 +1,26 @@
+# Python / uv
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Derived outputs (reproducible from data/)
+build/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Node (future web app)
+node_modules/
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.idea/
+*.swp
+
+# Secrets
+.env
+.env.*
