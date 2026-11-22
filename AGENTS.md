@@ -77,8 +77,10 @@ Idea (I-xxx) ──► Decision (ADR-xxxx) ──► Task (T-xxx) ──► Bran
   `status: done` as the last commit. It then pushes the branch and opens a PR
   titled `T-xxx: <task title>` using
   [the PR template](.github/pull_request_template.md).
-- **The owner approves and merges** (merge method: "Create a merge commit").
-  Change requests go back to the same branch.
+- **The owner approves** (in chat, or with an "approved" comment on the PR).
+  **Then the coordinator merges** (merge method: "Create a merge commit").
+  Nothing is merged without explicit owner approval. Change requests go back
+  to the same branch.
 - Dependent tasks start only after their prerequisites' PRs are merged.
 
 ### Status values

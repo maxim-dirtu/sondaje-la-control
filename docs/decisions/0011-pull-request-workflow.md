@@ -23,7 +23,11 @@ how. That is the usual PR/MR workflow.
   3. The coordinator pushes the branch and opens a PR using
      [the template](../../.github/pull_request_template.md): problem, goal,
      solution, what changed and how, verification, traceability, and notes.
-  4. **The owner reviews and merges.** Change requests go back to the branch.
+  4. **The owner reviews and approves**, either in the chat with the
+     coordinator or with an "approved" comment on the PR. GitHub does not let
+     the author approve their own PR. **The coordinator then merges.** Change
+     requests go back to the branch. Nothing is merged without the owner's
+     explicit approval.
 - **Merge method:** "Create a merge commit", so that the task-ID commits stay
   visible in the history.
 - PR titles follow the commit convention: `T-xxx: <task title>`.
