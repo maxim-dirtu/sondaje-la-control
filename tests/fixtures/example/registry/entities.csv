@@ -1,0 +1,8 @@
+entity_id,entity_type,name,short_name,color,source_url,source_type,retrieved_at,verified,notes
+alfa,party,Partidul Alfa,PA,#1F77B4,https://example.org/bec/parl-2099/liste,official,2099-06-20,true,
+beta,party,Partidul Beta,PB,#D62728,https://example.org/bec/parl-2099/liste,official,2099-06-20,true,
+gama,alliance,Alianța Gama,AG,#2CA02C,https://example.org/bec/parl-2099/liste,official,2099-06-20,true,
+delta,party,Partidul Delta,PD,,https://example.org/bec/parl-2099/liste,official,2099-06-20,true,Member of gama in parl-2099-cd.
+epsilon,party,Partidul Epsilon,PE,,https://example.org/bec/parl-2099/liste,official,2099-06-20,true,Member of gama in parl-2099-cd.
+zeta,party,Partidul Zeta,PZ,#9467BD,https://example.org/stiri/zeta-retragere,media,2099-06-20,true,Withdrew its list before parl-2099-cd.
+omega,party,Partidul Omega,PO,#8C564B,https://example.org/bec/parl-2099/liste,official,2099-06-20,true,

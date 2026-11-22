@@ -21,12 +21,13 @@ import argparse
 from collections.abc import Callable, Sequence
 
 from sondaje import __version__
+from sondaje.validation.command import register as register_validate
 
 type Subparsers = argparse._SubParsersAction[argparse.ArgumentParser]
 type Registrar = Callable[[Subparsers], None]
 type Handler = Callable[[argparse.Namespace], int]
 
-COMMANDS: list[Registrar] = []
+COMMANDS: list[Registrar] = [register_validate]
 """Registrars for every subcommand, in the order they appear in ``--help``."""
 
 

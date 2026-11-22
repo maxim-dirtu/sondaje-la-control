@@ -1,0 +1,13 @@
+election_id,scope,entity_id,votes,source_url,source_type,retrieved_at,verified,notes
+parl-2099-cd,domestic,alfa,2000000,https://example.org/aep/parl-2099/rezultate.csv,official,2099-06-20,true,
+parl-2099-cd,domestic,beta,1500000,https://example.org/aep/parl-2099/rezultate.csv,official,2099-06-20,true,
+parl-2099-cd,domestic,gama,1200000,https://example.org/aep/parl-2099/rezultate.csv,official,2099-06-20,true,
+parl-2099-cd,domestic,omega,45000,https://example.org/aep/parl-2099/rezultate.csv,official,2099-06-20,true,
+parl-2099-cd,diaspora,alfa,100000,https://example.org/aep/parl-2099/rezultate.csv,official,2099-06-20,true,
+parl-2099-cd,diaspora,beta,150000,https://example.org/aep/parl-2099/rezultate.csv,official,2099-06-20,true,
+parl-2099-cd,diaspora,gama,200000,https://example.org/aep/parl-2099/rezultate.csv,official,2099-06-20,true,
+parl-2099-cd,diaspora,omega,5000,https://example.org/aep/parl-2099/rezultate.csv,official,2099-06-20,true,
+parl-2099-cd,total,alfa,2100000,https://example.org/aep/parl-2099/rezultate.csv,official,2099-06-20,true,
+parl-2099-cd,total,beta,1650000,https://example.org/aep/parl-2099/rezultate.csv,official,2099-06-20,true,
+parl-2099-cd,total,gama,1400000,https://example.org/aep/parl-2099/rezultate.csv,official,2099-06-20,true,
+parl-2099-cd,total,omega,50000,https://example.org/aep/parl-2099/rezultate.csv,official,2099-06-20,true,

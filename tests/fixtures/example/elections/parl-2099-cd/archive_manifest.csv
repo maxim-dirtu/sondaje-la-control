@@ -1,0 +1,2 @@
+document_id,title,published_date,format,archive_url,sha256,raw_path,source_url,source_type,retrieved_at,notes
+parl-2099-cd-doc-001,Rezultate finale Camera Deputaților,2099-06-10,csv,,e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855,data/raw/elections/parl-2099-cd/rezultate.csv,https://example.org/aep/parl-2099/rezultate.csv,official,2099-06-20,

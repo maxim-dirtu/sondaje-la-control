@@ -1,0 +1,2 @@
+pollster_id,relation,counterpart_name,counterpart_entity_id,period_start,period_end,description,source_url,source_type,retrieved_at,verified,notes
+exemplar,client,Televiziunea Exemplu,,2099,,Commissioned the polls published in the 2099 campaign.,https://example.org/exemplar/raport-2099-05.pdf,pollster,2099-06-20,true,

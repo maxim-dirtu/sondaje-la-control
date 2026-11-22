@@ -1,0 +1,4 @@
+election_id,scope,registered_voters,voters,valid_votes,invalid_votes,source_url,source_type,retrieved_at,verified,notes
+parl-2099-cd,domestic,18000000,4900000,4745000,150000,https://example.org/aep/parl-2099/rezultate.csv,official,2099-06-20,true,
+parl-2099-cd,diaspora,,465000,455000,8000,https://example.org/aep/parl-2099/rezultate.csv,official,2099-06-20,true,No permanent-list figure for the diaspora.
+parl-2099-cd,total,,5365000,5200000,158000,https://example.org/aep/parl-2099/rezultate.csv,official,2099-06-20,true,

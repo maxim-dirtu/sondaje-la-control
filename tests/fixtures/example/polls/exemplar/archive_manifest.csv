@@ -1,0 +1,2 @@
+document_id,title,published_date,format,archive_url,sha256,raw_path,source_url,source_type,retrieved_at,notes
+exemplar-doc-001,"Barometru politic, mai 2099",2099-05-26,pdf_text,https://web.archive.org/web/20990526120000/https://example.org/exemplar/raport-2099-05.pdf,e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855,data/raw/polls/exemplar/exemplar-doc-001.pdf,https://example.org/exemplar/raport-2099-05.pdf,pollster,2099-05-27,
