@@ -25,4 +25,4 @@ Only the coordinator adds new IDs. Agents propose ideas in their task's
 | I-015 | Automated discovery and extraction of polls (RSS, LLM-assisted, human-verified) to scale beyond the MVP | captured | T-065 |
 | I-016 | Track a lean toward a *party* across election types by linking presidential candidates to the parties that supported them | planned | T-004 |
 | I-017 | Scrape sondajeromania.ro (polls, linked documents, pollster pages) as a discovery source when scaling beyond the MVP. Check its terms/robots first, give attribution, and still verify every value against the original | captured | T-065, ADR-0007 |
-| I-018 | Take general design ideas from sondajeromania.ro (clarity, calm visual tone, readable charts). Ideas only; no copying | planned | ADR-0008, T-031 |
+| I-018 | Take design inspiration from sondajeromania.ro (visual design, design system, UX, light mode). Design only: none of its product logic or mechanisms | planned | ADR-0008, ADR-0009, T-031 |

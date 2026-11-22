@@ -40,8 +40,9 @@ the visuals; it does not give final verdicts.
   error relative to the market (separating house error from industry-wide
   misses), looks at the whole campaign rather than only the final poll, adds
   significance and uncertainty, herding/convergence detection, a trust score
-  with a certainty level, and full provenance. Its clear UI is a design
-  reference (I-018), and it is a future discovery source (I-017).
+  with a certainty level, and full provenance. We take **design inspiration
+  only** from it (visual design, design system, UX, light mode; ADR-0009), none
+  of its mechanisms. It is also a future discovery source (I-017).
 - **gov2-ro/prezenta.roaep.ro:** an open-source downloader for AEP results
   data. Reference for T-010.
 
