@@ -1,7 +1,7 @@
 ---
 id: T-006
 title: Select MVP pollsters (2–4)
-status: review
+status: done
 phase: 0
 depends_on: [T-005]
 owner: agent-t006
