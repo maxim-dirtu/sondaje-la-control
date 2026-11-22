@@ -1,8 +1,12 @@
 # MVP pollster selection: scorecard and feasibility check
 
 **Task:** [T-006](../../tasks/T-006-select-mvp-pollsters.md) · **Date:** 2026-11-22 ·
-**Status:** input for the draft ADR [draft-mvp-pollsters.md](../decisions/draft-mvp-pollsters.md);
-awaiting owner approval.
+**Status:** the owner approved the selection on 2026-11-22; decision recorded in
+[ADR-0012](../decisions/0012-mvp-pollsters.md). The owner also changed the
+final accuracy window from 21 to **28 days** (M-1.3) and excluded polls
+published on or after election day from all metrics (M-1.7). **§2 has the
+current 28-day results**; the original 21-day scoring is kept in §3 and §4 as
+history.
 
 This report scores **every pollster in the T-005 registry**
 ([`data/registry/pollsters.csv`](../../data/registry/pollsters.csv), 15 houses)
@@ -20,16 +24,17 @@ M-5.1d later). Wording follows [ADR-0003](../decisions/0003-neutral-language.md)
 
 ### 1.1 Windows
 
-| Election | Election day | Final window (M-1.3, `window_days` = 21): `fieldwork_end` from … to … | 120-day campaign window (M-3.2): `fieldwork_end` from … |
-|---|---|---|---|
-| `parl-2024-cd` | 2024-12-01 | 2024-11-10 … 2024-11-30 | 2024-08-03 |
-| `pres-2025-r1` | 2025-05-04 | 2025-04-13 … 2025-05-03 | 2025-01-04 |
-| `pres-2025-r2` | 2025-05-18 | 2025-04-27 … 2025-05-17, **and** `fieldwork_start` after 2025-05-04 (R-84) | after 2025-05-04 (R-84) |
+| Election | Election day | Final window, 21 days (original M-1.3): `fieldwork_end` from … to … | Final window, **28 days** (current M-1.3): `fieldwork_end` from … to … | 120-day campaign window (M-3.2): `fieldwork_end` from … |
+|---|---|---|---|---|
+| `parl-2024-cd` | 2024-12-01 | 2024-11-10 … 2024-11-30 | 2024-11-03 … 2024-11-30 | 2024-08-03 |
+| `pres-2025-r1` | 2025-05-04 | 2025-04-13 … 2025-05-03 | 2025-04-06 … 2025-05-03 | 2025-01-04 |
+| `pres-2025-r2` | 2025-05-18 | 2025-04-27 … 2025-05-17, **and** `fieldwork_start` after 2025-05-04 (R-84) | 2025-04-20 … 2025-05-17, **and** `fieldwork_start` after 2025-05-04 (R-84) | after 2025-05-04 (R-84) |
 
 R-84 means that Dan–Simion head-to-heads asked before round 1 are not
-`pres-2025-r2` polls, even when their fieldwork ends inside the 21-day window
+`pres-2025-r2` polls, even when their fieldwork ends inside the final window
 (e.g. AtlasIntel 28 Apr–1 May, MKOR 24–27 Apr, Noi, Cetățenii 24–30 Apr).
-"Gap" below = election day − `fieldwork_end`, in days.
+"Gap" below = election day − `fieldwork_end`, in days. Under M-1.7 a poll first
+published on or after election day is not eligible.
 
 ### 1.2 Sources used (all retrieved 2026-11-22)
 
@@ -60,7 +65,64 @@ R-84 means that Dan–Simion head-to-heads asked before round 1 are not
 
 ---
 
-## 2. Summary scorecard
+## 2. Current result (28-day window, owner decisions of 2026-11-22)
+
+### 2.1 Owner decisions applied
+- **Q-A:** M-1.3 `window_days` 21 → **28** for all houses.
+- **Q-B:** media-only sources accepted with `verified = false`; for Sociopol the
+  broadcast graphic is the primary value and a differing article-text value
+  goes in `notes`.
+- **Q-C:** polls first published on or after election day are shown with a
+  notice but excluded from all metrics (new M-1.7). AtlasIntel's 1–3 May 2025
+  poll (published 5 May) is therefore not its round-1 final poll.
+- **Q-D:** M-1.4 as written: polls that explicitly include the diaspora are
+  compared to the `total` result.
+- **Q-E:** Verifield is added as a 4th house.
+
+### 2.2 Coverage re-scored with 28 days (all houses)
+Latest eligible poll inside the 28-day window per election (gap in days),
+else the nearest poll outside it. Publication dates of the selected houses'
+final polls were checked: all are before election day (e.g. AtlasIntel
+28 Apr–1 May: HotNews, metadata 2 May 2025; Sociopol 20–22 Nov: România TV,
+24 Nov 2024; CURS 8–11 May: TVR Info, 13 May 2025).
+
+| Pollster | parl-2024-cd | pres-2025-r1 | pres-2025-r2 | All 3 (28 d) | Change vs 21 d |
+|---|---|---|---|---|---|
+| **atlasintel** | ✓ 26–28 Nov (3) | ✓ 28 Apr–1 May (3); 1–3 May excluded (M-1.7) | ✓ 13–15 May (3) | **Yes** | Still yes; r1 final poll moves to 28 Apr–1 May |
+| **sociopol** | ✓ 20–22 Nov (9) | ✓ 28–30 Apr (4) | ✓ 10–12 May (6) | **Yes** | — (7–11 Apr, gap 23, now also inside) |
+| **curs** | ✓ 30 Oct–5 Nov (26) | ✓ 3–10 Apr (24) | ✓ 8–11 May (7) | **Yes** | **Newly meets coverage** |
+| **verifield** | ✗ 7–9 Oct (53) | ✗ 24–28 Mar (37) | ✓ 6 May (12) | **No** | — (also no with 35 days) |
+| mkor | ✗ no poll | ✓ 24–27 Apr (7) | ✓ 8–14 May (4) | No | — |
+| irsop | ✗ no poll | ✓ 4–14 Apr (20) | ✓ 10–13 May (5) | No | — |
+| noi-cetatenii | ✗ no poll | ✓ 24–30 Apr (4) | ✓ 11–15 May (3) | No | — |
+| inscop | ✓ 7–12 Nov (19) | ✗ no pre-election poll | ✗ no pre-election poll | No | — |
+| ara | ✗ Dec 2023 only | ✓ 23–28 Apr (6) | ✗ exit poll only | No | — |
+| bcs | ✓ 7–10 Nov (21) | ✗ no poll | ✗ no poll | No | — |
+| cira | ✓ 9–13 Nov (18) | ✗ no poll | ✗ no poll | No | — |
+| flashdata | ✗ no poll | ✓ 24–26 Apr (8) | ✗ pre-r1 head-to-heads only | No | 10–12 Apr (22) now also inside |
+| dataecho | ✗ no poll | ✓ 22–24 Apr (10) | ✗ no poll | No | 10–11 Apr (23) now also inside |
+| avangarde | ✗ Jan–Feb 2024 only | ✗ 19–23 Mar (42) | ✗ exit poll only | No | — |
+| snap-market-research | ✗ Jan 2024 only | ✗ no poll | ✗ no poll | No | — |
+
+**Result:** AtlasIntel, Sociopol and **CURS** meet the required coverage with
+28 days. The wider window adds no other house. **Verifield still does not meet
+it** (parliamentary gap 53, round-1 gap 37 days); no Verifield parliamentary
+poll in November 2024 or round-1 poll in April 2025 was found (§3.1).
+
+### 2.3 Final selection (ADR-0012)
+
+| House | Role | Coverage (28 d) | Note |
+|---|---|---|---|
+| AtlasIntel | Selected | parl ✓ / r1 ✓ / r2 ✓ | Full toplines; own-site PDFs with values in chart images |
+| Sociopol | Selected | parl ✓ / r1 ✓ / r2 ✓ | Media-only sources (`verified = false`, Q-B) |
+| CURS | Selected | parl ✓ / r1 ✓ / r2 ✓ | Own-site text PDFs; round 2 via TVR Info |
+| Verifield | Selected (owner, Q-E) | parl ✗ / r1 ✗ / r2 ✓ | **Does not meet the coverage requirement**: a campaign house (M-3 in all three elections, M-2 only for round 2); "no grade yet" under ADR-0010 |
+| MKOR | Reserve | parl ✗ / r1 ✓ / r2 ✓ | 7/7 transparency; no 2024 parliamentary poll |
+
+### 2.4 Summary scorecard at 21 days (history)
+
+Criteria 2–5 below are unchanged by the owner decisions; only the
+"final window" column is superseded by §2.2.
 
 | Pollster | 1. Final window parl / r1 / r2 | Polls in 120-day windows (parl + r1 + r2) | 2. Topline | 3. M-5.3 items (final-window polls) | 4. Main access & format | 5. Popularity |
 |---|---|---|---|---|---|---|
@@ -80,8 +142,8 @@ R-84 means that Dan–Simion head-to-heads asked before round 1 are not
 | avangarde | ✗ / ✗ (42 d) / ✗ (exit poll only) | 0 + 2 + 0 = 2 | Not checked | 6–7 / 7 (Mar 2025, outside window) | Media-hosted text PDF (Libertatea) | Medium |
 | snap-market-research | ✗ / ✗ / ✗ | 0 + 0 + 0 = 0 | Not checked | not assessed | Press release (Oficiul de Știri) | Low |
 
-**Only AtlasIntel and Sociopol meet the required coverage** (a final-window
-poll in all three elections). This corrects the T-005 working note
+**At 21 days, only AtlasIntel and Sociopol met the required coverage** (a
+final-window poll in all three elections; superseded by §2.2). This corrects the T-005 working note
 ("AtlasIntel, CURS and Verifield appear in all three"): that holds for the
 120-day windows, but CURS's and Verifield's latest `parl-2024-cd` and
 `pres-2025-r1` polls end before the 21-day window. Sociopol qualifies through a
@@ -91,6 +153,11 @@ it was found through a gap search.
 ---
 
 ## 3. Criterion 1: coverage, with evidence
+
+The tables below were built for the original 21-day window. Polls with a gap
+of 22–28 days, which the 28-day window now includes (CURS 30 Oct–5 Nov and
+3–10 Apr; Sociopol 7–11 Apr; FlashData 10–12 Apr; DataEcho 10–11 Apr), are
+classified in §2.2.
 
 ### 3.1 Final-window polls found
 
@@ -182,7 +249,9 @@ collection work, not data. Same-survey scenarios count once.
 
 ## 4. Criteria 2–5 per pollster
 
-Transparency letters as in §1.3: n, D, M, Q, W, E, S.
+Transparency letters as in §1.3: n, D, M, Q, W, E, S. The "Coverage" lines
+use the original 21-day window; see §2.2 for the 28-day result (CURS then
+covers all three elections).
 
 ### atlasintel
 - **Coverage:** ✓ / ✓ / ✓ (§3.1).
@@ -405,11 +474,11 @@ Described factually; no inference about intent (ADR-0003).
 | noi-cetatenii | Digital recruitment, channel not stated | Self-funded civic NGO | Residents + diaspora |
 | inscop | CATI | Daily newspaper (Libertatea); think tank (ILD) | Residents |
 
-The proposed set AtlasIntel + Sociopol + CURS (see the draft ADR) spans three
-collection modes (online, telephone, face-to-face/telephone) and three client
-situations (online outlet, TV station, no client stated). The reserves add a
-party/candidate-client profile (Verifield) and a self-funded online panel
-(MKOR).
+The selected set AtlasIntel + Sociopol + CURS + Verifield
+([ADR-0012](../decisions/0012-mvp-pollsters.md)) spans three collection modes
+(online, telephone, face-to-face/telephone) and four client situations (an
+online outlet, a TV station, no client stated, and a party and candidates'
+teams). The reserve adds a self-funded online panel (MKOR).
 
 ---
 
@@ -423,10 +492,13 @@ party/candidate-client profile (Verifield) and a self-funded online panel
   Sociopol parl USR (15% text vs 13% graphic); BCS wave dates (7–10 vs 7–11
   Nov); DataEcho sample size (2,607 vs 1,200).
 - **Publication after election day:** AtlasIntel's 1–3 May 2025 poll was
-  published on 5 May. R-81 allows it; R-83 warns. Whether such a poll can be a
-  house's "final poll" (M-1.3) is a methodology question (ADR open question).
+  published on 5 May. R-81 allows it; R-83 warns. **Resolved (Q-C, M-1.7):** it
+  is shown with a notice and excluded from all metrics; AtlasIntel's round-1
+  final poll is 28 Apr–1 May.
 - **Diaspora:** AtlasIntel (round 2, per media) and Noi, Cetățenii include the
-  diaspora (M-1.4 `target_scope`).
+  diaspora; per M-1.4 (Q-D) such polls are compared to the `total` result.
+- **Media-only sources (Q-B):** recorded with `verified = false`; for Sociopol
+  the broadcast graphic is primary and a differing text value goes in `notes`.
 
 ## 8. Limitations
 
