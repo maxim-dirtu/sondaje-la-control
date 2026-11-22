@@ -1,1 +1,4 @@
 election_id,election_type,body,round,election_date,name,status,source_url,source_type,retrieved_at,verified,notes
+parl-2024-cd,parliamentary,chamber_of_deputies,1,2024-12-01,"Parliamentary election 2024, Chamber of Deputies",held,https://parlamentare2024.bec.ro/wp-content/uploads/2024/12/RFCD_1.pdf,official,2026-11-22,true,"Date from the BEC national vote totalization PV for the Chamber of Deputies (no. 1 RFCD, 4 Dec 2024)."
+pres-2025-r1,presidential,president,1,2025-05-04,"Presidential election 2025, round 1",held,https://prezidentiale2025.bec.ro/wp-content/uploads/2025/05/RFT1.pdf,official,2026-11-22,true,Date from the BEC PV on the round-1 result (RFT1).
+pres-2025-r2,presidential,president,2,2025-05-18,"Presidential election 2025, round 2",held,https://prezidentiale2025.bec.ro/wp-content/uploads/2025/05/RFT1_2.pdf,official,2026-11-22,true,"Date from the BEC PV on the round-2 result (RFT2, 20 May 2025)."
