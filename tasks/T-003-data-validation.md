@@ -1,11 +1,11 @@
 ---
 id: T-003
 title: Data validation tooling
-status: todo
+status: in-progress
 phase: 0
 depends_on: [T-001, T-002]
-owner: null
-branch: null
+owner: agent-t003
+branch: task/T-003-data-validation
 methodology: []
 created: 2026-11-22
 updated: 2026-11-22
