@@ -94,7 +94,7 @@ Development can start on synthetic fixtures before M1 is reached.
 | ID | Task | Depends on |
 |---|---|---|
 | T-030 | Prototype dashboard (leaderboard, house × party heatmap, pollster card, timeline) | T-025, T-031 |
-| T-031 | UX concept & design references (storyboards, wireframes, visual language) | none: **can start now** |
+| T-031 | UX concept & design references (storyboards, wireframes, visual language) in [docs/ux/](ux/); mock-ups at [docs/ux/mockups/index.html](ux/mockups/index.html) | none: **can start now** |
 
 **Milestone M3:** the owner can explore every metric visually, through the UX
 concept.
