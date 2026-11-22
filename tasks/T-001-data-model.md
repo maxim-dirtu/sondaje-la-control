@@ -4,7 +4,7 @@ title: Define data model and CSV schemas
 status: in-progress
 phase: 0
 depends_on: []
-owner: agent-t001
+owner: agent-t001-2
 branch: task/T-001-data-model
 methodology: [M-1, M-5.3]
 created: 2026-11-22
