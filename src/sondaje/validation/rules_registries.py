@@ -1,4 +1,4 @@
-"""Registry rules: R-20, R-21, R-31, R-32, R-33 (R-30 is in rules_files, R-34 in history)."""
+"""Registry rules: R-20, R-21, R-31, R-32, R-33, R-35 (R-30 is in rules_files, R-34 in history)."""
 
 import re
 
@@ -165,8 +165,35 @@ def check_entity_colors(dataset: Dataset, reporter: Reporter) -> None:
             )
 
 
+def check_affiliation_counterparts(dataset: Dataset, reporter: Reporter) -> None:
+    """R-35: a counterpart that is a registered entity has its counterpart_entity_id set."""
+    data_file = dataset.registry.get(POLLSTER_AFFILIATIONS.name)
+    if data_file is None:
+        return
+    by_name: dict[str, set[str]] = {}
+    for entity_id, entity in dataset.registry_index(ENTITIES.name, "entity_id").items():
+        for column in ("name", "short_name"):
+            name = entity.get_str(column)
+            if name is not None:
+                by_name.setdefault(name.casefold(), set()).add(entity_id)
+    for row in data_file.rows:
+        name = row.get_str("counterpart_name")
+        if name is None or not row.is_empty("counterpart_entity_id"):
+            continue
+        matches = by_name.get(name.casefold())
+        if matches:
+            reporter.warning(
+                data_file.display_path,
+                row.line,
+                "R-35",
+                f"counterpart {name!r} matches entity {', '.join(sorted(matches))}, "
+                "but counterpart_entity_id is empty",
+            )
+
+
 def run(dataset: Dataset, reporter: Reporter) -> None:
     check_elections(dataset, reporter)
     check_aliases(dataset, reporter)
     check_affiliation_periods(dataset, reporter)
     check_entity_colors(dataset, reporter)
+    check_affiliation_counterparts(dataset, reporter)

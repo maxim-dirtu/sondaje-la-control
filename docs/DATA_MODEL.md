@@ -1,6 +1,6 @@
 # Data Model and CSV Schemas
 
-**Schema version:** 1.0 · **Owner:** T-001 · **Last updated:** 2026-11-22
+**Schema version:** 1.1 · **Owner:** T-001 (amended by T-007) · **Last updated:** 2026-11-22
 
 This document is the contract for everything under `data/`. Collection tasks
 (T-004, T-005, T-010, the pollster tasks T-012+) write files that follow it,
@@ -208,11 +208,28 @@ candidate, or an independent candidate in a list election.
   (e.g. fictitious `pex` for "Partidul Exemplu"). If there is no acronym, the
   slug of the short name.
 - **Person (candidate, independent):** `<given-name>-<family-name>`,
-  transliterated, e.g. fictitious `ion-exemplu`. Middle names only if needed
-  to disambiguate.
+  transliterated, e.g. fictitious `ion-exemplu`.
+  - `<given-name>` is **one** given name: the one the person is publicly known
+    by (the everyday name, as in `short_name`), e.g. `crin-antonescu` for the
+    ballot name "George-Crin-Laurențiu Antonescu". If no everyday form can be
+    established from sources (typical for list independents), it is the
+    **first** given name on the ballot (`ioan-sarmas` for "Ioan-Sabin Sărmaș").
+  - `<family-name>` is the **full** family name as on the ballot, every part
+    kept and joined by hyphens (`diana-iovanovici-sosoaca`,
+    `erich-mocanu-gollent`), even if the person is publicly known by one part.
+  - Further given names only if needed to disambiguate.
 - **Collision:** if the slug already exists for a different contestant (e.g. an
   acronym reused by a different legal party), append the year in which the new
   one first appears: `pex-2028`.
+- **One person, two roles.** `entity_type` is one value per ID, so a person
+  who is a contestant in two roles (e.g. an `independent` in a list election
+  and a `candidate` in a presidential one) has **two** IDs. The role registered
+  first keeps the plain slug; the second is a collision and gets the year of
+  the election in which that role first appears, e.g. `john-banu-muscel`
+  (independent, `parl-2024-cd`) and `john-banu-muscel-2025` (candidate,
+  `pres-2025-r1`). The same ID is reused for the same role in later elections.
+  The `notes` of the second row name the other ID. The registry has no
+  machine-readable link between the two IDs.
 - A renamed party keeps its ID; the rename goes in `notes`.
 
 ### 4.3 Pollsters: `pollster_id`
@@ -252,7 +269,7 @@ omits `verified`, see §6.10):
 | `source_url` | url | yes | absolute http(s) URL | `https://example.org/sondaj.pdf` | Where the values in this row were taken from (the page or file, not a home page). |
 | `source_type` | enum | yes | `official` · `pollster` · `media` · `wikipedia` · `aggregator` · `other` | `pollster` | Kind of source: `official` = electoral authority (AEP, BEC, Official Gazette); `pollster` = the pollster's own publication; `media` = a media outlet; `wikipedia` = Wikipedia; `aggregator` = a poll aggregator such as sondajeromania.ro; `other` = anything else (e.g. a party website), explained in `notes`. |
 | `retrieved_at` | date | yes | `YYYY-MM-DD` | `2026-11-22` | Date the source was accessed. |
-| `verified` | bool | yes | `true` · `false` | `true` | `true` if every value in the row was checked against the **original** publication (the pollster's own report, or the official results). Never `true` when `source_type` is `wikipedia` or `aggregator` (R-14). |
+| `verified` | bool | yes | `true` · `false` | `true` | `true` if every value in the row was checked against the **original** publication (the pollster's own report, or the official results). Never `true` when `source_type` is `wikipedia` or `aggregator` (R-14). Readings per registry table: §5.3. |
 | `notes` | text | no | English free text | `Fieldwork dates from the PDF footnote.` | Anything a reader needs to interpret the row. |
 
 ### 5.2 Archive fields
@@ -270,6 +287,18 @@ Each poll records **how** its values were extracted, in
 `html` (from an HTML table or text), or `manual_double_entry` (two
 independent manual transcriptions, compared by the T-011 diff tool; used for
 images, scans, and articles).
+
+### 5.3 What `verified` means in the pollster registries
+
+For the pollster registries, "the original publication" of §5.1 reads as
+follows. In every case, a row whose only source is Wikipedia or an aggregator
+is `false` (R-14).
+
+| File | `verified = true` when |
+|---|---|
+| `pollsters.csv` | `name`, `website`, and `typical_modes` were all confirmed on the pollster's own pages or reports. If any of them rests on media or an index, the row is `false` and `notes` says which value. |
+| `pollster_aliases.csv` | The contributor saw the variant, exactly as written in `alias`, in the cited source (the pollster's own publication or a media publication), and that source clearly refers to this pollster. |
+| `pollster_affiliations.csv` | The cited source is a **party to the relation**: the pollster's own publication, or the counterpart's own publication (e.g. the commissioning outlet's article on its own poll, a party's or candidate's own post), or an official record (e.g. the trade register, the Official Gazette). A third-party report (media describing a relation between two other parties) is `false`, even when `description` matches it exactly. |
 
 ## 6. Tables
 
@@ -342,7 +371,7 @@ Wording is factual and neutral (ADR-0003). Key: (`pollster_id`, `relation`,
 | `pollster_id` | slug | yes | FK → `pollsters.pollster_id` | `exemplar` | |
 | `relation` | enum | yes | `client` · `owner` · `personnel` · `other` | `client` | `client`: commissioned polls from the firm; `owner`: holds an ownership stake; `personnel`: a person in the firm's management or staff holds or held a role with the counterpart; `other`: explained in `description`. |
 | `counterpart_name` | text | yes | original language | `Partidul Exemplu` | The organisation or person on the other side. |
-| `counterpart_entity_id` | slug | no | FK → `entities.entity_id` | `pex` | Set when the counterpart is a registered entity. |
+| `counterpart_entity_id` | slug | no | FK → `entities.entity_id` | `pex` | Set whenever the counterpart is a registered entity (R-35 warns when a matching entity exists but the cell is empty). When the counterpart becomes an entity later, the cell is filled in as a correction (§2.2). |
 | `period_start` | partial_date | no | `YYYY[-MM[-DD]]` | `2024-03` | Start of the relation, if known. |
 | `period_end` | partial_date | no | `YYYY[-MM[-DD]]` | `2025-12` | End of the relation; empty = ongoing or unknown. |
 | `description` | text | yes | English, factual | `Commissioned 2 polls published in March 2024.` | What the source states, nothing more. |
@@ -359,10 +388,34 @@ Key: (`election_id`, `poll_entity_id`).
 |---|---|---|---|---|---|
 | `election_id` | slug | yes | FK → `elections`; equals the directory name | `parl-2024-cd` | |
 | `poll_entity_id` | slug | yes | FK → `entities.entity_id` | `pex` | The entity as polled. |
-| `relation` | enum | yes | `alliance_member` · `merged_into` · `withdrawn` · `excluded` · `not_registered` | `alliance_member` | `alliance_member`: the polled party ran as part of the alliance `result_entity_id`; its poll share is added to the alliance. `merged_into`: the polled entity was absorbed into `result_entity_id` before the vote. `withdrawn`: the contestant withdrew. `excluded`: the candidacy was rejected or annulled by the electoral authorities. `not_registered`: polled but never filed a candidacy/list. For the last three, the poll share is dropped and the rest renormalized (M-1.5). |
-| `result_entity_id` | slug | cond | FK → `entities.entity_id` | `ax` | Required for `alliance_member` and `merged_into`; must be empty otherwise (R-40). For `alliance_member` it must be an entity of type `alliance`. |
-| `effective_date` | date | no | `YYYY-MM-DD` | `2024-10-20` | When the alliance, merger, withdrawal, or exclusion took effect, if known. |
+| `relation` | enum | yes | `alliance_member` · `merged_into` · `ran_on_list_of` · `withdrawn` · `excluded` · `not_registered` | `alliance_member` | `alliance_member`: the polled party ran as part of the alliance `result_entity_id`; its poll share is added to the alliance. `merged_into`: the polled entity was absorbed into `result_entity_id` before the vote. `ran_on_list_of`: the polled party filed no lists of its own, and its candidates ran on the lists of the party or alliance `result_entity_id` (the *host*) under a party-level arrangement; its poll share is added to the host's share (see below). `withdrawn`: the contestant withdrew. `excluded`: the candidacy was rejected or annulled by the electoral authorities. `not_registered`: polled but never filed a candidacy/list. For the last three, the poll share is dropped and the rest renormalized (M-1.5). |
+| `result_entity_id` | slug | cond | FK → `entities.entity_id` | `ax` | Required for `alliance_member`, `merged_into`, and `ran_on_list_of`; must be empty otherwise (R-40). For `alliance_member` it must be an entity of type `alliance`; for `ran_on_list_of`, of type `party` or `alliance` (R-45). It is always a ballot contestant, never itself a `poll_entity_id` of the same file (R-41, R-46). |
+| `effective_date` | date | no | `YYYY-MM-DD` | `2024-10-20` | When the alliance, merger, withdrawal, or exclusion took effect, or (for `ran_on_list_of`) when the arrangement was announced, if known. |
 | provenance block | | | §5.1 | | Source of the relation (`official` or `media`). |
+
+**`ran_on_list_of` in detail.** The relation covers a *guest* party
+(`poll_entity_id`) that is not on the ballot because it placed its candidates
+on the lists of a *host* contestant (`result_entity_id`), for example when
+there was no time to register an electoral alliance. It differs from
+`alliance_member` in that the host is a single party (or alliance) that keeps
+its own name on the ballot, and from `merged_into` in that the guest party
+continues to exist.
+- **Evidence.** A source must show a **party-level** arrangement: the guest
+  party (its leadership or a statutory body) states that its candidates run
+  on the host's lists, or the host and guest file the lists together. A few
+  members of a party who join another party, or run on its lists as
+  individuals, do not make the party a guest; it stays `not_registered`, and
+  the source goes in `notes`.
+- **Semantics (M-1.5).** In a poll for this election, the guest's share is
+  added to the host's share, exactly as for `alliance_member`; it is not
+  dropped. Validation: the host has type `party` or `alliance`, the guest has
+  type `party` or `alliance`, the election is a list election
+  (`parliamentary` or `european`) (R-45); the host is a contestant in
+  `results.csv` (R-41) and is not itself mapped in the same file (R-46).
+- **Combined poll labels.** A poll option that names the host and the guest
+  together (e.g. "Partidul Delta + Partidul Eta") keeps its published
+  `option_label` and gets the **host's** `entity_id`: the option is the host's
+  list. A note on the `poll_results` row is recommended.
 
 Poll **labels** are resolved per row in `poll_results.csv`: `option_label`
 keeps the published text and `entity_id` holds the registry entity it refers
@@ -458,7 +511,7 @@ Key: `poll_id`.
 | `published_date` | date | yes | `YYYY-MM-DD` | `2024-11-26` | First publication date of the results. |
 | `sample_size` | int | no | ≥ 1 | `1100` | Total respondents (`n`), as published. |
 | `sample_size_expressed` | int | no | ≥ 1, ≤ `sample_size` | `792` | Respondents in the `expressed_option` base, if published. |
-| `mode` | enum | no | `cati` · `cawi` · `capi` · `papi` · `mixed` · `other` | `cati` | Data collection mode, as published. `mixed`/`other`: details in `notes`. |
+| `mode` | enum | no | `cati` · `cawi` · `capi` · `papi` · `face_to_face` · `mixed` · `other` | `cati` | Data collection mode (the interview channel), as published. `face_to_face`: in-person interviews when the publication does not say whether CAPI or PAPI was used. `mixed`/`other`: details in `notes`. Conventions below the table. |
 | `population` | enum | no | `adults` · `likely_voters` · `other` | `adults` | Sampled population: all adults with the right to vote, or respondents filtered as likely to vote. |
 | `population_geo` | enum | no | `residents` · `residents_and_diaspora` · `diaspora` | `residents` | Geographic coverage, as published. Empty if not stated. |
 | `target_scope` | enum | yes | `domestic` · `total` · `diaspora` | `domestic` | Result scope the poll is compared to (M-1.4): `domestic` unless the poll explicitly covers the diaspora. Must agree with `population_geo` (R-64). |
@@ -481,6 +534,22 @@ M-5.3 transparency items are read from these columns: sample size
 error (`moe_published`), client/sponsor (`sponsor_type ≠ not_disclosed`).
 They describe what the **source used** published. If the media article lacks
 an item that the pollster's own report has, use the pollster's report.
+
+`mode` conventions:
+- `mode` records how the **answers were collected** (the interview channel),
+  not how respondents were recruited.
+- Face-to-face without CAPI/PAPI detail ("față în față", "la domiciliul
+  respondentului"): `face_to_face`. Use `capi` or `papi` only when that
+  publication (or the pollster's report for that poll) says so; the pollster's
+  usual practice is not enough.
+- Recruitment-only descriptions, such as "random digital recruitment" (RDR):
+  if the publication also says the questionnaire was completed online, the
+  mode is `cawi`; if it names no interview channel, the mode is `other`, and
+  `notes` quotes the published description. Either way the mode counts as
+  published for M-5.3, because the publication describes the collection.
+- Several channels in one poll (e.g. CATI plus CAWI): `mixed`, with the
+  channels and, if published, their shares in `notes`.
+- The same conventions apply to the items of `pollsters.typical_modes`.
 
 ### 6.12 `polls/<pollster_id>/poll_results.csv`
 
@@ -575,9 +644,33 @@ poll_id,share_base,option_order,option_label,option_type,entity_id,share_raw,sha
 ## 7. Integrity rules (for T-003)
 
 Severity: **E** = error (validation fails), **W** = warning (reported, does
-not fail). Every message is reported as `file:row: message` (row = line number
-in the file, header = 1). Rules apply only to rows that exist; a header-only
-file passes all row rules.
+not fail). Rules apply only to rows that exist; a header-only file passes all
+row rules.
+
+**Running and output.** `uv run sondaje validate` checks `data/` (options:
+`--data-dir DIR`, `--reference-date YYYY-MM-DD`, `--against REF`, `--strict`,
+`--quiet`). Each finding is one line:
+
+```text
+<path>:<row>: [R-xx] error|warning: <message>
+```
+
+`<path>` is relative to the working directory with `/` separators, and
+`<row>` is the line number in the file (header = 1). File-level findings
+(e.g. R-05, a missing file, an R-34 removal) have no `:<row>` part. The output
+ends with a summary line `N error(s), M warning(s)`. The exit code is 1 if
+there is an error (or, with `--strict`, a warning), else 0. `--quiet` hides
+warnings. `--against REF` (e.g. `--against main`) adds the append-only check
+R-34 against the git reference `REF`; without it, R-34 is not run.
+
+**One finding per problem.** Where two rules describe the same problem, only
+the more specific one is reported: a duplicate key in `elections`, `entities`,
+or `pollsters` is R-30 (not R-04); a duplicate alias is R-31 only; an empty
+required provenance cell is R-10 (not R-03); a `poll_results` row whose poll
+does not exist is R-06 (not R-60); a full topline whose exact shares exceed
+100 + `tol` is R-91 (not also R-90); the `raw_path` prefix of R-71 is reported
+by the `path` type (R-03). Other overlaps are reported under each rule (e.g.
+R-05 for an unregistered directory with rows, plus R-06 for each row).
 
 Parameters (T-003 exposes them as constants):
 - `share_sum_tolerance_pp = 2.0`
@@ -589,11 +682,11 @@ Parameters (T-003 exposes them as constants):
 
 | ID | Sev | Rule |
 |---|---|---|
-| R-01 | E | File is UTF-8 without BOM, uses LF line endings, and has no line breaks inside fields. |
+| R-01 | E | File is UTF-8 without BOM, uses LF line endings, ends with a newline, parses as CSV (balanced quotes), and has no line breaks inside fields. A file that is not valid UTF-8 is not checked further; a row with a line break inside a field is skipped. The "quote only when needed" style of §3.1 is not validated (the parsed values are the same either way). |
 | R-02 | E | The header equals the column list of §6 for that file, in order. |
-| R-03 | E | Every cell matches its column type (§3.2) and enum; `yes` columns are not empty. |
+| R-03 | E | Every cell matches its column type (§3.2) and enum; `yes` columns are not empty; no cell has leading or trailing whitespace (any column). A row with the wrong number of fields (including an empty line) is reported here and skipped. |
 | R-04 | E | No duplicate key within a file (keys given per table in §6). |
-| R-05 | E | Only the files of §2.1 exist under `data/` (ignoring `data/raw/`, `data/README.md`, and `.gitkeep` files). `candidate_support.csv` exists only for presidential elections. Each `data/polls/<pollster_id>/` has `polls.csv`, `poll_results.csv`, and `archive_manifest.csv`. Each directory name is a valid ID; once any file in the directory has rows, the ID must exist in the matching registry (header-only directories, such as the MVP election directories before T-004, pass). |
+| R-05 | E | Only the files of §2.1 exist under `data/` (ignoring `data/raw/`, `data/README.md`, and `.gitkeep` files). `candidate_support.csv` exists only for presidential elections (the election type comes from the registry, or from the `pres-` prefix if the election is not registered yet). Each `data/polls/<pollster_id>/` has `polls.csv`, `poll_results.csv`, and `archive_manifest.csv`. Each directory name is a valid ID; once any file in the directory has rows, the ID must exist in the matching registry (header-only directories, such as the MVP election directories before T-004, pass). A reserved `inventory.csv` (§6.13) is a **warning** ("reserved; not validated") until T-011 defines it. |
 | R-06 | E | Every column holding an `election_id`, `entity_id`, `pollster_id`, `poll_id`, or `document_id` from another table references an existing row (FK). |
 | R-07 | E | The `election_id` / `pollster_id` column of a per-directory file equals its directory name. |
 
@@ -612,27 +705,30 @@ Parameters (T-003 exposes them as constants):
 
 | ID | Sev | Rule |
 |---|---|---|
-| R-20 | E | `election_id` agrees with its row: prefix ↔ `election_type` (`parl`↔`parliamentary`, `pres`↔`presidential`, `ep`↔`european`, `local`↔`local`); year = year of `election_date`; `-cd`↔`chamber_of_deputies`, `-sen`↔`senate`; `presidential`↔`president`, `european`↔`european_parliament`; `-rN` ↔ `round = N`, and no `-rN` ↔ `round = 1`; parliamentary IDs always have `-cd` or `-sen`; presidential IDs always have `-rN`. A `-<tag>` part (§4.1) is ignored by this check. Type `local` is reserved: its bodies and ID parts are added by T-062 (§9). |
+| R-20 | E | `election_id` agrees with its row: prefix ↔ `election_type` (`parl`↔`parliamentary`, `pres`↔`presidential`, `ep`↔`european`, `local`↔`local`); year = year of `election_date`; `-cd`↔`chamber_of_deputies`, `-sen`↔`senate`; `presidential`↔`president`, `european`↔`european_parliament`; `-rN` ↔ `round = N`, and no `-rN` ↔ `round = 1`; parliamentary IDs always have `-cd` or `-sen`; presidential IDs always have `-rN`; parliamentary and European IDs never have `-rN` (single-round types, §4.1). A `-<tag>` part (§4.1) is ignored by this check. Type `local` is reserved: any `local` row or `local-` ID is an error until T-062 adds its bodies and ID parts (§9). |
 | R-21 | E | For an election with `round = N ≥ 2`, the election with the same ID ending in `-r(N−1)` exists and has an earlier `election_date`. |
 | R-30 | E | `entity_id`, `pollster_id`, `election_id` values are unique across their registry (no reuse). |
 | R-31 | E | `pollster_aliases.alias` is unique across all pollsters (compared case-insensitively). |
 | R-32 | E | `pollster_affiliations.period_start ≤ period_end` when both are set (compared at the shared precision). |
 | R-33 | W | An entity without `color`. |
-| R-34 | E | Append-only files: compared with `main`, no row was removed or reordered, and no ID changed (T-003 may implement this as a separate `--against main` check). |
+| R-34 | E | Append-only files: compared with `main`, no row was removed or reordered, and no ID changed. Run with `sondaje validate --against REF` (e.g. `--against main`; needs git). Every row of an append-only file at `REF` must still be at the same position with the same key; non-key cells may change (corrections, §2.2). One error per file, at the first difference; a deleted file that had rows at `REF`, or an unknown `REF`, is also an error. |
+| R-35 | W | `pollster_affiliations`: `counterpart_entity_id` is empty, but `counterpart_name` equals the `name` or `short_name` of a registered entity (ignoring case). |
 
 ### 7.4 Election files
 
 | ID | Sev | Rule |
 |---|---|---|
-| R-40 | E | `entity_map`: `result_entity_id` is required for `alliance_member` and `merged_into` and must be empty for `withdrawn`, `excluded`, `not_registered`. For `alliance_member`, the target's `entity_type` is `alliance`. |
+| R-40 | E | `entity_map`: `result_entity_id` is required for `alliance_member`, `merged_into`, and `ran_on_list_of`, and must be empty for `withdrawn`, `excluded`, `not_registered`. For `alliance_member`, the target's `entity_type` is `alliance`. |
 | R-41 | E | `entity_map`: a `poll_entity_id` is not itself a contestant in `results.csv` of the same election, and a `result_entity_id` is a contestant there (checked only when `results.csv` has rows). |
 | R-42 | E | `candidate_support`: the election is presidential; the candidate has type `candidate`; the party has type `party` or `alliance`. |
-| R-43 | W | `candidate_support`: the candidate is neither a contestant in `results.csv` nor in `entity_map.csv` of the election. |
+| R-43 | W | `candidate_support`: the candidate is neither a contestant in `results.csv` nor in `entity_map.csv` of the election (checked only when `results.csv` has rows). |
 | R-44 | E | Every `entity_id` used in `poll_results` of a poll for election E is either a contestant in `results.csv` of E or a `poll_entity_id` in `entity_map.csv` of E (checked only when `results.csv` of E has rows). This is what makes M-1.5 mechanical. |
+| R-45 | E | `entity_map`, relation `ran_on_list_of`: the election is a list election (`election_type` `parliamentary` or `european`); the `poll_entity_id` (guest) and the `result_entity_id` (host) both have `entity_type` `party` or `alliance`. |
+| R-46 | E | `entity_map`: a `result_entity_id` is not a `poll_entity_id` in the same file (mappings are one step, so the target must be a ballot contestant; checked even when `results.csv` has no rows). |
 | R-50 | E | `results`: every contestant has a row in each of the three scopes (`0` is written explicitly). |
 | R-51 | E | `results`: for every contestant, `votes(domestic) + votes(diaspora) = votes(total)` exactly. Same for every numeric column of `results_totals` whose three cells (domestic, diaspora, total) are all set. |
 | R-52 | E | `results`: contestants of a presidential election have type `candidate`; of a parliamentary or European election, type `party`, `alliance`, or `independent`. |
-| R-53 | E | `results` vs `results_totals`: for every scope, the sum of `votes` equals `valid_votes` exactly. |
+| R-53 | E | `results` vs `results_totals`: for every scope, the sum of `votes` equals `valid_votes` exactly. If `results.csv` has rows but `results_totals.csv` (or its row for a scope) is missing, that is also an R-53 error. |
 | R-54 | W | `results_totals`: `valid_votes + invalid_votes > voters` when all three are set. |
 | R-55 | W | `results_totals`: `voters > registered_voters` in the `domestic` scope when both are set. |
 
@@ -642,8 +738,8 @@ Parameters (T-003 exposes them as constants):
 |---|---|---|
 | R-60 | E | `poll_results`: within each (`poll_id`, `share_base`), `option_order` is 1, 2, …, N without gaps. Every poll has at least one `poll_results` row, and every `poll_results` row has a poll. |
 | R-61 | E | `poll_results`: `entity_id` is set iff `option_type` ∈ {`party`, `alliance`, `candidate`, `independent`}, and then `entities.entity_type = option_type`. Entity types fit the election type as in R-52. |
-| R-62 | E | Within one (`pollster_id`, `election_id`), the same `option_label` always maps to the same `entity_id`. Within one (`poll_id`, `share_base`), an `entity_id` appears at most once. |
-| R-63 | E | Polls sharing (`document_id`, `election_id`, `fieldwork_start`, `fieldwork_end`) form one survey: exactly one of them has `headline = true`. `headline = false` requires a non-empty `scenario`. |
+| R-62 | E | Within one (`pollster_id`, `election_id`), the same `option_label` always maps to the same `entity_id` (including an empty one: a label left without entity in one poll and mapped in another is an error). Within one (`poll_id`, `share_base`), an `entity_id` appears at most once. |
+| R-63 | E | Polls sharing (`document_id`, `election_id`, `fieldwork_start`, `fieldwork_end`) form one survey: exactly one of them has `headline = true`. `headline = false` requires a non-empty `scenario`. The cells are compared as written, so polls with empty fieldwork dates from the same document form one survey. |
 | R-64 | E | `population_geo` ↔ `target_scope`: `residents` → `domestic`; `residents_and_diaspora` → `total`; `diaspora` → `diaspora`. Empty `population_geo` → `target_scope = domestic`, unless `notes` explains otherwise (then W). |
 | R-65 | E | `sponsor` is not empty unless `sponsor_type` ∈ {`self`, `not_disclosed`}; `sponsor` is empty when `sponsor_type = not_disclosed`. |
 | R-66 | E | `margin_of_error` is set only if `moe_published = true`. `sample_size_expressed ≤ sample_size` when both are set. |
@@ -659,7 +755,7 @@ Parameters (T-003 exposes them as constants):
 | ID | Sev | Rule |
 |---|---|---|
 | R-80 | E | `fieldwork_start ≤ fieldwork_end` when both are set. |
-| R-81 | E | `fieldwork_end < election_date` (fieldwork on election day is an exit poll, out of scope). If `fieldwork_end` is empty, `fieldwork_start` is used. |
+| R-81 | E | `fieldwork_end < election_date` (fieldwork on election day is an exit poll, out of scope). If `fieldwork_end` is empty, `fieldwork_start` is used; if both are empty, R-81 is skipped (R-86 warns). |
 | R-82 | E | `published_date ≥ fieldwork_end` when both are set. |
 | R-83 | W | `published_date ≥ election_date` (published on or after election day). |
 | R-84 | E | For an election with `round = N ≥ 2`: `fieldwork_start` (or `fieldwork_end` if the start is empty, or `published_date` if both are empty) is **after** the `election_date` of round N−1. Hypothetical pairings asked before the earlier round are not polls for this election. |
@@ -684,7 +780,7 @@ Parameters (T-003 exposes them as constants):
 | M-1.2 | entities present in poll and result; result shares for the 1% threshold | `poll_results.entity_id`, `results.votes / results_totals.valid_votes` |
 | M-1.3 | fieldwork end; election day; final poll per house | `polls.fieldwork_end`, `elections.election_date`, `polls.pollster_id` |
 | M-1.4 | domestic/diaspora/total results; target per poll | `results.scope`, `results_totals`, `polls.target_scope`, `polls.population_geo` |
-| M-1.5 | alliance mapping; withdrawals/exclusions; rounds as separate elections; candidate → party | `entity_map.csv`, `elections.round`, `candidate_support.csv` |
+| M-1.5 | alliance mapping; parties on another party's lists; withdrawals/exclusions; rounds as separate elections; candidate → party | `entity_map.csv` (`alliance_member`, `merged_into`, `ran_on_list_of`, …), `elections.round`, `candidate_support.csv` |
 | M-1.6 | the (house, election) unit | `polls.pollster_id`, `polls.election_id` |
 | M-2.1–M-2.6 | `s_j`, `r_j`, `k`, houses, recency | derived from the above |
 | M-3.1–M-3.3 | `t`, all campaign polls | `polls.fieldwork_start/end`, `published_date`, `headline` (avoids counting two scenarios of one survey) |
@@ -703,6 +799,13 @@ Parameters (T-003 exposes them as constants):
 - A new data column is inserted just before the provenance block, so the
   provenance block always stays last.
 - Exception: T-011 fills in §6.13 without a version bump (reserved).
+
+### 9.1 Schema history
+
+| Version | Task | Kind | Changes |
+|---|---|---|---|
+| 1.0 | T-001 | initial | Frozen at Milestone M0. |
+| 1.1 | T-007 | minor (additive) | New `entity_map.relation` value `ran_on_list_of` (§6.6) with rules R-45 and R-46, and R-40 extended to it. New `mode` value `face_to_face` and `mode` conventions (§6.11). New warning R-35 (affiliation counterpart not linked to its entity). Person-ID rules: which given name, full family name, one person in two roles (§4.2). Meaning of `verified` in the pollster registries (§5.3). §7: output format, `--against REF`, one finding per problem, and the readings T-003 implemented (R-01, R-03, R-05, R-20, R-34, R-43, R-53, R-62, R-63, R-81). Migration: no header changed; `parl-2024-cd/entity_map.csv` row `pmp` set to `ran_on_list_of` → `fd`; `counterpart_entity_id` filled in six `pollster_affiliations.csv` rows. |
 
 ## 10. Worked example (fictitious)
 

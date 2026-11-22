@@ -10,6 +10,7 @@ from sondaje.schema import (
     MODES,
     OPTION_TYPES,
     PROVENANCE,
+    SCHEMA_VERSION,
     SOURCE_TYPES,
     TABLES,
     ColumnType,
@@ -79,6 +80,13 @@ def test_columns_match_data_model(table: Table) -> None:
 
 def test_option_types_match_data_model() -> None:
     assert documented_values("see below") == set(OPTION_TYPES)
+
+
+def test_schema_version_matches_data_model() -> None:
+    match = re.search(r"^\*\*Schema version:\*\* (\S+)", DOC, flags=re.M)
+    assert match
+    assert match.group(1) == SCHEMA_VERSION
+    assert re.search(rf"^\| {re.escape(SCHEMA_VERSION)} \|", section("9.1"), flags=re.M)
 
 
 def test_every_table_ends_with_the_provenance_block() -> None:
