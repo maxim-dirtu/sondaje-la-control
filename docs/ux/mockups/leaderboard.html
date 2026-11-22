@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clasament · machetă T-031</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="components.css">
+<style>
+  .scale { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--space-2); margin-top: var(--space-3); }
+  .scale > div { border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: var(--space-2) var(--space-3); font-size: var(--fs-xs); color: var(--color-text-muted); background: var(--color-surface); }
+  .scale b { display: block; font-size: var(--fs-md); color: var(--color-text); }
+  .scale .is-out { background: repeating-linear-gradient(135deg, var(--color-surface) 0 6px, var(--color-surface-sunken) 6px 12px); color: var(--color-text-subtle); }
+  .scale .is-out b { color: var(--color-text-subtle); }
+  @media (max-width: 40rem) { .scale { grid-template-columns: repeat(2, 1fr); } }
+  .lb td:first-child { white-space: nowrap; }
+  .lb td:first-child a { font-weight: var(--fw-semibold); }
+  .sort { font-size: var(--fs-sm); color: var(--color-text-muted); }
+</style>
+</head>
+<body>
+<div class="fiction-banner" role="note">Date fictive — doar pentru ilustrare. Institutele, partidele și valorile nu sunt reale.</div>
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="index.html"><svg class="brand__mark" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="4" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="13" cy="8" r="2" fill="currentColor"/></svg>Sondaje la control</a>
+    <nav class="nav" aria-label="Principal">
+      <a href="leaderboard.html" aria-current="page">Clasament</a>
+      <a href="pollster-card.html">Institute</a>
+      <a href="heatmap.html">Harta abaterilor</a>
+      <a href="target-plot.html">Alegeri</a>
+      <a href="timeline.html">Campanii</a>
+      <a href="methodology.html">Cum măsurăm</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <p class="breadcrumb"><a href="index.html">Acasă</a> / Clasament</p>
+
+  <div class="page-head">
+    <p class="eyebrow">Clasament</p>
+    <h1>Pe ce sondaje te poți baza</h1>
+    <p class="question">Pe care institute mă pot baza mai mult și pe care mai puțin?</p>
+    <p class="finding finding--page">Deocamdată, <strong>niciun institut nu iese clar în față</strong>. Institutul Alfa și Gamma Data au nota C, Beta Research nota D, iar Delta Opinion nu are încă destule date. Cu doar 3 alegeri analizate, notele sunt provizorii.</p>
+  </div>
+
+  <aside class="callout callout--preliminary" style="margin-bottom:var(--space-5)">
+    <p class="callout__title">Rezultate preliminare: 4 institute, 3 alegeri</p>
+    <p>Cu atât de puține alegeri, notele sunt trase spre mijloc și pot urca sau coborî când adăugăm alegeri noi. Deocamdată, nota maximă posibilă este B.</p>
+  </aside>
+
+  <section class="card" aria-labelledby="lb-title">
+    <div class="card__head" style="align-items:center; flex-wrap:wrap">
+      <h2 class="card__title" id="lb-title">Institutele, grupate după notă</h2>
+      <p class="sort" style="margin:0">Ordonare: <strong>după notă</strong> · <a href="#">alfabetic</a> · <a href="#">după numărul de alegeri</a></p>
+    </div>
+    <div class="table-wrap" style="margin-top:var(--space-3)">
+      <table class="table lb">
+        <thead>
+          <tr>
+            <th scope="col">Institut</th>
+            <th scope="col">Notă</th>
+            <th scope="col" title="față de media celorlalte institute">Cea mai mare abatere</th>
+            <th scope="col" class="num">Eroare medie</th>
+            <th scope="col" class="num">Alegeri</th>
+            <th scope="col" class="num">Transparență</th>
+            <th scope="col">Tipare</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="group-row"><th colspan="7">Nota C <span class="subtle" style="font-weight:400">· în cadrul aceleiași note, ordinea este alfabetică</span></th></tr>
+          <tr>
+            <td><a href="pollster-card.html">Gamma Data</a></td>
+            <td>
+              <span class="grade grade--sm is-low"><span class="grade__letter" aria-hidden="true">C</span><span class="grade__text"><span class="grade__label">provizorie</span><span class="certainty"><span class="certainty__meter" aria-hidden="true"><i class="on"></i><i></i><i></i></span>certitudine scăzută</span></span></span>
+            </td>
+            <td><span class="party party--c"><span class="party__swatch"></span>Partidul C</span> <span class="subtle num">≈ +2,2 p.p. · neclar</span></td>
+            <td class="num">2,3 p.p.</td>
+            <td class="num">2 din 3</td>
+            <td class="num">4/7</td>
+            <td><span class="tag">sondaje neobișnuit de stabile</span></td>
+          </tr>
+          <tr>
+            <td><a href="pollster-card.html">Institutul Alfa</a></td>
+            <td>
+              <span class="grade grade--sm"><span class="grade__letter" aria-hidden="true">C</span><span class="grade__text"><span class="grade__label">Nota C</span><span class="certainty"><span class="certainty__meter" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i></span>certitudine medie</span></span></span>
+            </td>
+            <td><span class="party party--a"><span class="party__swatch"></span>Partidul A</span> <span class="over num">+3,1 p.p.</span> <span class="subtle">supraestimat</span></td>
+            <td class="num">2,1 p.p.</td>
+            <td class="num">3 din 3</td>
+            <td class="num">6/7</td>
+            <td><span class="subtle">—</span></td>
+          </tr>
+
+          <tr class="group-row"><th colspan="7">Nota D</th></tr>
+          <tr>
+            <td><a href="pollster-card.html">Beta Research</a></td>
+            <td>
+              <span class="grade grade--sm"><span class="grade__letter" aria-hidden="true">D</span><span class="grade__text"><span class="grade__label">Nota D</span><span class="certainty"><span class="certainty__meter" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i></span>certitudine medie</span></span></span>
+            </td>
+            <td><span class="party party--c"><span class="party__swatch"></span>Partidul C</span> <span class="under num">−2,9 p.p.</span> <span class="subtle">subestimat · încă 1 abatere</span></td>
+            <td class="num">2,0 p.p.</td>
+            <td class="num">3 din 3</td>
+            <td class="num">5/7</td>
+            <td><a class="tag" href="timeline.html" style="text-decoration:none">apropiere la final</a></td>
+          </tr>
+
+          <tr class="group-row"><th colspan="7">Fără notă încă</th></tr>
+          <tr>
+            <td><a href="pollster-card.html">Delta Opinion</a></td>
+            <td>
+              <span class="grade grade--sm is-unrated"><span class="grade__letter" aria-hidden="true">–</span><span class="grade__text"><span class="grade__label">date insuficiente</span></span></span>
+            </td>
+            <td class="subtle">un singur sondaj final, la o singură alegere</td>
+            <td class="num subtle">—</td>
+            <td class="num">1 din 3</td>
+            <td class="num">6/7</td>
+            <td><span class="subtle">—</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="subtle text-small" style="margin-top:var(--space-3)">Eroarea medie: cu câte puncte procentuale s-a înșelat, în medie, ultimul sondaj al institutului la fiecare partid (media institutelor: 2,2). Transparență: câte din 7 informații de bază publică institutul (eșantion, perioadă, metodă, întrebare, ponderare, marjă de eroare, client).</p>
+
+    <div style="margin-top:var(--space-4)">
+      <details class="disclosure">
+        <summary>Ce înseamnă notele?</summary>
+        <div class="disclosure__body">
+          <p>Nota combină cinci lucruri: cât de aproape au fost sondajele de rezultat, comparat cu celelalte institute; dacă există o abatere constantă spre un partid; cât de transparent e institutul; cum s-a comportat în campanie; și la câte alegeri l-am putut verifica.</p>
+          <div class="scale" aria-label="Scara notelor">
+            <div class="is-out"><b>A</b>85–100 · încă imposibil cu 3 alegeri</div>
+            <div><b>B</b>70–84</div>
+            <div><b>C</b>55–69</div>
+            <div><b>D</b>40–54</div>
+            <div><b>F</b>sub 40</div>
+          </div>
+          <p style="margin-top:var(--space-3)"><a href="methodology.html#nota">Cum se calculează nota, pas cu pas</a></p>
+        </div>
+      </details>
+      <details class="disclosure">
+        <summary>De ce nu există locul 1, locul 2…?</summary>
+        <div class="disclosure__body">
+          <p>Diferențele dintre institutele cu aceeași notă sunt mai mici decât incertitudinea măsurătorii. Un „loc 1” ar sugera o precizie pe care datele nu o au. De aceea grupăm institutele pe note și le ordonăm alfabetic în interiorul grupului.</p>
+        </div>
+      </details>
+      <details class="disclosure">
+        <summary>Ce înseamnă „certitudine scăzută”?</summary>
+        <div class="disclosure__body">
+          <p>Certitudinea depinde de numărul de alegeri la care am putut verifica institutul: scăzută sub 3 alegeri, medie între 3 și 5, ridicată de la 6 alegeri în sus. O notă cu certitudine scăzută e o primă estimare.</p>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <div class="grid-2" style="margin-top:var(--space-5)">
+    <aside class="callout callout--caveat">
+      <p class="callout__title">Ce nu spunem</p>
+      <p>Nota nu este o judecată despre buna-credință a unui institut. Ea măsoară cât de bine s-au potrivit sondajele lui cu rezultatele, cu cât de multe informații le-a însoțit și cât de sigură e măsurătoarea noastră.</p>
+    </aside>
+    <aside class="callout">
+      <p class="callout__title">Drept la replică</p>
+      <p>Fiecare institut a primit analiza înainte de publicare și poate răspunde. Răspunsurile apar pe fișa institutului.</p>
+    </aside>
+  </div>
+  <p class="annot">No ordinal ranks, no traffic-light colours: grade groups, alphabetical within a group (decision proposed in design-references.md). Low-certainty grades keep the dashed badge from the card. On mobile each row collapses into a compact card (name, grade badge, largest deviation); the other columns move behind "detalii". With N0 = 3 shrinkage (M-5.2), N ≤ 3 elections caps the score at 75, so A is unreachable in the MVP: shown honestly as a hatched "A" in the scale.</p>
+</main>
+
+<footer class="site-footer">
+  <div class="container">Machetă T-031 · date fictive · <a href="index.html">toate machetele</a></div>
+</footer>
+</body>
+</html>
