@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tokens and components · T-031</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="components.css">
+<style>
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr)); gap: var(--space-3); }
+  .sw { border: 1px solid var(--color-border); border-radius: var(--radius-sm); overflow: hidden; font-size: var(--fs-xs); background: var(--color-surface); }
+  .sw i { display: block; height: 2.5rem; }
+  .sw span { display: block; padding: var(--space-1) var(--space-2); font-family: var(--font-mono); color: var(--color-text-muted); }
+  .type-row { display: flex; gap: var(--space-4); align-items: baseline; border-bottom: 1px solid var(--color-border); padding: var(--space-2) 0; }
+  .type-row code { width: 7rem; flex: none; font-size: var(--fs-xs); color: var(--color-text-subtle); }
+  .space-row { display: flex; align-items: center; gap: var(--space-3); font-size: var(--fs-xs); font-family: var(--font-mono); color: var(--color-text-muted); }
+  .space-row i { background: var(--color-over-soft); border: 1px solid var(--color-over); height: 0.75rem; display: block; }
+  .elev { display: flex; gap: var(--space-5); flex-wrap: wrap; }
+  .elev > div { width: 9rem; height: 5rem; background: var(--color-surface); border-radius: var(--radius-lg); display: grid; place-items: center; font-size: var(--fs-xs); font-family: var(--font-mono); color: var(--color-text-muted); }
+  section h2 { margin-bottom: var(--space-4); }
+</style>
+</head>
+<body>
+<div class="fiction-banner" role="note">Date fictive — doar pentru ilustrare. Institutele, partidele și valorile nu sunt reale.</div>
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="index.html"><svg class="brand__mark" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="4" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="13" cy="8" r="2" fill="currentColor"/></svg>Sondaje la control</a>
+    <nav class="nav" aria-label="Principal">
+      <a href="index.html">Mock-ups</a>
+      <a href="components.html" aria-current="page">Components</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container stack" style="padding-top:var(--space-5)">
+  <div class="page-head">
+    <p class="eyebrow">Design system · light mode</p>
+    <h1>Tokens and components</h1>
+    <p class="muted prose">Specimen of <code>tokens.css</code> and <code>components.css</code>. Documentation: <code>docs/ux/visual-language.md</code>. This page is for the team, so its labels are in English; the component examples use Romanian UI copy.</p>
+  </div>
+
+  <section class="card">
+    <h2>Colour: neutral UI</h2>
+    <div class="swatches">
+      <div class="sw"><i style="background:var(--color-bg)"></i><span>--color-bg</span></div>
+      <div class="sw"><i style="background:var(--color-surface)"></i><span>--color-surface</span></div>
+      <div class="sw"><i style="background:var(--color-surface-sunken)"></i><span>--color-surface-sunken</span></div>
+      <div class="sw"><i style="background:var(--color-border)"></i><span>--color-border</span></div>
+      <div class="sw"><i style="background:var(--color-border-strong)"></i><span>--color-border-strong</span></div>
+      <div class="sw"><i style="background:var(--color-text)"></i><span>--color-text</span></div>
+      <div class="sw"><i style="background:var(--color-text-muted)"></i><span>--color-text-muted</span></div>
+      <div class="sw"><i style="background:var(--color-text-subtle)"></i><span>--color-text-subtle</span></div>
+      <div class="sw"><i style="background:var(--color-notice-bg)"></i><span>--color-notice-bg</span></div>
+    </div>
+    <h2 style="margin-top:var(--space-6)">Colour: data</h2>
+    <div class="swatches">
+      <div class="sw"><i style="background:var(--color-under)"></i><span>--color-under</span></div>
+      <div class="sw"><i style="background:var(--color-under-strong)"></i><span>--color-under-strong</span></div>
+      <div class="sw"><i style="background:var(--color-under-soft)"></i><span>--color-under-soft</span></div>
+      <div class="sw"><i style="background:var(--color-over)"></i><span>--color-over</span></div>
+      <div class="sw"><i style="background:var(--color-over-strong)"></i><span>--color-over-strong</span></div>
+      <div class="sw"><i style="background:var(--color-over-soft)"></i><span>--color-over-soft</span></div>
+      <div class="sw"><i style="background:var(--color-result)"></i><span>--color-result</span></div>
+      <div class="sw"><i style="background:var(--color-market)"></i><span>--color-market</span></div>
+      <div class="sw"><i style="background:var(--color-window)"></i><span>--color-window</span></div>
+      <div class="sw"><i class="swatch-insufficient" style="background-color:transparent"></i><span>hatch (insufficient)</span></div>
+    </div>
+    <p class="text-small muted" style="margin-top:var(--space-4)">Heatmap ramp (under-5 … zero … over-5):</p>
+    <span class="ramp" aria-hidden="true"><i style="background:var(--heat-under-5)"></i><i style="background:var(--heat-under-4)"></i><i style="background:var(--heat-under-3)"></i><i style="background:var(--heat-under-2)"></i><i style="background:var(--heat-under-1)"></i><i style="background:var(--heat-zero)"></i><i style="background:var(--heat-over-1)"></i><i style="background:var(--heat-over-2)"></i><i style="background:var(--heat-over-3)"></i><i style="background:var(--heat-over-4)"></i><i style="background:var(--heat-over-5)"></i></span>
+    <h2 style="margin-top:var(--space-6)">Colour: party chips (placeholder palette)</h2>
+    <div class="legend">
+      <span class="party party--a"><span class="party__swatch"></span>Partidul A</span>
+      <span class="party party--b"><span class="party__swatch"></span>Partidul B</span>
+      <span class="party party--c"><span class="party__swatch"></span>Partidul C</span>
+      <span class="party party--d"><span class="party__swatch"></span>Partidul D</span>
+      <span class="party party--e"><span class="party__swatch"></span>Partidul E</span>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Typography</h2>
+    <div class="type-row"><code>finding (serif)</code><p class="finding" style="margin:0">Institutul Alfa a supraestimat Partidul A cu 3,1 p.p.</p></div>
+    <div class="type-row"><code>--fs-xl / h1</code><span style="font-size:var(--fs-xl);font-weight:600">Institutul Alfa</span></div>
+    <div class="type-row"><code>--fs-lg / h2</code><span style="font-size:var(--fs-lg);font-weight:600">Abaterea pe partide</span></div>
+    <div class="type-row"><code>--fs-md</code><span style="font-size:var(--fs-md)">Text introductiv, 18 px</span></div>
+    <div class="type-row"><code>--fs-base</code><span>Text de bază, 16 px, înălțime de rând 1,55: ăâîșț ĂÂÎȘȚ</span></div>
+    <div class="type-row"><code>--fs-sm</code><span style="font-size:var(--fs-sm)">Legende, tabele, note: 14 px</span></div>
+    <div class="type-row"><code>eyebrow</code><span class="eyebrow" style="margin:0">Fișa institutului</span></div>
+    <div class="type-row"><code>tabular nums</code><span class="num">+3,1 · −2,9 · 11,0% · 1.100</span></div>
+  </section>
+
+  <section class="card">
+    <h2>Spacing, radius, elevation</h2>
+    <div class="stack" style="--gap:0">
+      <div class="space-row"><i style="width:var(--space-1)"></i>--space-1 · 4</div>
+      <div class="space-row"><i style="width:var(--space-2)"></i>--space-2 · 8</div>
+      <div class="space-row"><i style="width:var(--space-3)"></i>--space-3 · 12</div>
+      <div class="space-row"><i style="width:var(--space-4)"></i>--space-4 · 16</div>
+      <div class="space-row"><i style="width:var(--space-5)"></i>--space-5 · 24</div>
+      <div class="space-row"><i style="width:var(--space-6)"></i>--space-6 · 32</div>
+      <div class="space-row"><i style="width:var(--space-7)"></i>--space-7 · 48</div>
+      <div class="space-row"><i style="width:var(--space-8)"></i>--space-8 · 64</div>
+    </div>
+    <div class="elev" style="margin-top:var(--space-5)">
+      <div style="border:1px solid var(--color-border);box-shadow:var(--shadow-0)">shadow-0 + border</div>
+      <div style="border:1px solid var(--color-border);box-shadow:var(--shadow-1)">shadow-1 (card)</div>
+      <div style="box-shadow:var(--shadow-2)">shadow-2 (hover)</div>
+      <div style="box-shadow:var(--shadow-3)">shadow-3 (modal)</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Grade badge + certainty level</h2>
+    <div class="legend" style="gap:var(--space-6)">
+      <span class="grade"><span class="grade__letter">C</span><span class="grade__text"><span class="grade__label">Nota C</span><span class="certainty"><span class="certainty__meter" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i></span>certitudine medie</span></span></span>
+      <span class="grade"><span class="grade__letter">B</span><span class="grade__text"><span class="grade__label">Nota B</span><span class="certainty"><span class="certainty__meter" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i></span>certitudine ridicată</span></span></span>
+      <span class="grade is-low"><span class="grade__letter">C</span><span class="grade__text"><span class="grade__label">Nota C (provizorie)</span><span class="certainty"><span class="certainty__meter" aria-hidden="true"><i class="on"></i><i></i><i></i></span>certitudine scăzută</span></span></span>
+      <span class="grade is-unrated"><span class="grade__letter">–</span><span class="grade__text"><span class="grade__label">Fără notă încă</span><span class="subtle">date insuficiente</span></span></span>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Diverging bar · interval marker</h2>
+    <svg class="chart" viewBox="0 0 680 120" role="img" aria-label="Exemple de bare divergente: clară, neclară, spre stânga și spre dreapta" style="max-width:44rem">
+      <!-- x(v) = 370 + 44·v -->
+      <text x="360" y="14" text-anchor="end" class="t-under">← subestimează</text>
+      <text x="380" y="14" class="t-over">supraestimează →</text>
+      <text x="0" y="40" class="t-label">clară, dreapta</text>
+      <rect class="db-over" x="370" y="29" width="136.4" height="14" rx="2"/>
+      <line class="whisker" x1="422.8" y1="36" x2="581.2" y2="36"/>
+      <text x="600" y="40" class="t-over">+3,1</text>
+      <text x="0" y="70" class="t-label">clară, stânga</text>
+      <rect class="db-under" x="242.4" y="59" width="127.6" height="14" rx="2"/>
+      <line class="whisker" x1="167.6" y1="66" x2="321.6" y2="66"/>
+      <text x="600" y="70" class="t-under">−2,9</text>
+      <text x="0" y="100" class="t-label">neclară (≈)</text>
+      <rect class="db-under is-ns" x="308.4" y="89" width="61.6" height="14" rx="2"/>
+      <line class="whisker" x1="229.2" y1="96" x2="387.6" y2="96"/>
+      <text x="600" y="100" class="t-ns">≈ −1,4</text>
+      <line class="zero" x1="370" y1="22" x2="370" y2="110"/>
+    </svg>
+  </section>
+
+  <section class="card">
+    <h2>Heatmap cells</h2>
+    <table class="heatmap"><tbody><tr>
+      <td class="heat h-u4">−3,4<small>clară</small></td>
+      <td class="heat h-u2">−1,6<small>clară</small></td>
+      <td class="heat is-ns">≈ −0,6<small>neclară</small></td>
+      <td class="heat h-o3">+2,4<small>clară</small></td>
+      <td class="heat h-o5 ">+4,6<small>clară</small></td>
+      <td class="heat is-ns is-low">≈ +2,2<small>certitudine scăzută</small></td>
+      <td class="heat is-insufficient">date insuficiente</td>
+    </tr></tbody></table>
+  </section>
+
+  <section class="grid-2">
+    <aside class="callout"><p class="callout__title">callout (default)</p><p>Context neutru: „Greșeala comună”.</p></aside>
+    <aside class="callout callout--caveat"><p class="callout__title">callout--caveat · Ce nu spunem</p><p>Ce nu arată cifrele (ADR-0003).</p></aside>
+    <aside class="callout callout--preliminary"><p class="callout__title">callout--preliminary</p><p>Rezultate preliminare / certitudine scăzută.</p></aside>
+    <aside class="callout callout--insufficient"><p class="callout__title">callout--insufficient</p><p>Nu avem încă destule date.</p></aside>
+  </section>
+
+  <section class="card">
+    <h2>Table · disclosure · tag · segmented control</h2>
+    <table class="table">
+      <thead><tr><th>Institut</th><th class="num">Eroare medie</th><th>Tipare</th></tr></thead>
+      <tbody>
+        <tr class="group-row"><th colspan="3">Nota C</th></tr>
+        <tr><td>Institutul Alfa</td><td class="num">2,1 p.p.</td><td><span class="tag">niciunul semnalat</span></td></tr>
+        <tr><td>Beta Research</td><td class="num">2,0 p.p.</td><td><span class="tag">apropiere la final</span> <span class="tag tag--method">M-3.3</span></td></tr>
+      </tbody>
+    </table>
+    <details class="disclosure" style="margin-top:var(--space-4)"><summary>Cum citesc graficul?</summary><div class="disclosure__body"><p>Al doilea nivel de informație.</p></div></details>
+    <div class="segmented" role="group" aria-label="Exemplu" style="margin-top:var(--space-4)"><button type="button" aria-pressed="true">Sondajele finale</button><button type="button" aria-pressed="false">Toată campania</button></div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">T-031 · <a href="index.html">all mock-ups</a></div>
+</footer>
+</body>
+</html>

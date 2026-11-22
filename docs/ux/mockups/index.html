@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T-031 UX concept · mock-ups</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="components.css">
+<style>
+  .screen-card h2 { font-size: var(--fs-md); margin-bottom: var(--space-2); }
+  .screen-card .q { font-family: var(--font-serif); font-size: var(--fs-md); line-height: var(--lh-snug); margin: var(--space-2) 0 var(--space-3); color: var(--color-text); }
+  .screen-card .meta { font-size: var(--fs-sm); color: var(--color-text-subtle); }
+  .flow { font-size: var(--fs-sm); color: var(--color-text-muted); }
+  .flow b { color: var(--color-text); }
+</style>
+</head>
+<body>
+<div class="fiction-banner" role="note">Date fictive — doar pentru ilustrare. Fictitious data, for illustration only.</div>
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="index.html"><svg class="brand__mark" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="4" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="13" cy="8" r="2" fill="currentColor"/></svg>Sondaje la control</a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html" aria-current="page">Mock-ups</a>
+      <a href="components.html">Components</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <div class="page-head" style="margin-top:var(--space-6)">
+    <p class="eyebrow">T-031 · UX concept · light mode</p>
+    <h1>Mock-ups of the key screens</h1>
+    <p class="prose muted" style="margin-top:var(--space-3)">Static HTML + CSS, no build step, no external resources. All pollsters, parties and numbers are <strong>fictitious</strong> ("Institutul Alfa", "Beta Research", "Gamma Data", "Delta Opinion", "Partidul A–E"). Screen copy is in Romanian (ADR-0002) and is a first draft; final wording belongs to T-051. Design notes (dashed boxes) are in English. Background: <code>docs/ux/storyboard.md</code>, <code>visual-language.md</code>, <code>design-references.md</code>.</p>
+    <p class="flow" style="margin-top:var(--space-3)">Typical path: <b>Clasament</b> → <b>Fișa institutului</b> → (Harta abaterilor | O alegere | Campania) → <b>Cum măsurăm</b></p>
+  </div>
+
+  <div class="grid-3">
+    <a class="card card--link screen-card" href="leaderboard.html">
+      <p class="eyebrow">1 · Leaderboard</p>
+      <h2>Clasament</h2>
+      <p class="q">„Pe care institute mă pot baza mai mult și pe care mai puțin?”</p>
+      <p class="meta">Grade groups, no ordinal ranks, certainty per grade, "not rated yet" group.</p>
+    </a>
+    <a class="card card--link screen-card" href="pollster-card.html">
+      <p class="eyebrow">2 · Pollster card</p>
+      <h2>Fișa institutului</h2>
+      <p class="q">„Cât mă pot baza pe sondajele acestui institut și în ce direcție se abat?”</p>
+      <p class="meta">Grade + one-sentence finding + diverging bar per party; low-certainty and insufficient-data variants.</p>
+    </a>
+    <a class="card card--link screen-card" href="heatmap.html">
+      <p class="eyebrow">3 · House × party heatmap</p>
+      <h2>Harta abaterilor</h2>
+      <p class="q">„Care institut dă sistematic mai mult sau mai puțin unui anumit partid decât celelalte?”</p>
+      <p class="meta">Colour only where the interval excludes zero; cell detail panel.</p>
+    </a>
+    <a class="card card--link screen-card" href="target-plot.html">
+      <p class="eyebrow">4 · Per-election target plot</p>
+      <h2>O alegere în detaliu</h2>
+      <p class="q">„Cât de aproape au fost ultimele sondaje de rezultat și au greșit toate în aceeași direcție?”</p>
+      <p class="meta">Result = centre, ±1/±3/±5 rings, industry mean tick, houses by shape.</p>
+    </a>
+    <a class="card card--link screen-card" href="timeline.html">
+      <p class="eyebrow">5 · Campaign timeline</p>
+      <h2>Campania</h2>
+      <p class="q">„A arătat acest institut altceva decât celelalte în timpul campaniei, nu doar în ultima săptămână?”</p>
+      <p class="meta">House vs. market (leave-one-out) vs. result; convergence pattern; few-polls state.</p>
+    </a>
+    <a class="card card--link screen-card" href="methodology.html">
+      <p class="eyebrow">6 · How we measure this</p>
+      <h2>Cum măsurăm</h2>
+      <p class="q">„De unde vin cifrele de pe acest site și cât de mult mă pot baza pe ele?”</p>
+      <p class="meta">Plain sentence → worked example + diagram → technical details with M-IDs.</p>
+    </a>
+    <a class="card card--link screen-card" href="components.html">
+      <p class="eyebrow">Design system</p>
+      <h2>Tokens and components</h2>
+      <p class="q">Colour, type, spacing, radius, elevation, and the shared component inventory.</p>
+      <p class="meta">Source: tokens.css + components.css.</p>
+    </a>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">T-031 UX concept · light mode is the primary theme (ADR-0009) · no code, assets or text copied from any reference site</div>
+</footer>
+</body>
+</html>
