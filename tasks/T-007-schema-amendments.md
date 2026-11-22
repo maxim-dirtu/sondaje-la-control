@@ -1,7 +1,7 @@
 ---
 id: T-007
 title: Schema amendments from Phase 0 follow-ups
-status: review
+status: done
 phase: 0
 depends_on: [T-003, T-004, T-005]
 owner: agent-t007
