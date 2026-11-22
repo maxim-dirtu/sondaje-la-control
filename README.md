@@ -32,6 +32,22 @@ public**. It is not a poll aggregator; see
 | [docs/decisions/](docs/decisions/) | Architecture/Product Decision Records (`ADR-xxxx`) |
 | [tasks/](tasks/) | One file per unit of work (`T-xxx`). The status of each task is kept here |
 
+## Development
+
+The analysis code is a Python 3.12 package (`src/sondaje/`) managed by
+[uv](https://docs.astral.sh/uv/), which also installs the interpreter
+([ADR-0005](docs/decisions/0005-analysis-stack.md)).
+
+```powershell
+uv sync                       # create .venv/ from uv.lock
+uv run pytest                 # tests
+uv run ruff check .           # lint
+uv run ruff format --check .  # formatting
+uv run sondaje --help         # command-line tool
+```
+
+See [AGENTS.md §8](AGENTS.md#8-commands) for the full command list.
+
 ## Status
 
 Phase 0 (Foundations). See [docs/PLAN.md](docs/PLAN.md).

@@ -104,4 +104,26 @@ Statistics can show *systematic deviation*. They **cannot** prove intent.
 
 ## 8. Commands
 
-_To be filled in by T-002 (Python project skeleton)._
+Prerequisite: [uv](https://docs.astral.sh/uv/). No system Python is needed;
+uv installs the interpreter pinned in `.python-version` (3.12). Run every
+command from the repository root (or your worktree root).
+
+| Purpose | Command |
+|---|---|
+| Set up / update the environment (creates `.venv/` from `uv.lock`) | `uv sync` |
+| Run the tests | `uv run pytest` |
+| Lint | `uv run ruff check .` |
+| Lint and auto-fix | `uv run ruff check --fix .` |
+| Check formatting | `uv run ruff format --check .` |
+| Apply formatting | `uv run ruff format .` |
+| CLI help | `uv run sondaje --help` |
+| Add a runtime / dev dependency | `uv add <pkg>` / `uv add --dev <pkg>` (commit `uv.lock`) |
+
+Before handing off, all four checks must pass:
+
+```powershell
+uv sync; uv run pytest; uv run ruff check .; uv run ruff format --check .
+```
+
+New CLI subcommands are registered in `src/sondaje/cli.py` (see its
+docstring). `.venv/`, `build/`, and `data/raw/` are git-ignored.

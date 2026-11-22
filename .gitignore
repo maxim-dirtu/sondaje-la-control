@@ -5,9 +5,16 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 .mypy_cache/
+.coverage
+htmlcov/
+dist/
+*.egg-info/
 
 # Derived outputs (reproducible from data/)
 build/
+
+# Raw downloads (re-fetchable; URLs and hashes live in committed manifests)
+data/raw/
 
 # Notebooks
 .ipynb_checkpoints/
