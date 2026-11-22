@@ -53,7 +53,7 @@ Idea (I-xxx) ──► Decision (ADR-xxxx) ──► Task (T-xxx) ──► Bran
 ### While working
 - Stay inside the task's **Scope**. If you discover extra work, **do not**
   create new task IDs, because concurrent agents would collide. Add it to
-  the task's *Follow-ups* section instead. The coordinator assigns IDs on `main`.
+  the task's *Follow-ups* section instead. The coordinator assigns IDs.
 - **Shared files**: [docs/PLAN.md](docs/PLAN.md), [docs/METHODOLOGY.md](docs/METHODOLOGY.md),
   `docs/DATA_MODEL.md`, [docs/IDEAS.md](docs/IDEAS.md), and this file. Edit them only if
   your task's Scope lists them. Otherwise propose changes under *Follow-ups*.
@@ -64,7 +64,21 @@ Idea (I-xxx) ──► Decision (ADR-xxxx) ──► Task (T-xxx) ──► Bran
 ### Finishing
 1. Check every acceptance criterion, then run the tests and the linter.
 2. Fill in *Outcome*: what was done, the key commits, and known limitations.
-3. Set `status: review`. The coordinator merges into `main` and sets `status: done`.
+3. Set `status: review`. **Do not push and do not merge.** Your final report
+   should give the coordinator what the PR description needs: problem, goal,
+   solution, what changed and how, verification, and open questions.
+
+### Review and merge ([ADR-0011](docs/decisions/0011-pull-request-workflow.md))
+- **Nothing is pushed directly to `main`.** Every change, including the
+  coordinator's housekeeping on `chore/T-000-slug` branches, reaches `main`
+  through a GitHub pull request.
+- The coordinator reviews the branch and runs the checks, then sets
+  `status: done` as the last commit. It then pushes the branch and opens a PR
+  titled `T-xxx: <task title>` using
+  [the PR template](.github/pull_request_template.md).
+- **The owner approves and merges** (merge method: "Create a merge commit").
+  Change requests go back to the same branch.
+- Dependent tasks start only after their prerequisites' PRs are merged.
 
 ### Status values
 `todo` → `in-progress` → `review` → `done`; also `blocked` (explain why in

@@ -1,6 +1,7 @@
 # ADR-0006: Multi-agent workflow
 
-- **Status:** Proposed (working default)
+- **Status:** Proposed (working default). The merge step is superseded by
+  [ADR-0011](0011-pull-request-workflow.md): the owner merges through PRs.
 - **Date:** 2026-11-22
 - **Related:** none
 
