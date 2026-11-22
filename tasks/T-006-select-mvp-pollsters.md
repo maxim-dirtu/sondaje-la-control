@@ -24,7 +24,7 @@ its results.
 **In:**
 - `docs/reports/pollster-selection.md`: a scorecard of every pollster in the
   T-005 registry that was active in the 3 MVP elections
-- A draft ADR `docs/decisions/draft-mvp-pollsters.md` proposing the selection
+- A draft ADR `docs/decisions/draft-mvp-pollsters.md` proposing the selection (finalized as ADR-0012)
 
 Scorecard criteria (score each one, with links as evidence):
 1. **Coverage (required):** at least one poll inside the final window
@@ -47,22 +47,25 @@ Scorecard criteria (score each one, with links as evidence):
 - [x] The draft ADR proposes 2–4 houses, plus 1–2 reserves, with reasons.
 - [x] The report lists the publication formats found for each house. T-011
       needs this to know which extraction paths to support.
-- [ ] The owner has approved the selection. The coordinator then numbers the ADR
+- [x] The owner has approved the selection. The coordinator then numbers the ADR
       and creates one data task per pollster (T-012 onward).
-
-## Follow-ups
-- **Owner decisions (draft ADR, Q-A to Q-E):** how CURS is used given the
-  21-day window (A1 campaign house / A2 wider window / A3 two houses only);
-  accepting media-only sources and expressed toplines for Sociopol; final-poll
-  eligibility of polls published on or after election day; diaspora default;
-  a 4th house.
-- **METHODOLOGY M-1.3 (proposal):** state whether a poll published on or after
-  election day can be a house's "final poll" (AtlasIntel 1–3 May 2025,
-  published 5 May). Suggested default: eligible only if `published_date` <
-  `election_date`; T-025 tests the alternative.
-- **METHODOLOGY / T-025 (proposal):** include `window_days` = 28 in the
-  sensitivity analysis; it is the smallest round value that covers CURS's
-  parliamentary (gap 26) and round-1 (gap 24) polls.
+ ## Follow-ups
+- **Coordinator:** create the data tasks (T-012 onward) for AtlasIntel,
+  Sociopol, CURS and Verifield, applying the "Rules for the data tasks" in
+  ADR-0012 (media-only sources `verified = false`, broadcast graphic primary
+  for Sociopol; M-1.7 publication timing; M-1.4 diaspora → `total`; search
+  beyond the indexes; resolve the source disagreements in report §7).
+- **T-025 task file:** its sensitivity list says `window_days` ∈ {14, 21, 30};
+  align it with the new default 28 and METHODOLOGY's table (21, 28, 35).
+- **UX docs and mock-ups** still say "final 21-day window"
+  (`docs/ux/visual-language.md`, `docs/ux/storyboard.md`,
+  `docs/ux/mockups/tokens.css`, `docs/ux/mockups/timeline.html`); update to
+  28 days. The UI also needs (a) a "published after the vote" notice (M-1.7)
+  and (b) a lower verification level for `verified = false` polls (Q-B).
+- **DATA_MODEL (proposals):** R-83 could cite M-1.7 (published on/after
+  election day → shown, excluded from metrics); a convention for flagging
+  such polls if a column is wanted rather than deriving it from
+  `published_date`.
 - **DATA_MODEL §6.11 `topline_coverage` (proposal):** clarify how to record a
   publication that shows parties/candidates + "other" summing to 100 but no
   undecided share (Sociopol, CURS, IRSOP, ARA, INSCOP). Is that `full` (every
@@ -70,13 +73,13 @@ Scorecard criteria (score each one, with links as evidence):
 - **DATA_MODEL §6.10 `format` (proposal):** values for broadcast video (ARA
   23–28 Apr 2025) and for polls known only from a verbal statement reported in
   an article (Sociopol round 2). Today they would be `other` / `html`.
-- **T-011:** extraction paths needed by the proposed set: `pdf_text`, `html`,
+- **T-011:** extraction paths needed by the selected set: `pdf_text`, `html`,
   and manual double entry from images and rendered PDF pages (report §5).
-- **Data tasks (T-012+):** search beyond the indexes (Sociopol 20–22 Nov 2024,
-  BCS 26–29 Sep and 7–10 Nov 2024, AtlasIntel 1–3 May 2025 were missing);
-  resolve the source disagreements listed in report §7.
 - **T-005 Log note is superseded:** "AtlasIntel, CURS and Verifield have
-  pre-election polls in all three elections" holds for the 120-day windows
+  pre-election polls in all three elections" holds for the 120-day windows;
+  with the 28-day final window it holds for AtlasIntel and CURS (and
+  Sociopol), not for Verifield.
+ons" holds for the 120-day windows
   only, not for the 21-day final window.
 
 ## Log
@@ -126,24 +129,51 @@ Scorecard criteria (score each one, with links as evidence):
   the Avangarde March 2025 vote-question page was not checked. None of these
   changes the coverage result.
 
-## Outcome
-Scorecard and draft ADR delivered; the owner's approval is pending.
+- **2026-11-22: owner decisions (via coordinator).** Q-A → A2: `window_days`
+  21 → 28 for all houses. Q-B → media-only sources accepted with
+  `verified = false`; Sociopol broadcast graphic primary, text value in notes.
+  Q-C → polls published on or after election day shown with a notice and
+  excluded from all metrics. Q-D → M-1.4 as written. Q-E → Verifield added as
+  a 4th house. Reserve: MKOR.
+- **2026-11-22: scope extension authorized by the coordinator:** finalize the
+  ADR as `docs/decisions/0012-mvp-pollsters.md` (Accepted; number assigned by
+  the coordinator) and delete the draft; edit `docs/METHODOLOGY.md` for
+  exactly these decisions (M-1.3 default 28 and the parameter row with
+  21/35-day sensitivity; new M-1.7 "Publication timing"; existing IDs
+  unchanged); update the report; tick the owner-approval criterion.
+- **2026-11-22: 28-day re-scoring.** Windows: parl from 2024-11-03, r1 from
+  2025-04-06, r2 from 2025-04-20 (R-84 still binds). Newly inside: CURS
+  30 Oct–5 Nov (26 d) and 3–10 Apr (24 d), Sociopol 7–11 Apr (23 d),
+  FlashData 10–12 Apr (22 d), DataEcho 10–11 Apr (23 d). Houses meeting
+  coverage: AtlasIntel, Sociopol, **CURS** (new). **Verifield still does
+  not** (gaps 53 and 37 days; also not at 35 days); it stays in the set by
+  owner decision as a campaign house with "no grade yet" (ADR-0010), stated in
+  ADR-0012 and report §2. M-1.7 check: AtlasIntel's 1–3 May poll (published
+  5 May) excluded; its 28 Apr–1 May poll (HotNews metadata 2 May 2025) is the
+  round-1 final poll, gap 3 days. Publication dates of the other selected
+  final polls are before election day (Sociopol parl: România TV 24 Nov 2024;
+  CURS r2: TVR Info 13 May 2025).
 
-- `docs/reports/pollster-selection.md` (c5bfe4d, d03720b): all 15 registered
-  houses scored on criteria 1–5, with evidence links to the specific
-  final-window polls; criterion 6 (diversity) described factually; publication
-  formats and the extraction paths T-011 needs (§5); data-quality findings for
-  the poll tasks (§7).
-- `docs/decisions/draft-mvp-pollsters.md` (66c703e): proposes **AtlasIntel,
-  Sociopol, CURS**, with **Verifield** and **MKOR** as reserves, plus owner
-  questions Q-A to Q-E.
-- Key result: only AtlasIntel and Sociopol have a final-window poll in all
-  three elections. CURS is proposed as a campaign house (owner option A1), as
-  its parliamentary and round-1 polls end 26 and 24 days before the vote.
-- Checks: `uv run pytest -q` (252 passed), `uv run ruff check .`,
+## Outcome
+Scorecard delivered and selection approved by the owner (2026-11-22).
+
+- `docs/reports/pollster-selection.md`: all 15 registered houses scored on
+  criteria 1–5 with evidence links to the specific final-window polls;
+  criterion 6 described factually; publication formats and the extraction
+  paths T-011 needs (§5); data-quality findings (§7). §2 has the current
+  28-day result and the owner decisions; the 21-day scoring is kept as history.
+- `docs/decisions/0012-mvp-pollsters.md` (Accepted): **AtlasIntel, Sociopol,
+  CURS, Verifield**; reserve **MKOR**; the owner decisions Q-A to Q-E and the
+  rules for the data tasks.
+- `docs/METHODOLOGY.md`: M-1.3 `window_days` default 28 (sensitivity 21/35);
+  new M-1.7 publication timing.
+- Coverage with 28 days: AtlasIntel, Sociopol and CURS cover all three
+  elections; Verifield covers round 2 only (campaign house, no grade in the
+  MVP).
+- Checks: `uv run pytest -q`, `uv run ruff check .`,
   `uv run ruff format --check .`, `uv run sondaje validate --quiet` (0 errors;
   the warnings come from existing data, which this task did not touch).
 
 Known limitations: poll counts are approximate; the vote shares of
 Noi, Cetățenii and DataEcho were not read (charts/images); popularity is a
-qualitative indicator. See the Log ("not verified").
+qualitative indicator. Other documents still mention 21 days (see Follow-ups).
