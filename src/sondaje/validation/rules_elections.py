@@ -1,4 +1,4 @@
-"""Election-file rules: R-40…R-44 and R-50…R-55."""
+"""Election-file rules: R-40…R-46 and R-50…R-55."""
 
 from collections import defaultdict
 
@@ -15,8 +15,14 @@ from sondaje.schema import (
 )
 from sondaje.validation.model import DataFile, Dataset, Reporter, Row
 
-MAPPED_RELATIONS = ("alliance_member", "merged_into")
+MAPPED_RELATIONS = ("alliance_member", "merged_into", "ran_on_list_of")
 """``entity_map`` relations that need a ``result_entity_id`` (R-40)."""
+
+LIST_ELECTION_TYPES = ("parliamentary", "european")
+"""Election types with party lists, where ``ran_on_list_of`` applies (R-45)."""
+
+LIST_ENTITY_TYPES = ("party", "alliance")
+"""Entity types that can be the guest or the host of ``ran_on_list_of`` (R-45)."""
 
 CONTESTANT_TYPES = {
     "presidential": ("candidate",),
@@ -45,15 +51,19 @@ def mapped_entities(dataset: Dataset, election_id: str) -> set[str]:
 
 
 def check_entity_map(
-    dataset: Dataset, entity_types: dict[str, str | None], reporter: Reporter
+    dataset: Dataset,
+    entity_types: dict[str, str | None],
+    election_types: dict[str, str | None],
+    reporter: Reporter,
 ) -> None:
-    """R-40 and R-41."""
+    """R-40, R-41, R-45 and R-46."""
     for election_id in dataset.elections:
         data_file = dataset.election_file(election_id, ENTITY_MAP.name)
         if data_file is None:
             continue
         has_results = bool(dataset.election_rows(election_id, RESULTS.name))
         on_ballot = contestants(dataset, election_id)
+        mapped = mapped_entities(dataset, election_id)
         for row in data_file.rows:
             shown, line = data_file.display_path, row.line
             relation = row.get_str("relation")
@@ -77,6 +87,16 @@ def check_entity_map(
                     f"alliance_member target {target!r} has entity_type {target_type!r}, "
                     "expected 'alliance'",
                 )
+            if relation == "ran_on_list_of":
+                _check_ran_on_list_of(shown, row, entity_types, election_types, reporter)
+            if target is not None and target in mapped:
+                reporter.error(
+                    shown,
+                    line,
+                    "R-46",
+                    f"result_entity_id {target!r} is itself a poll_entity_id in this file; "
+                    "map to the ballot contestant directly",
+                )
             if not has_results:
                 continue
             polled = row.get_str("poll_entity_id")
@@ -95,6 +115,36 @@ def check_entity_map(
                     "R-41",
                     f"result_entity_id {target!r} is not a contestant in results.csv",
                 )
+
+
+def _check_ran_on_list_of(
+    shown: str,
+    row: Row,
+    entity_types: dict[str, str | None],
+    election_types: dict[str, str | None],
+    reporter: Reporter,
+) -> None:
+    """R-45: a guest party on a host's lists, in a list election."""
+    election_id = row.get_str("election_id")
+    election_type = election_types.get(election_id) if election_id else None
+    if election_type is not None and election_type not in LIST_ELECTION_TYPES:
+        reporter.error(
+            shown,
+            row.line,
+            "R-45",
+            f"ran_on_list_of needs a list election, but {election_id!r} is {election_type}",
+        )
+    for column, role in (("poll_entity_id", "guest"), ("result_entity_id", "host")):
+        entity_id = row.get_str(column)
+        entity_type = entity_types.get(entity_id) if entity_id else None
+        if entity_type is not None and entity_type not in LIST_ENTITY_TYPES:
+            reporter.error(
+                shown,
+                row.line,
+                "R-45",
+                f"ran_on_list_of {role} {entity_id!r} has entity_type {entity_type!r}, "
+                "expected 'party' or 'alliance'",
+            )
 
 
 def check_candidate_support(
@@ -325,7 +375,7 @@ def run(dataset: Dataset, reporter: Reporter) -> None:
         election_id: row.get_str("election_type")
         for election_id, row in dataset.registry_index(ELECTIONS.name, "election_id").items()
     }
-    check_entity_map(dataset, entity_types, reporter)
+    check_entity_map(dataset, entity_types, election_types, reporter)
     check_candidate_support(dataset, entity_types, election_types, reporter)
     check_poll_entities(dataset, reporter)
     check_results(dataset, entity_types, election_types, reporter)
