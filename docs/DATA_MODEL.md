@@ -312,8 +312,8 @@ One row per polling firm. Key: `pollster_id`.
 |---|---|---|---|---|---|
 | `pollster_id` | slug | yes | §4.3 | `exemplar` | Stable pollster ID. |
 | `name` | text | yes | original language | `Institutul Exemplar de Sondare` | Official name (legal form may be omitted). |
-| `short_name` | text | yes | | `Exemplar` | Name used in charts and tables. |
-| `website` | url | no | | `https://example.org` | Official website. |
+| `short_name` | text | yes | original language | `Exemplar` | Name used in charts and tables. |
+| `website` | url | no | absolute http(s) URL | `https://example.org` | Official website. |
 | `typical_modes` | list<enum> | no | items from the `mode` enum (§6.11) | `cati;cawi` | Survey modes the firm usually reports. |
 | provenance block | | | §5.1 | | Source for the name and website. |
 
@@ -342,7 +342,7 @@ Wording is factual and neutral (ADR-0003). Key: (`pollster_id`, `relation`,
 | `counterpart_name` | text | yes | original language | `Partidul Exemplu` | The organisation or person on the other side. |
 | `counterpart_entity_id` | slug | no | FK → `entities.entity_id` | `pex` | Set when the counterpart is a registered entity. |
 | `period_start` | partial_date | no | `YYYY[-MM[-DD]]` | `2024-03` | Start of the relation, if known. |
-| `period_end` | partial_date | no | `YYYY[-MM[-DD]]` | | End of the relation; empty = ongoing or unknown. |
+| `period_end` | partial_date | no | `YYYY[-MM[-DD]]` | `2025-12` | End of the relation; empty = ongoing or unknown. |
 | `description` | text | yes | English, factual | `Commissioned 2 polls published in March 2024.` | What the source states, nothing more. |
 | provenance block | | | §5.1 | | `source_url` is mandatory, as everywhere. |
 
@@ -407,10 +407,10 @@ Totals per scope. Key: (`election_id`, `scope`).
 |---|---|---|---|---|---|
 | `election_id` | slug | yes | FK → `elections`; equals the directory name | `parl-2024-cd` | |
 | `scope` | enum | yes | `domestic` · `diaspora` · `total` | `total` | As in §6.8. |
-| `registered_voters` | int | no | | `18000000` | Voters on the permanent lists, if published for this scope. |
-| `voters` | int | no | | `9000000` | Voters who turned up (signed the lists). |
-| `valid_votes` | int | yes | | `8700000` | Valid votes; the denominator for result shares. |
-| `invalid_votes` | int | no | | `250000` | Invalid (null) votes. |
+| `registered_voters` | int | no | ≥ 0 | `18000000` | Voters on the permanent lists, if published for this scope. |
+| `voters` | int | no | ≥ 0 | `9000000` | Voters who turned up (signed the lists). |
+| `valid_votes` | int | yes | ≥ 0 | `8700000` | Valid votes; the denominator for result shares. |
+| `invalid_votes` | int | no | ≥ 0 | `250000` | Invalid (null) votes. |
 | provenance block | | | §5.1 | | |
 
 ### 6.10 `archive_manifest.csv` (polls and elections)
@@ -427,13 +427,13 @@ itself. Key: `document_id`.
 | `title` | text | no | original language | `Barometru politic, noiembrie 2024` | Title as published. |
 | `published_date` | date | no | `YYYY-MM-DD` | `2024-11-26` | Publication date of the document, if known. |
 | `format` | enum | yes | `pdf_text` · `pdf_image` · `html` · `image` · `csv` · `xlsx` · `json` · `zip` · `other` | `pdf_text` | `pdf_text`: PDF with a text layer; `pdf_image`: scanned or image-only PDF. |
-| `archive_url` | url | cond | | `https://web.archive.org/web/20241126000000/https://example.org/r.pdf` | Snapshot of the original. **Required** in poll manifests (`data/polls/`); optional in election manifests (R-71). |
+| `archive_url` | url | cond | absolute http(s) URL of an archive snapshot | `https://web.archive.org/web/20241126000000/https://example.org/r.pdf` | Snapshot of the original. **Required** in poll manifests (`data/polls/`); optional in election manifests (R-71). |
 | `sha256` | sha256 | yes | 64 lowercase hex | `e3b0c442…b855` | SHA-256 of the downloaded bytes. |
 | `raw_path` | path | no | `data/raw/...` | `data/raw/polls/exemplar/exemplar-doc-001.pdf` | Local (git-ignored) copy. |
-| `source_url` | url | yes | | `https://example.org/r.pdf` | The original URL that was downloaded. |
+| `source_url` | url | yes | absolute http(s) URL | `https://example.org/r.pdf` | The original URL that was downloaded. |
 | `source_type` | enum | yes | §5.1 | `pollster` | |
-| `retrieved_at` | date | yes | | `2026-11-22` | Download date (the hash refers to this download). |
-| `notes` | text | no | | | |
+| `retrieved_at` | date | yes | `YYYY-MM-DD` | `2026-11-22` | Download date (the hash refers to this download). |
+| `notes` | text | no | English free text | `Second copy of the report, hosted by a media partner.` | As in §5.1. |
 
 ### 6.11 `polls/<pollster_id>/polls.csv`
 
@@ -464,8 +464,8 @@ Key: `poll_id`.
 | `question_wording` | text | no | original language, verbatim | `Dacă duminica viitoare …` | Exact wording, if published. |
 | `sponsor` | text | cond | original language | `Televiziunea Exemplu` | Client/sponsor as published. Required unless `sponsor_type` is `self` or `not_disclosed`; must be empty for `not_disclosed` (R-65). |
 | `sponsor_type` | enum | yes | `self` · `media` · `party` · `candidate` · `public_institution` · `civil_society` · `business` · `other` · `not_disclosed` | `media` | `self`: the publication states the pollster funded it; `not_disclosed`: no client/sponsor information published. |
-| `weighting_published` | bool | yes | | `true` | The publication describes the weighting. |
-| `moe_published` | bool | yes | | `true` | The publication states a margin of error. |
+| `weighting_published` | bool | yes | `true` · `false` | `true` | The publication describes the weighting. |
+| `moe_published` | bool | yes | `true` · `false` | `true` | The publication states a margin of error. |
 | `margin_of_error` | decimal | no | pp, as published | `3` | Margin of error in percentage points (e.g. `±3%` → `3`). Allowed only if `moe_published = true` (R-66). |
 | `topline_coverage` | enum | yes | `full` · `partial` | `full` | `full`: every option the publication shows was captured **and** the publication shows a complete topline (all options, incl. undecided/non-response where asked). `partial`: the source shows only some options (e.g. an article listing the leading parties). |
 | `document_id` | slug | yes | FK → `archive_manifest.document_id` in the same directory | `exemplar-doc-001` | The archived document the values were extracted from. |
@@ -501,10 +501,10 @@ Key: (`poll_id`, `share_base`, `option_order`).
 
 | Value | Meaning | Romanian examples | Counts as a vote option in M-1.1 |
 |---|---|---|---|
-| `party` | a party | | yes |
-| `alliance` | an alliance | | yes |
-| `candidate` | a presidential candidate | | yes |
-| `independent` | an independent candidate in a list election | | yes |
+| `party` | a party | the party name or acronym as printed | yes |
+| `alliance` | an alliance | the alliance name as printed | yes |
+| `candidate` | a presidential candidate | the candidate name as printed | yes |
+| `independent` | an independent candidate in a list election | "Candidați independenți" only if it names one person; otherwise `other` | yes |
 | `other` | a catch-all for other parties/candidates | "Alt partid", "Alt candidat", "Altele" | yes, as "others" (M-1.1) |
 | `undecided` | does not know yet | "Nu știu", "Nehotărât" | no |
 | `non_response` | refuses to answer | "Nu răspund" | no |
@@ -512,7 +512,7 @@ Key: (`poll_id`, `share_base`, `option_order`).
 | `would_not_vote` | will not vote | "Nu voi vota", "Nu merg la vot" | no |
 | `none` | explicitly none of the options | "Niciunul" | no |
 | `blank_or_invalid` | would cast a blank or invalid ballot | "Vot alb", "Vot anulat" | no |
-| `other_non_vote` | any other non-vote answer, explained in `notes` | | no |
+| `other_non_vote` | any other non-vote answer, explained in `notes` | "Depinde" | no |
 
 ### 6.13 `polls/<pollster_id>/inventory.csv` (reserved for T-011)
 
