@@ -1,11 +1,11 @@
 ---
 id: T-005
 title: Pollster registry and transparency metadata
-status: todo
+status: in-progress
 phase: 0
 depends_on: [T-001]
-owner: null
-branch: null
+owner: agent-t005
+branch: task/T-005-pollster-registry
 methodology: [M-5.3]
 created: 2026-11-22
 updated: 2026-11-22
