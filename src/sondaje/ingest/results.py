@@ -201,7 +201,7 @@ def _documents(
     )
 
 
-_PARL_FIELDS = PvFields(
+PARLIAMENTARY_PV_FIELDS = PvFields(
     registered_voters="a1",
     voters="b",
     valid_votes="e",
@@ -213,7 +213,7 @@ _PARL_FIELDS = PvFields(
         "valid_votes = e, invalid_votes = f (null votes)."
     ),
 )
-_PRES_FIELDS = PvFields(
+PRESIDENTIAL_PV_FIELDS = PvFields(
     registered_voters="a",
     voters="b",
     valid_votes="c",
@@ -235,7 +235,7 @@ SOURCES: dict[str, ElectionSource] = {
     "parl-2024-cd": ElectionSource(
         election_id="parl-2024-cd",
         category="CD",
-        pv_fields=_PARL_FIELDS,
+        pv_fields=PARLIAMENTARY_PV_FIELDS,
         station_fields=StationFields(valid_votes="e"),
         postal_fields=StationFields(valid_votes="d1"),
         documents=_documents(
@@ -254,7 +254,7 @@ SOURCES: dict[str, ElectionSource] = {
     "pres-2025-r1": ElectionSource(
         election_id="pres-2025-r1",
         category="PRSD",
-        pv_fields=_PRES_FIELDS,
+        pv_fields=PRESIDENTIAL_PV_FIELDS,
         station_fields=StationFields(valid_votes="c"),
         postal_fields=StationFields(valid_votes="d1"),
         documents=_documents(
@@ -270,7 +270,7 @@ SOURCES: dict[str, ElectionSource] = {
     "pres-2025-r2": ElectionSource(
         election_id="pres-2025-r2",
         category="PRSD",
-        pv_fields=_PRES_FIELDS,
+        pv_fields=PRESIDENTIAL_PV_FIELDS,
         station_fields=StationFields(valid_votes="c"),
         postal_fields=StationFields(valid_votes="d1"),
         documents=_documents(
@@ -719,7 +719,8 @@ def _scope_origin(scope: str, values: ScopeValues, pv_doc: str, bec_doc: str) ->
         pv = values.pvs[0]
         return (
             f"Constituency PV {pv.code} ({pv.report_type}) in {pv_doc}: polling stations abroad "
-            "and postal votes."
+            "and postal votes. registered_voters is this PV's permanent-list figure; most voters "
+            "abroad vote on supplementary lists, so it is not a turnout base."
         )
     return (
         f"BEC national PV ({values.pvs[0].report_type}) in {pv_doc}; matches the BEC PV text "
