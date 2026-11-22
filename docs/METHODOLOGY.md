@@ -34,10 +34,12 @@ threshold (default 1% in the result) are merged into "others". This prevents
 small-party noise from dominating the log-odds metrics.
 
 ### M-1.3 Accuracy window and recency weight
-- Only polls with fieldwork **ending ≤ 21 days** before election day are used for
-  accuracy metrics (parameter `window_days`, default 21).
+- Only polls with fieldwork **ending ≤ 28 days** before election day are used for
+  accuracy metrics (parameter `window_days`, default 28; owner decision
+  2026-11-22, [ADR-0012](decisions/0012-mvp-pollsters.md); previously 21).
 - Weight: `w = exp(−days_before_election / τ)`, `τ = 7` by default.
-- The "final poll" of a house is its latest poll inside the window.
+- The "final poll" of a house is its latest poll inside the window that is
+  eligible under M-1.7.
 
 ### M-1.4 Domestic vs. total result
 Most Romanian polls sample the resident population only. The default comparison
@@ -60,6 +62,15 @@ poll.
 ### M-1.6 Independence unit
 Polls from the same house for the same election are **not independent**. The
 statistical unit for cross-election inference is the pair `(house, election)`.
+
+### M-1.7 Publication timing
+A poll whose first publication (`published_date`) is **on or after election
+day** is shown to users, with an explicit notice that it was published after
+the vote, but it is **excluded from every calculation**: errors (M-2), market
+average and campaign metrics (M-3), significance (M-4), and the trust score
+(M-5). It can never be a house's final poll (M-1.3); the final poll is the
+latest poll published before election day. Owner decision 2026-11-22
+([ADR-0012](decisions/0012-mvp-pollsters.md)).
 
 ---
 
@@ -203,7 +214,7 @@ is recorded in the task Log and in the section itself.
 
 | Parameter | Default | Section | Calibrated by |
 |---|---|---|---|
-| `window_days` | 21 | M-1.3 | T-025 sensitivity analysis |
+| `window_days` | 28 | M-1.3 | T-025 sensitivity analysis (incl. 21 and 35 days) |
 | `tau` | 7 | M-1.3 | T-025 |
 | `small_party_threshold` | 1% | M-1.2 | T-025 |
 | `campaign_days` | 120 | M-3.2 | T-023 |
