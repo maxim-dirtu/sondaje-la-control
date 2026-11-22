@@ -1,7 +1,7 @@
 ---
 id: T-001
 title: Define data model and CSV schemas
-status: review
+status: done
 phase: 0
 depends_on: []
 owner: agent-t001-2

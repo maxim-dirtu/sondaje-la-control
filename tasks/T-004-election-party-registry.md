@@ -31,6 +31,10 @@ presidential candidate to the parties that supported them lets a lean toward a
   labels map to result entities
 - Candidate → supporting party/parties for both presidential rounds, each with
   a source
+- **Candidates that polls included but who are not in the official results**
+  (withdrawn, excluded, or never registered): an entity row plus an
+  `entity_map` row each, so that the pollster tasks don't all append the same
+  rows. Use the discovery indexes (Wikipedia, sondajeromania.ro) to find them.
 
 **Out:**
 - Results and polls (Phase 1). Pollsters (T-005).

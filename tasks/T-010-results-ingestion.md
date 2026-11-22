@@ -34,7 +34,8 @@ elections for the `domestic`, `diaspora`, and `total` scopes.
 - Raw downloads go to `data/raw/` (git-ignored). Their source URLs and SHA-256
   hashes are recorded in a committed manifest.
 - An entity missing from the registry may be appended to the entities file
-  (append-only).
+  (append-only). T-004 is a dependency, so rebase on its merge first; only
+  entities that T-004 missed may be appended.
 
 **Out:**
 - Results below the national level (county, polling station). Propose them as

@@ -179,6 +179,22 @@ interval combines the M-4.1 sampling error with the posterior uncertainty of
 
 ---
 
+## Open specification issues
+
+These are raised by T-001 and must be resolved, by updating the relevant
+section, before or during T-020. Each has a suggested default; the final choice
+is recorded in the task Log and in the section itself.
+
+| ID | Section | Question | Suggested default |
+|---|---|---|---|
+| OI-1 | M-1.1 | A poll may publish several share bases (`all_respondents`, `expressed_option`, …). Which one is used? | `expressed_option` if published (it is the pollster's own headline figure, the one the public sees); otherwise `all_respondents`, normalized |
+| OI-2 | M-1.1 | How do values published as "<x%" (`share_qualifier = lt`) enter the normalization? | Use x/2, flag the poll, and test the sensitivity in T-025 |
+| OI-3 | M-1.3 | Non-headline scenarios (`headline = false`) | Excluded from the metrics, kept for transparency |
+| OI-4 | M-1.3, M-3 | A poll with no published `fieldwork_end` | Excluded from windowed metrics. It lowers the transparency score (M-5.3) |
+| OI-5 | M-4.1 | Is `n` equal to `sample_size` or to `sample_size_expressed` when shares are on the expressed base? | `sample_size_expressed` if published; otherwise `sample_size` × the expressed share |
+
+---
+
 ## Tunable parameters
 
 | Parameter | Default | Section | Calibrated by |

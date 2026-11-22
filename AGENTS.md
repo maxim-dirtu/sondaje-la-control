@@ -83,9 +83,10 @@ Statistics can show *systematic deviation*. They **cannot** prove intent.
 
 - **Never invent or estimate data.** If a value can't be verified, leave it
   empty and note it in the task *Log*.
-- Every row records `source_url` and `retrieved_at` (ISO date). Polls also
-  record where the source came from (e.g. pollster site, media article, or
-  Wikipedia).
+- Every row carries the provenance block from
+  [DATA_MODEL.md §5.1](docs/DATA_MODEL.md): `source_url`, `source_type`
+  (`official` | `pollster` | `media` | `aggregator` | `wikipedia` | `other`),
+  `retrieved_at` (ISO date), `verified`, and `notes`.
 - Wikipedia and aggregators (e.g. sondajeromania.ro) are **indexes, not
   sources**. Verify against the original publication whenever possible.
 - Polls are recorded as **full toplines**: every option exactly as published.
@@ -93,6 +94,8 @@ Statistics can show *systematic deviation*. They **cannot** prove intent.
 - Official results come from AEP/BEC. Keep domestic, diaspora, and total
   results separate.
 - Canonical data is versioned CSV in git ([ADR-0004](docs/decisions/0004-data-storage-csv-in-git.md)).
+  The schema, the ID conventions, and the integrity rules are in
+  [DATA_MODEL.md](docs/DATA_MODEL.md).
 
 ## 7. Definition of done
 

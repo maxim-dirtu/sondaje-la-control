@@ -26,12 +26,14 @@ real data is not required to start.
 - A single config object holding the tunable parameters, with defaults taken
   from the METHODOLOGY table
 - **Shared file allowed:** `docs/METHODOLOGY.md` section M-1, for
-  clarifications only
+  clarifications, and to resolve the open specification issues OI-1…OI-5
 
 **Out:**
 - Any metric calculation.
 
 ## Acceptance criteria
+- [ ] OI-1…OI-5 in METHODOLOGY are resolved: the sections are updated and the
+      rows are removed from the open-issues table. The choices are in the Log.
 - [ ] Every M-1.x rule has at least one unit test with hand-computed expected
       values.
 - [ ] Docstrings cite the M-ID they implement.
