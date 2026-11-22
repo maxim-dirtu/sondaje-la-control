@@ -89,7 +89,8 @@ the committed `archive_manifest.csv` files and checked against their SHA-256.
 
 The directories for the three MVP elections exist with header-only CSV files.
 Pollster directories are created by the pollster tasks (after T-006), with the
-headers copied from §6.
+header lines copied from §6.14. `data/polls/.gitkeep` keeps the empty
+`polls/` directory in git until then.
 
 A header-only file (header line, no rows) is valid and means "no data yet".
 A file that a directory does not need may be absent, except that every
@@ -127,7 +128,8 @@ touches them.
 
 With this split, the Phase 1 tasks run in parallel: T-010 writes only result
 files, each pollster task writes only its own `polls/<pollster_id>/`
-directory, and both only append to the registries and to `entity_map.csv`.
+directory, and both only append to the registries (pollster tasks also to
+`entity_map.csv`).
 
 ## 3. CSV format and column types
 
@@ -181,20 +183,20 @@ Romanian diacritics are transliterated: ă→a, â→a, î→i, ș/ş→s, ț/ţ
 
 ### 4.1 Elections: `election_id`
 
-Grammar: `<type>-<year>[-<body>][-r<round>]`
+Grammar: `<type>-<year>[-<body>][-<tag>][-r<round>]`
 
 | Part | Values | Meaning |
 |---|---|---|
 | `type` | `parl` parliamentary · `pres` presidential · `ep` European Parliament · `local` local | `election_type` |
 | `year` | 4 digits | year of `election_date` |
 | `body` | `cd` Chamber of Deputies · `sen` Senate (parliamentary only; omitted where the type has one body) | `body` |
+| `tag` | a slug, only to disambiguate two elections that would otherwise get the same ID; agreed with the coordinator | none (free) |
 | `round` | `r1`, `r2`, … only for elections that can have several rounds | `round` |
 
 Examples: `parl-2024-cd`, `pres-2025-r1`, `pres-2025-r2` (MVP); `ep-2024`,
 `pres-2024-r1`, `parl-2024-sen` (future). Each round is a separate election
 (M-1.5). If two elections would get the same ID (e.g. a repeated election in
-the same year), the later one appends a slug suffix agreed with the
-coordinator (e.g. `pres-2030-rerun-r1`). Local elections (T-062) extend the
+the same year), the later one gets a `tag` (e.g. `pres-2030-rerun-r1`). Local elections (T-062) extend the
 grammar with a locality part through a schema change (§9).
 
 ### 4.2 Entities: `entity_id`
@@ -330,8 +332,8 @@ same `pollster_id`. Key: (`pollster_id`, `alias`).
 
 ### 6.5 `registry/pollster_affiliations.csv`
 
-Sourced, factual links between a pollster and another party: clients,
-ownership, personnel. Feeds M-5.1d. Unsourced claims are not recorded.
+Sourced, factual links between a pollster and another organisation or person:
+clients, ownership, personnel. Feeds M-5.1d. Unsourced claims are not recorded.
 Wording is factual and neutral (ADR-0003). Key: (`pollster_id`, `relation`,
 `counterpart_name`, `period_start`).
 
@@ -504,7 +506,7 @@ Key: (`poll_id`, `share_base`, `option_order`).
 | `party` | a party | the party name or acronym as printed | yes |
 | `alliance` | an alliance | the alliance name as printed | yes |
 | `candidate` | a presidential candidate | the candidate name as printed | yes |
-| `independent` | an independent candidate in a list election | "Candidați independenți" only if it names one person; otherwise `other` | yes |
+| `independent` | one named independent candidate in a list election | the candidate name as printed (a generic "Independenți" bucket is `other`) | yes |
 | `other` | a catch-all for other parties/candidates | "Alt partid", "Alt candidat", "Altele" | yes, as "others" (M-1.1) |
 | `undecided` | does not know yet | "Nu știu", "Nehotărât" | no |
 | `non_response` | refuses to answer | "Nu răspund" | no |
@@ -610,7 +612,7 @@ Parameters (T-003 exposes them as constants):
 
 | ID | Sev | Rule |
 |---|---|---|
-| R-20 | E | `election_id` agrees with its row: prefix ↔ `election_type` (`parl`↔`parliamentary`, `pres`↔`presidential`, `ep`↔`european`, `local`↔`local`); year = year of `election_date`; `-cd`↔`chamber_of_deputies`, `-sen`↔`senate`; `presidential`↔`president`, `european`↔`european_parliament`; `-rN` ↔ `round = N`, and no `-rN` ↔ `round = 1`; parliamentary IDs always have `-cd` or `-sen`; presidential IDs always have `-rN`. |
+| R-20 | E | `election_id` agrees with its row: prefix ↔ `election_type` (`parl`↔`parliamentary`, `pres`↔`presidential`, `ep`↔`european`, `local`↔`local`); year = year of `election_date`; `-cd`↔`chamber_of_deputies`, `-sen`↔`senate`; `presidential`↔`president`, `european`↔`european_parliament`; `-rN` ↔ `round = N`, and no `-rN` ↔ `round = 1`; parliamentary IDs always have `-cd` or `-sen`; presidential IDs always have `-rN`. A `-<tag>` part (§4.1) is ignored by this check. Type `local` is reserved: its bodies and ID parts are added by T-062 (§9). |
 | R-21 | E | For an election with `round = N ≥ 2`, the election with the same ID ending in `-r(N−1)` exists and has an earlier `election_date`. |
 | R-30 | E | `entity_id`, `pollster_id`, `election_id` values are unique across their registry (no reuse). |
 | R-31 | E | `pollster_aliases.alias` is unique across all pollsters (compared case-insensitively). |
@@ -626,6 +628,7 @@ Parameters (T-003 exposes them as constants):
 | R-41 | E | `entity_map`: a `poll_entity_id` is not itself a contestant in `results.csv` of the same election, and a `result_entity_id` is a contestant there (checked only when `results.csv` has rows). |
 | R-42 | E | `candidate_support`: the election is presidential; the candidate has type `candidate`; the party has type `party` or `alliance`. |
 | R-43 | W | `candidate_support`: the candidate is neither a contestant in `results.csv` nor in `entity_map.csv` of the election. |
+| R-44 | E | Every `entity_id` used in `poll_results` of a poll for election E is either a contestant in `results.csv` of E or a `poll_entity_id` in `entity_map.csv` of E (checked only when `results.csv` of E has rows). This is what makes M-1.5 mechanical. |
 | R-50 | E | `results`: every contestant has a row in each of the three scopes (`0` is written explicitly). |
 | R-51 | E | `results`: for every contestant, `votes(domestic) + votes(diaspora) = votes(total)` exactly. Same for every numeric column of `results_totals` whose three cells (domestic, diaspora, total) are all set. |
 | R-52 | E | `results`: contestants of a presidential election have type `candidate`; of a parliamentary or European election, type `party`, `alliance`, or `independent`. |
@@ -668,7 +671,7 @@ Parameters (T-003 exposes them as constants):
 | ID | Sev | Rule |
 |---|---|---|
 | R-90 | E | For every poll with `topline_coverage = full` and every `share_base` it has: let `low` = Σ `share_raw` over rows with an empty `share_qualifier`, and `high` = `low` + Σ `share_raw` over rows with `share_qualifier = lt`. Then `low − tol ≤ 100 ≤ high + tol`, with `tol = share_sum_tolerance_pp`. |
-| R-91 | E | For every poll and base: Σ `share_raw` ≤ 100 + `tol` (applies to `partial` toplines too). |
+| R-91 | E | For every poll and base: `low` (as in R-90) ≤ 100 + `tol` (applies to `partial` toplines too). |
 | R-92 | W | A `share_base = expressed_option` row with a non-vote `option_type` (undecided, non-response, would-not-vote, …). |
 | R-93 | E | **Duplicate poll:** two `headline = true` polls with the same `pollster_id`, `election_id`, and non-empty `fieldwork_start` and `fieldwork_end`. |
 | R-94 | W | **Possible duplicate:** two `headline = true` polls of the same pollster and election without fieldwork dates, with the same `published_date`. |
@@ -697,8 +700,8 @@ Parameters (T-003 exposes them as constants):
   value, new file) goes through a task that edits this document, bumps the
   **schema version** (minor: additive; major: breaking), updates the T-003
   schema in code, and migrates existing files in the same branch.
-- Adding a column is done at the end of the column list (before the
-  provenance block if it is a data column), so diffs stay readable.
+- A new data column is inserted just before the provenance block, so the
+  provenance block always stays last.
 - Exception: T-011 fills in §6.13 without a version bump (reserved).
 
 ## 10. Worked example (fictitious)
