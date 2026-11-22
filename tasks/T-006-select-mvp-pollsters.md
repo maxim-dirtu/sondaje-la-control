@@ -1,11 +1,11 @@
 ---
 id: T-006
 title: Select MVP pollsters (2–4)
-status: todo
+status: in-progress
 phase: 0
 depends_on: [T-005]
-owner: null
-branch: null
+owner: agent-t006
+branch: task/T-006-select-mvp-pollsters
 methodology: [M-5.3]
 created: 2026-11-22
 updated: 2026-11-22
