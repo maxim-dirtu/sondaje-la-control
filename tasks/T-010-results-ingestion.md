@@ -1,7 +1,7 @@
 ---
 id: T-010
 title: "Results ingestion: Parliamentary 2024 and Presidential 2025 (R1, R2)"
-status: review
+status: done
 phase: 1
 depends_on: [T-002, T-003, T-004]
 owner: agent-t010
