@@ -137,6 +137,7 @@ command from the repository root (or your worktree root).
 | Check formatting | `uv run ruff format --check .` |
 | Apply formatting | `uv run ruff format .` |
 | CLI help | `uv run sondaje --help` |
+| Validate all data in `data/` | `uv run sondaje validate` (add `--against main` to also check that registries are append-only; `--strict` makes warnings fail) |
 | Add a runtime / dev dependency | `uv add <pkg>` / `uv add --dev <pkg>` (commit `uv.lock`) |
 
 Before handing off, all four checks must pass:

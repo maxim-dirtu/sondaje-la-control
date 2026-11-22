@@ -259,6 +259,18 @@ CASES = [
         "R-32", PRESIDENTIAL, lambda d: d.update(AFFILIATIONS, 2, period_end="2099-02"), ("R-32", E)
     ),
     case("R-33", PRESIDENTIAL, lambda d: d.update(ENTITIES, 2, color=""), ("R-33", W)),
+    case(
+        "R-35-name",
+        EXAMPLE,
+        lambda d: d.update(AFFILIATIONS, 2, counterpart_name="Partidul Alfa"),
+        ("R-35", W),
+    ),
+    case(
+        "R-35-short-name-ignoring-case",
+        EXAMPLE,
+        lambda d: d.update(AFFILIATIONS, 2, counterpart_name="pa"),
+        ("R-35", W),
+    ),
     # --- 7.4 Election files ---
     case(
         "R-40-forbidden-target",
@@ -292,6 +304,67 @@ CASES = [
     ),
     case("R-43", PRESIDENTIAL, lambda d: add_unknown_candidate(d), ("R-43", W)),
     case("R-44", EXAMPLE, lambda d: d.delete(ENTITY_MAP, 4), ("R-44", E)),
+    case(
+        "R-40-ran-on-list-of-missing-host",
+        EXAMPLE,
+        lambda d: add_guest(d, host=""),
+        ("R-40", E),
+    ),
+    case(
+        "R-41-ran-on-list-of-host-not-on-ballot",
+        EXAMPLE,
+        lambda d: (
+            d.append_copy(ENTITIES, 2, entity_id="theta", name="Partidul Theta", short_name="PT"),
+            add_guest(d, host="theta"),
+        ),
+        ("R-41", E),
+    ),
+    case(
+        "R-41-ran-on-list-of-guest-on-ballot",
+        EXAMPLE,
+        lambda d: d.append_copy(
+            ENTITY_MAP,
+            2,
+            poll_entity_id="omega",
+            relation="ran_on_list_of",
+            result_entity_id="beta",
+            effective_date="",
+        ),
+        ("R-41", E),
+    ),
+    case(
+        "R-45-guest-type",
+        EXAMPLE,
+        lambda d: add_guest(d, entity_type="candidate"),
+        ("R-45", E),
+    ),
+    case("R-45-host-type", EXAMPLE, lambda d: host_beta_as_independent(d), ("R-45", E)),
+    case(
+        "R-45-not-a-list-election",
+        PRESIDENTIAL,
+        lambda d: d.append_copy(
+            R1 + "entity_map.csv",
+            2,
+            poll_entity_id="alfa",
+            relation="ran_on_list_of",
+            result_entity_id="ion-exemplu",
+            effective_date="",
+        ),
+        ("R-45", E),
+    ),
+    case(
+        "R-46-target-mapped",
+        EXAMPLE,
+        lambda d: d.update(ENTITY_MAP, 3, relation="merged_into", result_entity_id="delta"),
+        ("R-46", E),
+        ("R-41", E),
+    ),
+    case(
+        "R-46-without-results",
+        EXAMPLE,
+        lambda d: (add_guest(d, host="zeta"), d.write(RESULTS, d.read(RESULTS)[0], [])),
+        ("R-46", E),
+    ),
     case("R-50", EXAMPLE, lambda d: d.delete(RESULTS, 9), ("R-50", E), ("R-53", E)),
     case(
         "R-51-results",
@@ -511,7 +584,49 @@ CASES = [
         lambda d: rename_poll(d, EXAMPLE_POLL, EXAMPLE_POLL + "-2"),
     ),
     case("pass-R-34-not-checked-without-against", EXAMPLE, lambda d: d.delete(ALIASES, 2)),
+    case(
+        "pass-R-35-linked",
+        EXAMPLE,
+        lambda d: d.update(
+            AFFILIATIONS, 2, counterpart_name="Partidul Alfa", counterpart_entity_id="alfa"
+        ),
+    ),
+    case("pass-ran-on-list-of", EXAMPLE, lambda d: add_guest(d)),
+    case(
+        "pass-ran-on-list-of-alliance-host",
+        EXAMPLE,
+        lambda d: add_guest(d, host="gama"),
+    ),
+    case("pass-mode-face-to-face", EXAMPLE, lambda d: d.update(POLLS, 2, mode="face_to_face")),
+    case(
+        "pass-typical-modes-face-to-face",
+        EXAMPLE,
+        lambda d: d.update(POLLSTERS, 2, typical_modes="face_to_face;cati"),
+    ),
 ]
+
+
+def add_guest(d: DataDir, host: str = "beta", entity_type: str = "party") -> None:
+    """Party ``eta`` filed no lists; its candidates ran on the lists of ``host``."""
+    d.append_copy(
+        ENTITIES, 5, entity_id="eta", entity_type=entity_type, name="Partidul Eta", short_name="PH"
+    )
+    d.append_copy(
+        ENTITY_MAP,
+        2,
+        poll_entity_id="eta",
+        relation="ran_on_list_of",
+        result_entity_id=host,
+        effective_date="",
+    )
+
+
+def host_beta_as_independent(d: DataDir) -> None:
+    """``beta`` becomes an independent (a valid contestant type), then hosts ``eta``."""
+    d.update(ENTITIES, 3, entity_type="independent")
+    d.update(POLL_RESULTS, 3, option_type="independent")
+    d.update(POLL_RESULTS, 11, option_type="independent")
+    add_guest(d)
 
 
 def add_unknown_candidate(d: DataDir) -> None:

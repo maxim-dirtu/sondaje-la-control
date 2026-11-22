@@ -15,7 +15,7 @@ is only a short guide.
 | `registry/pollsters.csv` | polling firms | T-005 (+ pollster tasks) | append-only |
 | `registry/pollster_aliases.csv` | pollster name variants | T-005 (+ pollster tasks) | append-only |
 | `registry/pollster_affiliations.csv` | sourced client/ownership/personnel links | T-005 (+ pollster tasks) | append-only |
-| `elections/<election_id>/entity_map.csv` | polled entity → ballot contestant (alliances, withdrawals) | T-004 (+ pollster tasks) | append-only |
+| `elections/<election_id>/entity_map.csv` | polled entity → ballot contestant (alliances, parties on another party's lists, withdrawals) | T-004 (+ pollster tasks) | append-only |
 | `elections/<election_id>/candidate_support.csv` | presidential only: candidate → supporting parties | T-004 | owned |
 | `elections/<election_id>/results.csv` | votes per contestant, scope `domestic` / `diaspora` / `total` | T-010 | generated |
 | `elections/<election_id>/results_totals.csv` | valid/invalid votes and voters per scope | T-010 | generated |
@@ -51,3 +51,6 @@ created by the pollster tasks; copy the header lines from DATA_MODEL.md §6.14.
   ([ADR-0003](../docs/decisions/0003-neutral-language.md)).
 - Validate before committing: `uv run sondaje validate`. Add `--against main`
   to also check that append-only files were only appended to (R-34).
+- The election results files (`results.csv`, `results_totals.csv`,
+  `archive_manifest.csv`) are generated: never edit them by hand; re-run
+  `uv run sondaje ingest-results <election_id>` (downloads go to `data/raw/`).

@@ -11,7 +11,7 @@ from dataclasses import dataclass
 from decimal import Decimal
 from enum import StrEnum
 
-SCHEMA_VERSION = "1.0"
+SCHEMA_VERSION = "1.1"
 """DATA_MODEL.md schema version implemented here."""
 
 
@@ -97,9 +97,16 @@ ELECTION_TYPES = ("parliamentary", "presidential", "european", "local")
 BODIES = ("chamber_of_deputies", "senate", "president", "european_parliament")
 ELECTION_STATUSES = ("held", "annulled", "scheduled")
 ENTITY_TYPES = ("party", "alliance", "candidate", "independent")
-MODES = ("cati", "cawi", "capi", "papi", "mixed", "other")
+MODES = ("cati", "cawi", "capi", "papi", "face_to_face", "mixed", "other")
 AFFILIATION_RELATIONS = ("client", "owner", "personnel", "other")
-ENTITY_MAP_RELATIONS = ("alliance_member", "merged_into", "withdrawn", "excluded", "not_registered")
+ENTITY_MAP_RELATIONS = (
+    "alliance_member",
+    "merged_into",
+    "ran_on_list_of",
+    "withdrawn",
+    "excluded",
+    "not_registered",
+)
 SUPPORT_TYPES = ("nominated", "endorsed")
 SCOPES = ("domestic", "diaspora", "total")
 DOCUMENT_FORMATS = ("pdf_text", "pdf_image", "html", "image", "csv", "xlsx", "json", "zip", "other")
