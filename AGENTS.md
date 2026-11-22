@@ -17,8 +17,9 @@ mainly to keep work traceable and conflict-free.
 - **English** for everything technical: code, identifiers, comments, docs,
   commit messages, task files, ADRs, prompts, and logs.
 - **Romanian** only for public-facing UI copy. Keep it in locale/content
-  files, never hard-coded in logic. Conversations with the project owner may
-  be in Romanian.
+  files, never hard-coded in logic.
+- **Chat with the project owner:** reply in the language the owner used in
+  their latest message (Romanian → Romanian, English → English).
 
 ## 3. Traceability model
 
