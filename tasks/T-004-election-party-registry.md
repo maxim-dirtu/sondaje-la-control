@@ -1,7 +1,7 @@
 ---
 id: T-004
 title: Election, party and alliance registry (MVP elections)
-status: review
+status: done
 phase: 0
 depends_on: [T-001]
 owner: agent-t004
