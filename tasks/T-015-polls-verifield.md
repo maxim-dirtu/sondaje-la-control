@@ -1,7 +1,7 @@
 ---
 id: T-015
 title: "Polls: Verifield (MVP elections)"
-status: review
+status: done
 phase: 1
 depends_on: [T-011]
 owner: Copilot (Sonnet)
@@ -151,7 +151,10 @@ Collection windows (fieldwork end date):
   and base was compared with the archived slides (the Oct slide upscaled) and
   the HTML. Two corrections to cells on which both passes agreed:
   (1) Oct 2024, label of the PUSL row: both passes typed "PU-SL"; the slide
-  prints a middle dot, so the label is "…(PU·SL)" (note in the row).
+  was read as a middle dot, so the label was changed to "…(PU·SL)". **Reverted
+  by the coordinator (2026-11-27):** an 8× zoom of the archived slide shows a
+  short horizontal dash, as both passes read, so the label is "…(PU-SL)" and
+  the row note was removed.
   (2) Mar 2025: both passes used `expressed_option` for a slide base
   "voturi exprimate a celor care se duc la vot – 59% din esantion"; changed to
   `other_subset` with the label in `notes`, as T-011 did for the same kind of
