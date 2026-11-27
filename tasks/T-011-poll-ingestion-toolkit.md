@@ -1,14 +1,14 @@
 ---
 id: T-011
 title: Poll ingestion toolkit
-status: todo
+status: in-progress
 phase: 1
 depends_on: [T-001, T-002, T-006]
-owner: null
-branch: null
+owner: copilot-t011
+branch: task/T-011-poll-ingestion-toolkit
 methodology: [M-1.1, M-5.3]
 created: 2026-11-22
-updated: 2026-11-22
+updated: 2026-11-27
 ---
 
 ## Goal
