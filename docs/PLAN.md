@@ -1,6 +1,6 @@
 # Project Plan
 
-**Last updated:** 2026-11-22 · **Current phase:** 1 (Data collection). Phase 0 is complete.
+**Last updated:** 2026-11-27 · **Current phase:** 1 (Data collection). Phase 0 is complete.
 
 The task files in [tasks/](../tasks/) are the source of truth for status. This
 document defines **what** gets built and **in which order**. It does not track
@@ -100,7 +100,7 @@ Development can start on synthetic fixtures before M1 is reached.
 ### Phase 3: Internal prototype & UX
 | ID | Task | Depends on |
 |---|---|---|
-| T-030 | Prototype dashboard on real data (leaderboard, house × party heatmap, pollster card, timeline), **applying the post-mock-up decisions**: 28-day window, balanced card lead, provisional grades, notices for post-vote and unverified polls | T-025, T-031 |
+| T-030 | Prototype dashboard on real data (leaderboard, house × party heatmap, pollster card, timeline), **applying the post-mock-up decisions**: 28-day window, balanced card lead, provisional grades, notices for post-vote and unverified polls, and a source link (original + archived copy) on every number (I-019) | T-025, T-031 |
 | T-031 | UX concept & design references (storyboards, wireframes, visual language) in [docs/ux/](ux/); mock-ups at [docs/ux/mockups/index.html](ux/mockups/index.html) | none: **can start now** |
 
 **Milestone M3:** the owner can explore every metric visually, through the UX
