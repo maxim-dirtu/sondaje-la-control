@@ -23,12 +23,13 @@ is only a short guide.
 | `polls/<pollster_id>/polls.csv` | one row per poll (metadata, transparency fields) | that pollster's task | owned |
 | `polls/<pollster_id>/poll_results.csv` | full topline: one row per poll × option × base | that pollster's task | owned |
 | `polls/<pollster_id>/archive_manifest.csv` | archived original reports: URL, Web Archive URL, SHA-256 | that pollster's task | owned |
-| `polls/<pollster_id>/inventory.csv` | discovered publications (reserved; defined by T-011) | that pollster's task | owned |
+| `polls/<pollster_id>/inventory.csv` | every discovered publication, how it was found, and its status (`found` → `archived` → `extracted` → `verified`, or `excluded` with a reason) | that pollster's task | owned |
 | `raw/` | local copies of downloaded sources | tools | **git-ignored** |
 
 The MVP election directories (`parl-2024-cd`, `pres-2025-r1`, `pres-2025-r2`)
 and the registries exist with header lines only. Pollster directories are
 created by the pollster tasks; copy the header lines from DATA_MODEL.md §6.14.
+Poll collection follows [docs/POLL_INGESTION.md](../docs/POLL_INGESTION.md).
 
 ## Rules in one screen
 

@@ -1,6 +1,6 @@
 # Data Model and CSV Schemas
 
-**Schema version:** 1.1 · **Owner:** T-001 (amended by T-007) · **Last updated:** 2026-11-22
+**Schema version:** 1.2 · **Owner:** T-001 (amended by T-007, T-011) · **Last updated:** 2026-11-27
 
 This document is the contract for everything under `data/`. Collection tasks
 (T-004, T-005, T-010, the pollster tasks T-012+) write files that follow it,
@@ -78,7 +78,7 @@ data/
 │       ├── polls.csv                  §6.11 one row per poll (metadata)
 │       ├── poll_results.csv           §6.12 one row per poll × option × base (full topline)
 │       ├── archive_manifest.csv       §6.10 archived original reports
-│       └── inventory.csv              §6.13 RESERVED: defined by T-011
+│       └── inventory.csv              §6.13 every discovered publication and its status
 └── raw/                               git-ignored local copies of source files
     ├── elections/<election_id>/...
     └── polls/<pollster_id>/<document_id>.<ext>
@@ -95,7 +95,7 @@ header lines copied from §6.14. `data/polls/.gitkeep` keeps the empty
 A header-only file (header line, no rows) is valid and means "no data yet".
 A file that a directory does not need may be absent, except that every
 `data/polls/<pollster_id>/` directory has all of `polls.csv`,
-`poll_results.csv`, and `archive_manifest.csv` (R-05).
+`poll_results.csv`, `archive_manifest.csv`, and `inventory.csv` (R-05).
 
 ### 2.2 Who writes what
 
@@ -585,18 +585,55 @@ Key: (`poll_id`, `share_base`, `option_order`).
 | `blank_or_invalid` | would cast a blank or invalid ballot | "Vot alb", "Vot anulat" | no |
 | `other_non_vote` | any other non-vote answer, explained in `notes` | "Depinde" | no |
 
-### 6.13 `polls/<pollster_id>/inventory.csv` (reserved for T-011)
+### 6.13 `polls/<pollster_id>/inventory.csv`
 
-> **RESERVED.** T-011 defines this file and adds its column table to this
-> section (T-011's scope allows editing `docs/DATA_MODEL.md` for this). Until
-> then the file is not created and T-003 does not validate it.
+The pollster's **poll inventory**: one row per discovered publication (a page
+or a file) that carries, or may carry, a voting-intention poll by this
+pollster, with how it was found and how far it got through the ingestion
+protocol ([POLL_INGESTION.md](POLL_INGESTION.md)). The inventory is the
+collection task's checklist and its evidence of completeness: every
+publication that was found is either used (`extracted` / `verified`) or
+`excluded` with a reason. A publication that covers two elections has one row
+per election. Key: (`publication_url`, `election_id`).
 
-Expected content, from T-011's scope: one row per discovered publication of
-this pollster: URL, election, how it was found (discovery source), and status
-`found | archived | extracted | verified | excluded` with a reason. To keep
-the model linked, the inventory should reference the existing IDs
-(`election_id`, `document_id` once archived, `poll_id` once extracted) and
-reuse the provenance block (§5.1) and the types of §3.2.
+| Column | Type | Req | Allowed values / format | Example | Description |
+|---|---|---|---|---|---|
+| `publication_url` | url | yes | absolute http(s) URL | `https://example.org/exemplar/raport-2099-05.pdf` | The publication itself, at its original location (the pollster's page or file, or the media article or image), never an index page. Once archived, it equals the `source_url` of `document_id` (R-74). |
+| `election_id` | slug | cond | FK → `elections` | `parl-2099-cd` | The election the publication's voting-intention question is about. Required unless `status = excluded` (R-73), e.g. a poll about an election that is not in the registry. |
+| `title` | text | no | original language | `Barometru politic, mai 2099` | Title or headline as published. |
+| `published_date` | date | no | `YYYY-MM-DD` | `2099-05-26` | Publication date, as far as known when the row was written. |
+| `fieldwork_start` | date | no | `YYYY-MM-DD` | `2099-05-20` | Fieldwork start, as far as known (used to decide the collection window before extraction). |
+| `fieldwork_end` | date | no | `YYYY-MM-DD` | `2099-05-24` | Fieldwork end, as far as known. Once a poll is linked, the poll's dates win (R-78 warns on a difference). |
+| `found_via` | enum | yes | `index` · `pollster_site` · `partner_outlet` · `web_search` · `reference` · `other` | `pollster_site` | How the publication was found: `index` = a discovery index (Wikipedia, an aggregator such as sondajeromania.ro); `pollster_site` = the pollster's own site or listing; `partner_outlet` = the site of a client or media partner (e.g. its poll tag page); `web_search` = a search engine or a site search; `reference` = a link or citation in another publication (e.g. an article that links the report); `other` = explained in `notes`. |
+| `discovery_url` | url | no | absolute http(s) URL | `https://example.org/exemplar/sondaje` | The page where the publication was found (the index page, the listing, the citing article). Empty for a web search. |
+| `status` | enum | yes | `found` · `archived` · `extracted` · `verified` · `excluded` | `verified` | How far the publication got (below). |
+| `exclusion_reason` | enum | cond | `out_of_window` · `out_of_scope` · `exit_poll` · `duplicate` · `no_topline` · `unavailable` · `other` | `duplicate` | Required when `status = excluded`, empty otherwise (R-73). Values below. |
+| `document_id` | slug | cond | FK → `archive_manifest.document_id` in the same directory | `exemplar-doc-001` | The archived copy of this publication. Required from `archived` on; may stay set on an `excluded` row. |
+| `poll_id` | slug | cond | FK → `polls.poll_id` in the same directory | `exemplar-parl-2099-cd-20990524` | The poll this publication produced or fed (for a survey with several polls, its headline poll). Required for `extracted` and `verified`; on an `excluded` row only with `exclusion_reason = duplicate`, naming the poll it duplicates; empty otherwise (R-73). |
+| provenance block | | | §5.1 | | Source of the row's descriptive values (`title`, dates, `election_id`). While the row is `found`, this is usually the discovery page (so `verified = false` for an index, R-14). Once the publication has been opened, it is the publication itself (`source_url = publication_url`), and `verified = true` when those values were checked on it. |
+
+`status` values. A row moves forward only; `excluded` can be reached from any
+status:
+
+| Value | Meaning | Link columns (R-73) |
+|---|---|---|
+| `found` | Listed; the publication has not been archived yet. | `document_id` and `poll_id` empty |
+| `archived` | Downloaded, hashed, and snapshotted (`sondaje archive`), but nothing extracted yet. | `document_id` set, `poll_id` empty |
+| `extracted` | Values were transcribed from it (extraction draft or double entry) into the poll files, but the review against the original (POLL_INGESTION.md step 6) is not done. | `document_id` and `poll_id` set |
+| `verified` | The committed poll rows were checked value by value against this archived publication. This is about the transcription; it does **not** make `polls.verified` true (that also needs the original publication, §5.1). | `document_id` and `poll_id` set |
+| `excluded` | Not used, for the reason in `exclusion_reason` (details in `notes`). | `exclusion_reason` set |
+
+`exclusion_reason` values:
+
+| Value | Meaning |
+|---|---|
+| `out_of_window` | The fieldwork falls outside the collection window of the task (e.g. more than 120 days before the election). |
+| `out_of_scope` | No voting-intention question for a registered election: an attitudes survey, an election not in the registry, or a round-2 pairing asked before round 1 (R-84). |
+| `exit_poll` | Fieldwork on election day (R-81). |
+| `duplicate` | The same survey is captured through another row of this inventory (e.g. a media report of a poll whose own report is used); `poll_id` may name that poll. |
+| `no_topline` | No vote shares are published (e.g. only a ranking or a verbal statement without numbers). A publication with only some shares is not excluded: it is recorded with `topline_coverage = partial`. |
+| `unavailable` | The publication cannot be accessed or archived (removed, paywalled, no snapshot); `notes` says what was tried. |
+| `other` | Explained in `notes` (R-77 warns otherwise). |
 
 ### 6.14 Header lines (copy-paste reference)
 
@@ -639,6 +676,9 @@ poll_id,pollster_id,election_id,headline,scenario,fieldwork_start,fieldwork_end,
 
 polls/<pollster_id>/poll_results.csv
 poll_id,share_base,option_order,option_label,option_type,entity_id,share_raw,share_qualifier,source_url,source_type,retrieved_at,verified,notes
+
+polls/<pollster_id>/inventory.csv
+publication_url,election_id,title,published_date,fieldwork_start,fieldwork_end,found_via,discovery_url,status,exclusion_reason,document_id,poll_id,source_url,source_type,retrieved_at,verified,notes
 ```
 
 ## 7. Integrity rules (for T-003)
@@ -686,7 +726,7 @@ Parameters (T-003 exposes them as constants):
 | R-02 | E | The header equals the column list of §6 for that file, in order. |
 | R-03 | E | Every cell matches its column type (§3.2) and enum; `yes` columns are not empty; no cell has leading or trailing whitespace (any column). A row with the wrong number of fields (including an empty line) is reported here and skipped. |
 | R-04 | E | No duplicate key within a file (keys given per table in §6). |
-| R-05 | E | Only the files of §2.1 exist under `data/` (ignoring `data/raw/`, `data/README.md`, and `.gitkeep` files). `candidate_support.csv` exists only for presidential elections (the election type comes from the registry, or from the `pres-` prefix if the election is not registered yet). Each `data/polls/<pollster_id>/` has `polls.csv`, `poll_results.csv`, and `archive_manifest.csv`. Each directory name is a valid ID; once any file in the directory has rows, the ID must exist in the matching registry (header-only directories, such as the MVP election directories before T-004, pass). A reserved `inventory.csv` (§6.13) is a **warning** ("reserved; not validated") until T-011 defines it. |
+| R-05 | E | Only the files of §2.1 exist under `data/` (ignoring `data/raw/`, `data/README.md`, and `.gitkeep` files). `candidate_support.csv` exists only for presidential elections (the election type comes from the registry, or from the `pres-` prefix if the election is not registered yet). Each `data/polls/<pollster_id>/` has `polls.csv`, `poll_results.csv`, `archive_manifest.csv`, and `inventory.csv`. Each directory name is a valid ID; once any file in the directory has rows, the ID must exist in the matching registry (header-only directories, such as the MVP election directories before T-004, pass). |
 | R-06 | E | Every column holding an `election_id`, `entity_id`, `pollster_id`, `poll_id`, or `document_id` from another table references an existing row (FK). |
 | R-07 | E | The `election_id` / `pollster_id` column of a per-directory file equals its directory name. |
 
@@ -749,6 +789,12 @@ Parameters (T-003 exposes them as constants):
 | R-70 | E | `poll_id` matches `<pollster_id>-<election_id>-<YYYYMMDD>[-<suffix>]` with its own row's values, where `YYYYMMDD` = `fieldwork_end`, or `published_date` if `fieldwork_end` is empty. |
 | R-71 | E | Every `archive_manifest.csv` row under `data/polls/` has an `archive_url`. `raw_path`, when set, starts with `data/raw/`. `document_id` starts with the directory ID (§4.5). |
 | R-72 | W | Two manifest rows in one file with the same `sha256` (same file archived twice). |
+| R-73 | E | `inventory`: the `status` decides the link columns (§6.13): `election_id` is set unless `excluded`; `found` has no `document_id` and no `poll_id`; `archived` has a `document_id` and no `poll_id`; `extracted` and `verified` have both; `excluded` has an `exclusion_reason`, and a `poll_id` only when the reason is `duplicate`; `exclusion_reason` is empty for every other status. |
+| R-74 | E | `inventory`: `publication_url` equals the `source_url` of its `document_id`, and `election_id` equals the `election_id` of its `poll_id`. |
+| R-75 | E | Every poll in `polls.csv` is covered by an `inventory` row with status `extracted` or `verified`: one whose `poll_id` is the poll, or whose `document_id` and `election_id` equal the poll's (so the scenarios of a survey are covered by its headline row). |
+| R-76 | W | An `archive_manifest.csv` document of a pollster that no `inventory` row references. |
+| R-77 | W | `inventory`: `found_via = other` or `exclusion_reason = other` without `notes`. |
+| R-78 | W | `inventory`: an `extracted` or `verified` row whose `published_date`, `fieldwork_start`, or `fieldwork_end` differs from its poll's (when both are set). |
 
 ### 7.6 Dates
 
@@ -798,7 +844,8 @@ Parameters (T-003 exposes them as constants):
   schema in code, and migrates existing files in the same branch.
 - A new data column is inserted just before the provenance block, so the
   provenance block always stays last.
-- Exception: T-011 fills in §6.13 without a version bump (reserved).
+- §6.13 was reserved for T-011, which filled it in with schema 1.2 (the
+  version was bumped because R-05 and §7.5 changed with it).
 
 ### 9.1 Schema history
 
@@ -806,6 +853,7 @@ Parameters (T-003 exposes them as constants):
 |---|---|---|---|
 | 1.0 | T-001 | initial | Frozen at Milestone M0. |
 | 1.1 | T-007 | minor (additive) | New `entity_map.relation` value `ran_on_list_of` (§6.6) with rules R-45 and R-46, and R-40 extended to it. New `mode` value `face_to_face` and `mode` conventions (§6.11). New warning R-35 (affiliation counterpart not linked to its entity). Person-ID rules: which given name, full family name, one person in two roles (§4.2). Meaning of `verified` in the pollster registries (§5.3). §7: output format, `--against REF`, one finding per problem, and the readings T-003 implemented (R-01, R-03, R-05, R-20, R-34, R-43, R-53, R-62, R-63, R-81). Migration: no header changed; `parl-2024-cd/entity_map.csv` row `pmp` set to `ran_on_list_of` → `fd`; `counterpart_entity_id` filled in six `pollster_affiliations.csv` rows. |
+| 1.2 | T-011 | minor (additive) | New file `polls/<pollster_id>/inventory.csv` (§6.13, the poll inventory; header in §6.14), which every pollster directory must have (R-05; the "reserved; not validated" warning is gone). New rules R-73…R-78 (§7.5). The worked example (§10) gains an inventory. Migration: none (no pollster directory existed). |
 
 ## 10. Worked example (fictitious)
 
@@ -821,7 +869,9 @@ Partidul Delta and Partidul Epsilon run together on the list of *Alianța
 Gama*, but the poll still lists them separately. Partidul Zeta withdraws its
 list after the poll. The report publishes two bases: all respondents, and
 respondents who named a party (whose figures sum to 101 because of rounding;
-they are stored as published).
+they are stored as published). The pollster's inventory also lists a media
+report of the same survey (found through an index) and the pollster's exit
+poll, both excluded.
 
 `data/registry/elections.csv`
 ```csv
@@ -933,6 +983,14 @@ exemplar-parl-2099-cd-20990524,expressed_option,5,Partidul Zeta,party,zeta,4,,ht
 exemplar-parl-2099-cd-20990524,expressed_option,6,Alt partid,other,,6,,https://example.org/exemplar/raport-2099-05.pdf,pollster,2099-05-27,true,
 ```
 
+`data/polls/exemplar/inventory.csv`
+```csv
+publication_url,election_id,title,published_date,fieldwork_start,fieldwork_end,found_via,discovery_url,status,exclusion_reason,document_id,poll_id,source_url,source_type,retrieved_at,verified,notes
+https://example.org/exemplar/raport-2099-05.pdf,parl-2099-cd,"Barometru politic, mai 2099",2099-05-26,2099-05-20,2099-05-24,pollster_site,https://example.org/exemplar/sondaje,verified,,exemplar-doc-001,exemplar-parl-2099-cd-20990524,https://example.org/exemplar/raport-2099-05.pdf,pollster,2099-05-27,true,
+https://example.org/stiri/sondaj-exemplar,parl-2099-cd,Sondaj Exemplar: Partidul Alfa conduce,2099-05-26,,,index,https://example.org/wiki/sondaje-2099,excluded,duplicate,,exemplar-parl-2099-cd-20990524,https://example.org/stiri/sondaj-exemplar,media,2099-05-27,true,Media report of the same survey; the pollster's report is used.
+https://example.org/exemplar/exit-poll-2099,parl-2099-cd,Exit poll 7 iunie 2099,2099-06-07,2099-06-07,2099-06-07,pollster_site,https://example.org/exemplar/sondaje,excluded,exit_poll,,,https://example.org/exemplar/exit-poll-2099,pollster,2099-06-20,true,
+```
+
 **What validation checks here (examples).** R-70: the `poll_id` date
 `20990524` equals `fieldwork_end`. R-80–R-82: 2099-05-20 ≤ 2099-05-24 <
 2099-06-07, and 2099-05-26 ≥ 2099-05-24. R-90: the `all_respondents` base
@@ -940,7 +998,9 @@ sums to 100 and the `expressed_option` base to 101, both within ±2.0.
 R-41: `delta`, `epsilon`, `zeta` are not contestants in `results.csv`, and
 `gama` is. R-51/R-53: 2,000,000 + 100,000 = 2,100,000 for `alfa`, and the
 domestic votes sum to 4,745,000 = `valid_votes`. R-64: `residents` →
-`domestic`. R-68: the poll's `source_url` equals the document's.
+`domestic`. R-68: the poll's `source_url` equals the document's. R-73–R-75:
+the report's inventory row is `verified` with its document and poll, the
+media report is a `duplicate` of that poll, and the poll is covered.
 
 **What the pipeline does with it (illustration only; M-1 and T-020 are
 normative).** Using the `all_respondents` base and the `domestic` target
