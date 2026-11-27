@@ -5,7 +5,8 @@ from sondaje.validation.model import DataFile, Dataset, Reporter, Row
 
 LINKED_STATUSES = ("extracted", "verified")
 """Statuses whose row produced (or fed) a poll: ``document_id`` and ``poll_id`` are required."""
-DATE_COLUMNS = ("published_date", "fieldwork_start", "fieldwork_end")
+DATE_COLUMNS = ("fieldwork_start", "fieldwork_end")
+"""R-78 compares fieldwork dates only: a later publication of a poll has its own date."""
 
 
 def _index(data_file: DataFile | None, column: str) -> dict[str, Row]:

@@ -601,7 +601,7 @@ per election. Key: (`publication_url`, `election_id`).
 | `publication_url` | url | yes | absolute http(s) URL | `https://example.org/exemplar/raport-2099-05.pdf` | The publication itself, at its original location (the pollster's page or file, or the media article or image), never an index page. Once archived, it equals the `source_url` of `document_id` (R-74). |
 | `election_id` | slug | cond | FK → `elections` | `parl-2099-cd` | The election the publication's voting-intention question is about. Required unless `status = excluded` (R-73), e.g. a poll about an election that is not in the registry. |
 | `title` | text | no | original language | `Barometru politic, mai 2099` | Title or headline as published. |
-| `published_date` | date | no | `YYYY-MM-DD` | `2099-05-26` | Publication date, as far as known when the row was written. |
+| `published_date` | date | no | `YYYY-MM-DD` | `2099-05-26` | Publication date of this publication (which may be later than the poll's first publication, `polls.published_date`). |
 | `fieldwork_start` | date | no | `YYYY-MM-DD` | `2099-05-20` | Fieldwork start, as far as known (used to decide the collection window before extraction). |
 | `fieldwork_end` | date | no | `YYYY-MM-DD` | `2099-05-24` | Fieldwork end, as far as known. Once a poll is linked, the poll's dates win (R-78 warns on a difference). |
 | `found_via` | enum | yes | `index` · `pollster_site` · `partner_outlet` · `web_search` · `reference` · `other` | `pollster_site` | How the publication was found: `index` = a discovery index (Wikipedia, an aggregator such as sondajeromania.ro); `pollster_site` = the pollster's own site or listing; `partner_outlet` = the site of a client or media partner (e.g. its poll tag page); `web_search` = a search engine or a site search; `reference` = a link or citation in another publication (e.g. an article that links the report); `other` = explained in `notes`. |
@@ -610,7 +610,7 @@ per election. Key: (`publication_url`, `election_id`).
 | `exclusion_reason` | enum | cond | `out_of_window` · `out_of_scope` · `exit_poll` · `duplicate` · `no_topline` · `unavailable` · `other` | `duplicate` | Required when `status = excluded`, empty otherwise (R-73). Values below. |
 | `document_id` | slug | cond | FK → `archive_manifest.document_id` in the same directory | `exemplar-doc-001` | The archived copy of this publication. Required from `archived` on; may stay set on an `excluded` row. |
 | `poll_id` | slug | cond | FK → `polls.poll_id` in the same directory | `exemplar-parl-2099-cd-20990524` | The poll this publication produced or fed (for a survey with several polls, its headline poll). Required for `extracted` and `verified`; on an `excluded` row only with `exclusion_reason = duplicate`, naming the poll it duplicates; empty otherwise (R-73). |
-| provenance block | | | §5.1 | | Source of the row's descriptive values (`title`, dates, `election_id`). While the row is `found`, this is usually the discovery page (so `verified = false` for an index, R-14). Once the publication has been opened, it is the publication itself (`source_url = publication_url`), and `verified = true` when those values were checked on it. |
+| provenance block | | | §5.1 | | Source of the row's descriptive values (`title`, dates, `election_id`). While the row is `found`, this is usually the discovery page (so `verified = false` for an index, R-14). Once the publication has been opened, it is the publication itself (`source_url = publication_url`), and `verified = true` when those values were checked on it (a value that the publication does not carry, such as a publication date taken from the article that released a report, is explained in `notes`). |
 
 `status` values. A row moves forward only; `excluded` can be reached from any
 status:
@@ -794,7 +794,7 @@ Parameters (T-003 exposes them as constants):
 | R-75 | E | Every poll in `polls.csv` is covered by an `inventory` row with status `extracted` or `verified`: one whose `poll_id` is the poll, or whose `document_id` and `election_id` equal the poll's (so the scenarios of a survey are covered by its headline row). |
 | R-76 | W | An `archive_manifest.csv` document of a pollster that no `inventory` row references. |
 | R-77 | W | `inventory`: `found_via = other` or `exclusion_reason = other` without `notes`. |
-| R-78 | W | `inventory`: an `extracted` or `verified` row whose `published_date`, `fieldwork_start`, or `fieldwork_end` differs from its poll's (when both are set). |
+| R-78 | W | `inventory`: an `extracted` or `verified` row whose `fieldwork_start` or `fieldwork_end` differs from its poll's (when both are set). `published_date` is not compared: a later publication of a poll has its own date. |
 
 ### 7.6 Dates
 
