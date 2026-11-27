@@ -5,14 +5,19 @@ DATA_MODEL.md §5.2 and §6.10 (``archive_url``, ``sha256``, ``raw_path``, ``for
 
 1. The publication must already be listed in ``data/polls/<pollster_id>/inventory.csv``
    (§6.13); archiving never invents an inventory row.
-2. The file is downloaded (or read from ``--file`` when it had to be saved by hand) to
-   ``data/raw/polls/<pollster_id>/<document_id>.<ext>`` (git-ignored) and hashed (SHA-256).
+2. The file is downloaded (or read from ``--file`` when it had to be saved by hand), hashed
+   (SHA-256), and saved to ``data/raw/polls/<pollster_id>/<document_id>.<ext>`` (git-ignored)
+   once a snapshot is secured (step 3). A Google Drive ``view`` link is resolved to the direct
+   download, which is also what gets snapshotted. Requests that fail with HTTP 429, a server
+   error, a refused connection, or a timeout are retried (``--retries``).
 3. A Web Archive snapshot is requested through Save Page Now. If that fails, an existing
    snapshot is looked up through the Wayback availability API. ``--archive-url`` supplies a
    snapshot made by other means. **No archive URL is ever made up**: when no snapshot can be
-   created, found, or supplied, the command stops with an error and writes nothing.
-4. The snapshot's bytes are downloaded and compared with the download, and the result is
-   reported (dynamic HTML pages usually differ; PDFs and images should not).
+   created, found, or supplied, the command stops with an error and writes nothing (not even
+   the raw file).
+4. The snapshot's bytes are downloaded (gzip-encoded captures are decompressed) and compared
+   with the download, and the result is reported (dynamic HTML pages usually differ; PDFs and
+   images should not). Running the command again on unchanged bytes repeats the check.
 5. The pollster's ``archive_manifest.csv`` row is appended (or updated, keyed by
    ``source_url``), and every inventory row for the URL gets the ``document_id``; rows with
    status ``found`` move to ``archived``.
@@ -20,14 +25,18 @@ DATA_MODEL.md §5.2 and §6.10 (``archive_url``, ``sha256``, ``raw_path``, ``for
 
 import argparse
 import datetime as dt
+import gzip
 import hashlib
 import http.client
 import io
 import json
 import re
 import sys
+import time
+import urllib.error
 import urllib.parse
 import urllib.request
+import zlib
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
 from pathlib import Path, PurePosixPath
@@ -50,6 +59,7 @@ DOWNLOAD_TIMEOUT = 120.0
 SAVE_TIMEOUT = 300.0
 LOOKUP_TIMEOUT = 60.0
 URL_RE = re.compile(r"^https?://\S+$")
+DRIVE_FILE_RE = re.compile(r"^/file/d/([\w-]+)(?:/|$)")
 SLUG_RE = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 RAW_PREFIX = "data/raw/polls"
@@ -87,6 +97,35 @@ def http_fetch(url: str, timeout: float) -> Response:
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     with urllib.request.urlopen(request, timeout=timeout) as response:
         return Response(response.geturl(), response.read(), dict(response.headers.items()))
+
+
+DEFAULT_RETRIES = 2
+RETRY_BASE_DELAY = 10.0
+"""Seconds before the first retry; the wait doubles with each further retry."""
+
+
+def is_retriable(exc: Exception) -> bool:
+    """Rate limiting (HTTP 429), server errors, refused or dropped connections and timeouts are
+    worth another try; a bad URL or another client error (403, 404, ...) is not."""
+    if isinstance(exc, urllib.error.HTTPError):
+        return exc.code == 429 or exc.code >= 500
+    return not isinstance(exc, ValueError)
+
+
+def retrying(fetch: Fetcher, retries: int, sleep: Callable[[float], None] = time.sleep) -> Fetcher:
+    """``fetch`` that retries a retriable failure up to ``retries`` times, with backoff."""
+
+    def fetch_with_retries(url: str, timeout: float) -> Response:
+        for attempt in range(retries + 1):
+            try:
+                return fetch(url, timeout)
+            except FETCH_ERRORS as exc:
+                if attempt >= retries or not is_retriable(exc):
+                    raise
+                sleep(RETRY_BASE_DELAY * 2**attempt)
+        raise AssertionError("unreachable")
+
+    return fetch_with_retries
 
 
 # --- Format detection ---------------------------------------------------------------------------
@@ -160,6 +199,21 @@ def raw_suffix(document_format: str, content: bytes, url: str) -> str:
 # --- Web Archive ----------------------------------------------------------------------------------
 
 
+def direct_download_url(url: str) -> str:
+    """The direct-download URL of a Google Drive ``view`` link (an HTML viewer, not the file);
+    any other URL is returned unchanged."""
+    parts = urllib.parse.urlsplit(url)
+    if (parts.hostname or "").lower() != "drive.google.com":
+        return url
+    match = DRIVE_FILE_RE.match(parts.path)
+    if match is None and parts.path.rstrip("/") == "/open":
+        ids = urllib.parse.parse_qs(parts.query).get("id")
+        match = re.fullmatch(r"([\w-]+)", ids[0]) if ids else None
+    if match is None:
+        return url
+    return f"https://drive.google.com/uc?export=download&id={match.group(1)}"
+
+
 def _comparable(url: str) -> str:
     """A URL without scheme, ``www.``, default port, and trailing slash (for comparisons)."""
     parts = urllib.parse.urlsplit(url.strip())
@@ -225,6 +279,16 @@ def lookup_snapshot(url: str, fetch: Fetcher) -> tuple[str | None, str]:
     return snapshot, f"existing snapshot dated {snapshot_date(snapshot)} (Wayback lookup)"
 
 
+def _gunzipped_sha256(content: bytes) -> str | None:
+    """SHA-256 of the decompressed bytes if ``content`` is gzip data, else ``None``."""
+    if content[:2] != b"\x1f\x8b":
+        return None
+    try:
+        return hashlib.sha256(gzip.decompress(content)).hexdigest()
+    except (OSError, EOFError, zlib.error):
+        return None
+
+
 def check_snapshot(snapshot: str, sha256: str, fetch: Fetcher) -> str:
     """Compare the snapshot's original bytes (``id_`` mode) with the downloaded file."""
     match = SNAPSHOT_RE.match(snapshot)
@@ -234,9 +298,17 @@ def check_snapshot(snapshot: str, sha256: str, fetch: Fetcher) -> str:
     try:
         content = fetch(f"https://web.archive.org/web/{timestamp}id_/{archived}", SAVE_TIMEOUT)
     except FETCH_ERRORS as exc:
-        return f"not checked (snapshot download failed: {exc})"
+        return (
+            f"NOT CHECKED: the snapshot download failed ({exc}). The snapshot is unverified: "
+            "open it and compare by hand, or run the same command again to repeat the check"
+        )
     if hashlib.sha256(content.content).hexdigest() == sha256:
         return "identical: the snapshot has the same bytes as the download"
+    if _gunzipped_sha256(content.content) == sha256:
+        return (
+            "identical: the snapshot has the same bytes as the download "
+            "(the Web Archive served it gzip-encoded; compared after decompressing)"
+        )
     return (
         "DIFFERENT: the snapshot's bytes differ from the download (usual for dynamic HTML "
         "pages; for a PDF or an image, open the snapshot and compare, and say so in notes)"
@@ -260,6 +332,8 @@ class ArchiveRequest:
     save: bool = True
     check: bool = True
     file: Path | None = None
+    retries: int = DEFAULT_RETRIES
+    """Retries of a download or Web Archive request that failed in a retriable way."""
 
 
 @dataclass
@@ -277,6 +351,9 @@ class ArchiveResult:
     snapshot_check: str | None
     inventory_updated: int
     attempts: list[str] = field(default_factory=list)
+    download_url: str | None = None
+    """For a Google Drive ``view`` link: the direct-download URL that was downloaded and
+    snapshotted (the manifest's ``source_url`` stays the link as published)."""
 
 
 def _clean(value: str | None) -> str | None:
@@ -301,6 +378,8 @@ def _check_request(request: ArchiveRequest) -> None:
             ok = False
         if not ok:
             raise ArchiveError(f"--published-date must be YYYY-MM-DD: {request.published_date!r}")
+    if request.retries < 0:
+        raise ArchiveError("--retries must be 0 or more")
     if request.archive_url is not None and not URL_RE.match(request.archive_url):
         raise ArchiveError(f"--archive-url is not an absolute http(s) URL: {request.archive_url!r}")
 
@@ -315,10 +394,11 @@ def archive(
     request: ArchiveRequest,
     fetch: Fetcher | None = None,
     today: dt.date | None = None,
+    sleep: Callable[[float], None] = time.sleep,
 ) -> ArchiveResult:
     """Archive one publication (see the module docstring). Raises :class:`ArchiveError`."""
     _check_request(request)
-    fetch = fetch or http_fetch
+    fetch = retrying(fetch or http_fetch, request.retries, sleep)
     today = today or dt.date.today()
     directory = request.data_dir / "polls" / request.pollster_id
     manifest_path = directory / ARCHIVE_MANIFEST.filename
@@ -344,11 +424,12 @@ def archive(
     if not source_type:
         raise ArchiveError("--source-type is required for a new document")
 
+    fetch_url = direct_download_url(request.url)
     if request.file is not None:
         content = request.file.read_bytes()
     else:
         try:
-            content = fetch(request.url, DOWNLOAD_TIMEOUT).content
+            content = fetch(fetch_url, DOWNLOAD_TIMEOUT).content
         except FETCH_ERRORS as exc:
             raise ArchiveError(
                 f"download failed: {exc}. If the site blocks scripts, save the file with a "
@@ -358,13 +439,22 @@ def archive(
         raise ArchiveError("the download is empty")
     digest = hashlib.sha256(content).hexdigest()
     document_format = request.document_format or detect_format(content, request.url)
+    if (
+        fetch_url != request.url
+        and request.file is None
+        and request.document_format is None
+        and document_format == "html"
+    ):
+        raise ArchiveError(
+            f"Google Drive returned a web page, not the file, for {fetch_url} (a private file, "
+            "a quota limit, or a file too large for the virus-scan check). Save the file with a "
+            "browser and pass it with --file"
+        )
     document_id = (
         existing["document_id"] if existing else _next_document_id(request.pollster_id, manifest)
     )
     raw_name = document_id + raw_suffix(document_format, content, request.url)
     raw_file = request.data_dir / "raw" / "polls" / request.pollster_id / raw_name
-    raw_file.parent.mkdir(parents=True, exist_ok=True)
-    raw_file.write_bytes(content)
     unchanged = existing is not None and existing["sha256"] == digest
 
     attempts: list[str] = []
@@ -376,22 +466,24 @@ def archive(
         snapshot, origin = existing["archive_url"], "kept from the manifest (same SHA-256)"
     else:
         if request.save:
-            snapshot, origin = save_snapshot(request.url, fetch)
+            snapshot, origin = save_snapshot(fetch_url, fetch)
             attempts.append(origin)
         if snapshot is None:
-            snapshot, origin = lookup_snapshot(request.url, fetch)
+            snapshot, origin = lookup_snapshot(fetch_url, fetch)
             attempts.append(origin)
     if snapshot is None:
         raise ArchiveError(
             "no Web Archive snapshot could be created or found ("
             + "; ".join(attempts)
-            + f"). The download is kept at {raw_file.as_posix()} (sha256 {digest}), but nothing "
-            "was written to the manifest or the inventory. Retry later, or make a snapshot by "
-            "other means and pass it with --archive-url; never enter a URL that was not checked"
+            + f"). Nothing was saved or written (sha256 of the download: {digest}); no raw file "
+            "is left under data/raw/. Retry later, or make a snapshot by other means and pass "
+            "it with --archive-url; never enter a URL that was not checked"
         )
+    raw_file.parent.mkdir(parents=True, exist_ok=True)
+    raw_file.write_bytes(content)
     snapshot_check = (
         check_snapshot(snapshot, digest, fetch)
-        if request.check and request.archive_url is None and not unchanged
+        if request.check and request.archive_url is None
         else None
     )
 
@@ -442,6 +534,7 @@ def archive(
         snapshot_check=snapshot_check,
         inventory_updated=updated,
         attempts=attempts,
+        download_url=fetch_url if fetch_url != request.url else None,
     )
 
 
@@ -488,6 +581,16 @@ def register(subparsers: "Subparsers") -> None:
         "--file", type=Path, help="use this local copy instead of downloading (saved by hand)"
     )
     parser.add_argument(
+        "--retries",
+        type=int,
+        default=DEFAULT_RETRIES,
+        help=(
+            "retries (waits of 10 s, 20 s, ...) for a download or Web Archive request that "
+            "fails with HTTP 429, a server error, a refused connection or a timeout "
+            f"(default: {DEFAULT_RETRIES})"
+        ),
+    )
+    parser.add_argument(
         "--data-dir", type=Path, default=Path("data"), help="data directory (default: data)"
     )
     parser.set_defaults(handler=run)
@@ -497,6 +600,10 @@ def format_result(result: ArchiveResult) -> str:
     detected = "detected" if result.format_detected else "given or kept"
     lines = [
         f"{result.document_id} ({result.status})",
+    ]
+    if result.download_url is not None:
+        lines.append(f"  Google Drive view link resolved to {result.download_url}")
+    lines += [
         f"  saved {result.size} bytes to {result.raw_path}",
         f"  format {result.document_format} ({detected}); sha256 {result.sha256}",
     ]
@@ -527,6 +634,7 @@ def run(args: argparse.Namespace) -> int:
         save=not args.no_save,
         check=not args.no_check,
         file=args.file,
+        retries=args.retries,
     )
     try:
         result = archive(request)

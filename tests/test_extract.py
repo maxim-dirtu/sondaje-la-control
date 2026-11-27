@@ -24,6 +24,7 @@ from sondaje.ingest.extract_pdf import (
     page_lines,
     parse_pages,
     render_pdf,
+    text_layer_problem,
 )
 from sondaje.schema import ARCHIVE_MANIFEST, POLL_RESULTS
 
@@ -176,6 +177,49 @@ def test_extract_pdf_lines_and_page_errors(tmp_path: Path) -> None:
         extract_pdf(not_pdf)
 
 
+def spaced_letters_pdf() -> bytes:
+    """A text layer like the Sociopol PDFs: every character is a separate text run."""
+    text = "Intentia de vot pentru partidele politice in luna mai 2025 PSD 32% AUR 15%"
+    items = [(10 + 15 * i, 300 - 20 * (n // 38), ch) for n, ch in enumerate(text) for i in [n % 38]]
+    return text_pdf([item for item in items if item[2] != " "], width=600, height=400)
+
+
+def test_text_layer_problem_detects_spaced_letters_and_missing_text(tmp_path: Path) -> None:
+    spaced = tmp_path / "spaced.pdf"
+    spaced.write_bytes(spaced_letters_pdf())
+    assert "unreadable" in (text_layer_problem(spaced) or "")
+    blank = tmp_path / "blank.pdf"
+    blank.write_bytes(text_pdf([]))
+    assert "no text layer" in (text_layer_problem(blank) or "")
+    good = tmp_path / "good.pdf"
+    good.write_bytes(text_pdf([(50, 300, "Intentia de vot pentru partidele politice " * 2)]))
+    assert text_layer_problem(good) is None
+    with pytest.raises(ExtractError):
+        text_layer_problem(spaced, "9")
+
+
+def test_cli_extract_pdf_explains_an_unreadable_text_layer(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    spaced = tmp_path / "spaced.pdf"
+    spaced.write_bytes(spaced_letters_pdf())
+    out = tmp_path / "draft.csv"
+    assert main(["extract-pdf", str(spaced), "--mode", "lines", "--out", str(out)]) == 0
+    err = capsys.readouterr().err
+    assert "probably wrong" in err and "unreadable" in err
+    assert "render-pdf" in err and "double entry" in err
+    assert main(["extract-pdf", str(spaced), "--out", str(out)]) == 1
+    assert "no rows found: the text layer is unreadable" in capsys.readouterr().err
+    blank = tmp_path / "blank.pdf"
+    blank.write_bytes(text_pdf([]))
+    assert main(["extract-pdf", str(blank), "--out", str(out)]) == 1
+    assert "no text layer" in capsys.readouterr().err
+    good = tmp_path / "good.pdf"
+    good.write_bytes(text_pdf([(50, 300, "Intentia de vot pentru partidele politice " * 2)]))
+    assert main(["extract-pdf", str(good), "--out", str(out)]) == 1
+    assert "no rows found; try another --mode" in capsys.readouterr().err
+
+
 def test_parse_pages() -> None:
     assert parse_pages("3,5-6", 8) == [3, 5, 6]
     assert parse_pages(None, 2) == [1, 2]
@@ -277,6 +321,32 @@ def test_html_tables_mode() -> None:
     ]
     with pytest.raises(ExtractError):
         extract_html(b"", "ocr", None)
+
+
+LINES_PAGE = """<html><body><p>Intenția de vot:</p>
+<p>George Simion - 50%</p><p>Nicuşor Dan \u2013 45,5 %</p><p>Nu știu - sub 1%</p>
+<p>Altul - 3.5%</p>
+<p>PSD - 30%, AUR - 20%; Altele - 5%</p></body></html>"""
+
+
+def test_html_text_mode_reads_name_dash_value_lines() -> None:
+    _, rows = extract_html(LINES_PAGE.encode("utf-8"), "text", MATCHER)
+    assert [(r.label, r.value, r.qualifier, r.option_type, r.entity_id) for r in rows] == [
+        ("George Simion", "50", "", "candidate", "george-simion"),
+        ("Nicuşor Dan", "45.5", "", "candidate", "nicusor-dan"),
+        ("Nu știu", "1", "lt", "undecided", ""),
+        ("Altul", "3.5", "", "other", ""),
+        ("PSD", "30", "", "party", "psd"),
+        ("AUR", "20", "", "party", "aur"),
+        ("Altele", "5", "", "other", ""),
+    ]
+    assert rows[0].where.startswith("block 2: George Simion - 50%")
+
+
+def test_html_dash_after_a_long_sentence_is_not_taken_as_a_label() -> None:
+    page = "<p>Directorul institutului a explicat în detaliu că PSD a obținut - 30% din voturi.</p>"
+    _, rows = extract_html(page.encode("utf-8"), "text", MATCHER)
+    assert [(r.label, r.value) for r in rows] == [("", "30")]
 
 
 def test_write_draft_appends_with_restarting_order(tmp_path: Path) -> None:
