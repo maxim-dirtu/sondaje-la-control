@@ -1,7 +1,7 @@
 ---
 id: T-013
 title: "Polls: Sociopol (MVP elections)"
-status: review
+status: done
 phase: 1
 depends_on: [T-011]
 owner: copilot-agent (Opus)
