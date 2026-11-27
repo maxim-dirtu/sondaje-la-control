@@ -178,6 +178,42 @@ houses in the dataset. Whether to use a broader reference market is open (I-013)
 `RA_{h,E} = MAE_{h,E} − median_h'(MAE_{h',E})`. Negative values mean the house
 was better than the typical pollster.
 
+### M-2.7 Conventions and edge cases (T-021)
+Choices the formulas above leave open. Implemented by `sondaje.metrics.errors`.
+
+- **Inputs.** The metrics are computed on the prepared tables of M-1, never on
+  raw shares. They exist only for `eligible` polls (M-1.3, M-1.7): scenarios,
+  polls published on or after election day, and polls without a fieldwork end
+  have none. A poll outside the accuracy window keeps its metrics, flagged
+  `in_window = false`; accuracy summaries and the final poll (M-1.3) use
+  in-window polls only.
+- **The comparison set.** `k` counts every compared entity, the "others" bucket
+  included (M-1.2), so `MAE` is the mean over `k` rows. `e_j` is always defined
+  and finite. An entity of the result that the poll does not name is already in
+  the "others" of both sides (M-1.2), so no entity is missing at this stage. A
+  prepared row without `s` or `r` is an input error, and is never filled in.
+  Houses may name different numbers of parties, so `k` differs between polls of
+  the same election and `MAE` is not computed over one common set. T-022 decides
+  whether a common comparison set is needed for comparisons between houses.
+- **Total error.** Because both sides sum to 1 over the comparison set, the
+  `e_j` of a poll sum to 0, and `TE` equals the sum of its overestimates (and of
+  its underestimates).
+- **Undefined log-odds (default).** `A'_j` is undefined when `s_j` or `r_j` is 0
+  or 1. This happens, for example, when a poll publishes no "others" option
+  while the result has some, or when a named party is published at 0. Such a
+  term is **left out of `B`**, so `B` is the mean of `|A'_j|` over the `b_terms`
+  defined terms. The number left out (`b_undefined = k − b_terms`) is reported
+  next to every `B`. `B` is empty when no term is defined. The term still counts
+  in `k`, `MAE`, and `TE`, where it is a finite error. Reason: a zero share is
+  often a format artefact (no "others" published, rounding), and any
+  substitute value would dominate `B`.
+- **Undefined log-odds (sensitivity).** With the option `zero_floor = f`
+  (default: none), both shares are first clipped to `[f, 1 − f]`, so that every
+  term is defined and a missing share counts as a large error. T-025 may tune
+  `f`.
+- **Units.** `e`, `MAE`, and `TE` are in pp; `A'` and `B` are dimensionless
+  (natural log).
+
 ---
 
 ## M-3 Campaign-long behaviour
