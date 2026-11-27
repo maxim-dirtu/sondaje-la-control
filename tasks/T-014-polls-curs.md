@@ -1,7 +1,7 @@
 ---
 id: T-014
 title: "Polls: CURS (MVP elections)"
-status: review
+status: done
 phase: 1
 depends_on: [T-011]
 owner: copilot (Sonnet)
