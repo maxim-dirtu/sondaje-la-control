@@ -11,7 +11,7 @@ from dataclasses import dataclass
 from decimal import Decimal
 from enum import StrEnum
 
-SCHEMA_VERSION = "1.1"
+SCHEMA_VERSION = "1.2"
 """DATA_MODEL.md schema version implemented here."""
 
 
@@ -142,6 +142,17 @@ NON_VOTE_OPTION_TYPES = (
 )
 OPTION_TYPES = (*VOTE_OPTION_TYPES, *NON_VOTE_OPTION_TYPES)
 SHARE_QUALIFIERS = ("lt",)
+INVENTORY_STATUSES = ("found", "archived", "extracted", "verified", "excluded")
+FOUND_VIA = ("index", "pollster_site", "partner_outlet", "web_search", "reference", "other")
+EXCLUSION_REASONS = (
+    "out_of_window",
+    "out_of_scope",
+    "exit_poll",
+    "duplicate",
+    "no_topline",
+    "unavailable",
+    "other",
+)
 
 
 # --- Column helpers --------------------------------------------------------------------------
@@ -417,6 +428,29 @@ POLL_RESULTS = Table(
     ),
 )
 
+INVENTORY = Table(
+    name="inventory",
+    filename="inventory.csv",
+    locations=_POLL,
+    section="6.13",
+    key=("publication_url", "election_id", "poll_id"),
+    columns=(
+        _col("publication_url", T.URL),
+        _col("election_id", T.SLUG, COND, references=ELECTION_REF),
+        _col("title", T.TEXT, NO),
+        _col("published_date", T.DATE, NO),
+        _col("fieldwork_start", T.DATE, NO),
+        _col("fieldwork_end", T.DATE, NO),
+        _col("found_via", T.ENUM, YES, FOUND_VIA),
+        _col("discovery_url", T.URL, NO),
+        _col("status", T.ENUM, YES, INVENTORY_STATUSES),
+        _col("exclusion_reason", T.ENUM, COND, EXCLUSION_REASONS),
+        _col("document_id", T.SLUG, COND, references="archive_manifest.document_id"),
+        _col("poll_id", T.SLUG, COND, references="polls.poll_id"),
+        *PROVENANCE,
+    ),
+)
+
 TABLES: tuple[Table, ...] = (
     ELECTIONS,
     ENTITIES,
@@ -430,15 +464,13 @@ TABLES: tuple[Table, ...] = (
     ARCHIVE_MANIFEST,
     POLLS,
     POLL_RESULTS,
+    INVENTORY,
 )
-"""Every table of DATA_MODEL.md §6, in document order (§6.13 is reserved)."""
+"""Every table of DATA_MODEL.md §6, in document order."""
 
 TABLES_BY_NAME = {table.name: table for table in TABLES}
 
-RESERVED_FILES = {Location.POLL: ("inventory.csv",)}
-"""Files reserved by DATA_MODEL.md §6.13 (defined by T-011); allowed, not validated."""
-
-REQUIRED_POLL_FILES = ("polls.csv", "poll_results.csv", "archive_manifest.csv")
+REQUIRED_POLL_FILES = ("polls.csv", "poll_results.csv", "archive_manifest.csv", "inventory.csv")
 """Files every ``data/polls/<pollster_id>/`` directory must have (R-05)."""
 
 

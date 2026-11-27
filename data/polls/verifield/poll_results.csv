@@ -1,0 +1,11 @@
+poll_id,share_base,option_order,option_label,option_type,entity_id,share_raw,share_qualifier,source_url,source_type,retrieved_at,verified,notes
+verifield-pres-2025-r2-20250506,all_respondents,1,George-SIMION,candidate,george-simion,38.9,,https://hotnews.ro/wp-content/uploads/2025/05/Raport-ND13-6-Mai-Val-1.pdf,pollster,2026-11-27,true,
+verifield-pres-2025-r2-20250506,all_respondents,2,Nicușor DAN,candidate,nicusor-dan,31.3,,https://hotnews.ro/wp-content/uploads/2025/05/Raport-ND13-6-Mai-Val-1.pdf,pollster,2026-11-27,true,
+verifield-pres-2025-r2-20250506,all_respondents,3,Anulez Votul,blank_or_invalid,,1.4,,https://hotnews.ro/wp-content/uploads/2025/05/Raport-ND13-6-Mai-Val-1.pdf,pollster,2026-11-27,true,
+verifield-pres-2025-r2-20250506,all_respondents,4,Nu știu / Nu m-am hotărât,undecided,,14.7,,https://hotnews.ro/wp-content/uploads/2025/05/Raport-ND13-6-Mai-Val-1.pdf,pollster,2026-11-27,true,
+verifield-pres-2025-r2-20250506,all_respondents,5,Nu m-aș duce la vot,would_not_vote,,4.9,,https://hotnews.ro/wp-content/uploads/2025/05/Raport-ND13-6-Mai-Val-1.pdf,pollster,2026-11-27,true,
+verifield-pres-2025-r2-20250506,all_respondents,6,NR,non_response,,8.9,,https://hotnews.ro/wp-content/uploads/2025/05/Raport-ND13-6-Mai-Val-1.pdf,pollster,2026-11-27,true,
+verifield-pres-2025-r2-20250506,expressed_option,1,George-SIMION,candidate,george-simion,55.4,,https://hotnews.ro/wp-content/uploads/2025/05/Raport-ND13-6-Mai-Val-1.pdf,pollster,2026-11-27,true,
+verifield-pres-2025-r2-20250506,expressed_option,2,Nicușor DAN,candidate,nicusor-dan,44.6,,https://hotnews.ro/wp-content/uploads/2025/05/Raport-ND13-6-Mai-Val-1.pdf,pollster,2026-11-27,true,
+verifield-pres-2025-r2-20250506,other_subset,1,George-SIMION,candidate,george-simion,54.8,,https://hotnews.ro/wp-content/uploads/2025/05/Raport-ND13-6-Mai-Val-1.pdf,pollster,2026-11-27,true,"Expressed votes of respondents who say they will vote (61.6% of the sample), as labelled on p. 5."
+verifield-pres-2025-r2-20250506,other_subset,2,Nicușor DAN,candidate,nicusor-dan,45.2,,https://hotnews.ro/wp-content/uploads/2025/05/Raport-ND13-6-Mai-Val-1.pdf,pollster,2026-11-27,true,"Expressed votes of respondents who say they will vote (61.6% of the sample), as labelled on p. 5."

@@ -30,6 +30,7 @@ R1, R2 = "elections/pres-2099-r1/", "elections/pres-2099-r2/"
 POLLS = "polls/exemplar/polls.csv"
 POLL_RESULTS = "polls/exemplar/poll_results.csv"
 MANIFEST = "polls/exemplar/archive_manifest.csv"
+INVENTORY = "polls/exemplar/inventory.csv"
 EXAMPLE_POLL = "exemplar-parl-2099-cd-20990524"
 CANDIDATE_SUPPORT_HEADER = (
     b"election_id,candidate_entity_id,party_entity_id,support_type,announced_date,"
@@ -46,6 +47,19 @@ def rules(issues: list[Issue]) -> set[tuple[str, Severity]]:
 def rename_poll(d: DataDir, old: str, new: str) -> None:
     d.replace_value(POLLS, "poll_id", old, new)
     d.replace_value(POLL_RESULTS, "poll_id", old, new)
+    d.replace_value(INVENTORY, "poll_id", old, new)
+
+
+def update_poll(d: DataDir, line: int, inventory_line: int, **changes: str) -> None:
+    """Change a poll and copy its date changes to its inventory row (so R-78 stays quiet)."""
+    d.update(POLLS, line, **changes)
+    dates = {
+        k: v
+        for k, v in changes.items()
+        if k in ("published_date", "fieldwork_start", "fieldwork_end")
+    }
+    if dates:
+        d.update(INVENTORY, inventory_line, **dates)
 
 
 def clear_fieldwork(d: DataDir) -> None:
@@ -57,6 +71,15 @@ def second_survey(d: DataDir, poll_id: str) -> None:
     """Add another headline poll of the same pollster and election, from a new document."""
     d.append_copy(MANIFEST, 2, document_id="exemplar-doc-002", sha256="a" * 64)
     d.append_copy(POLLS, 2, poll_id=f"{poll_id}-2", document_id="exemplar-doc-002")
+    d.append_copy(
+        INVENTORY,
+        2,
+        publication_url="https://example.org/exemplar/raport-2099-05-b.pdf",
+        document_id="exemplar-doc-002",
+        poll_id=f"{poll_id}-2",
+    )
+    d.update(MANIFEST, 3, source_url="https://example.org/exemplar/raport-2099-05-b.pdf")
+    d.update(POLLS, 3, source_url="https://example.org/exemplar/raport-2099-05-b.pdf")
     _, rows = d.read(POLL_RESULTS)
     for line in range(2, len(rows) + 2):
         d.append_copy(POLL_RESULTS, line, poll_id=f"{poll_id}-2")
@@ -187,10 +210,10 @@ CASES = [
         ("R-06", E),
     ),
     case(
-        "R-05-reserved-file",
+        "R-05-inventory-missing",
         EXAMPLE,
-        lambda d: d.write_bytes("polls/exemplar/inventory.csv", b"x\n"),
-        ("R-05", W),
+        lambda d: d.remove(INVENTORY),
+        ("R-05", E),
     ),
     case(
         "R-06-entity",
@@ -491,9 +514,93 @@ CASES = [
         EXAMPLE,
         lambda d: d.append_copy(MANIFEST, 2, document_id="exemplar-doc-002"),
         ("R-72", W),
+        ("R-76", W),
+    ),
+    # --- 7.5 Poll inventory ---
+    case(
+        "R-06-inventory-poll",
+        EXAMPLE,
+        lambda d: d.update(INVENTORY, 3, poll_id="exemplar-parl-2099-cd-20990101"),
+        ("R-06", E),
+    ),
+    case(
+        "R-73-found-with-links",
+        EXAMPLE,
+        lambda d: d.update(INVENTORY, 2, status="found"),
+        ("R-73", E),
+        ("R-75", E),
+    ),
+    case(
+        "R-73-archived-with-poll",
+        EXAMPLE,
+        lambda d: d.update(INVENTORY, 2, status="archived"),
+        ("R-73", E),
+        ("R-75", E),
+    ),
+    case(
+        "R-73-verified-without-poll",
+        EXAMPLE,
+        lambda d: d.update(INVENTORY, 2, poll_id=""),
+        ("R-73", E),
+    ),
+    case(
+        "R-73-missing-election",
+        EXAMPLE,
+        lambda d: d.update(INVENTORY, 2, election_id=""),
+        ("R-73", E),
+    ),
+    case(
+        "R-73-excluded-without-reason",
+        EXAMPLE,
+        lambda d: d.update(INVENTORY, 4, exclusion_reason=""),
+        ("R-73", E),
+    ),
+    case(
+        "R-73-reason-without-exclusion",
+        EXAMPLE,
+        lambda d: d.update(INVENTORY, 2, exclusion_reason="duplicate"),
+        ("R-73", E),
+    ),
+    case(
+        "R-73-excluded-poll-not-duplicate",
+        EXAMPLE,
+        lambda d: d.update(INVENTORY, 4, poll_id=EXAMPLE_POLL),
+        ("R-73", E),
+    ),
+    case(
+        "R-74-publication-url",
+        EXAMPLE,
+        lambda d: d.update(INVENTORY, 2, publication_url="https://example.org/x.pdf"),
+        ("R-74", E),
+    ),
+    case(
+        "R-74-election",
+        PRESIDENTIAL,
+        lambda d: d.update(INVENTORY, 2, poll_id="exemplar-pres-2099-r2-20991105"),
+        ("R-74", E),
+        ("R-78", W),
+    ),
+    case(
+        "R-75",
+        EXAMPLE,
+        lambda d: d.delete(INVENTORY, 2),
+        ("R-75", E),
+        ("R-76", W),
+    ),
+    case(
+        "R-76",
+        EXAMPLE,
+        lambda d: d.append_copy(MANIFEST, 2, document_id="exemplar-doc-002", sha256="a" * 64),
+        ("R-76", W),
+    ),
+    case("R-77", EXAMPLE, lambda d: d.update(INVENTORY, 4, found_via="other"), ("R-77", W)),
+    case(
+        "R-78", EXAMPLE, lambda d: d.update(INVENTORY, 2, fieldwork_end="2099-05-23"), ("R-78", W)
     ),
     # --- 7.6 Dates ---
-    case("R-80", EXAMPLE, lambda d: d.update(POLLS, 2, fieldwork_start="2099-05-25"), ("R-80", E)),
+    case(
+        "R-80", EXAMPLE, lambda d: update_poll(d, 2, 2, fieldwork_start="2099-05-25"), ("R-80", E)
+    ),
     case(
         "R-81",
         EXAMPLE,
@@ -501,17 +608,17 @@ CASES = [
         ("R-81", E),
         ("R-83", W),
     ),
-    case("R-82", EXAMPLE, lambda d: d.update(POLLS, 2, published_date="2099-05-23"), ("R-82", E)),
+    case("R-82", EXAMPLE, lambda d: update_poll(d, 2, 2, published_date="2099-05-23"), ("R-82", E)),
     case(
         "R-83",
         EXAMPLE,
-        lambda d: d.update(POLLS, 2, published_date="2099-06-08", retrieved_at="2099-06-08"),
+        lambda d: update_poll(d, 2, 2, published_date="2099-06-08", retrieved_at="2099-06-08"),
         ("R-83", W),
     ),
     case(
         "R-84",
         PRESIDENTIAL,
-        lambda d: d.update(POLLS, 4, fieldwork_start="2099-10-30"),
+        lambda d: update_poll(d, 4, 3, fieldwork_start="2099-10-30"),
         ("R-84", E),
     ),
     case("R-85", EXAMPLE, lambda d: move_fieldwork_to_2098(d), ("R-85", W)),
@@ -603,6 +710,22 @@ CASES = [
         EXAMPLE,
         lambda d: d.update(POLLSTERS, 2, typical_modes="face_to_face;cati"),
     ),
+    case(
+        "pass-R-75-scenario-covered-by-document",
+        PRESIDENTIAL,
+        lambda d: d.update(INVENTORY, 2, poll_id="exemplar-pres-2099-r1-20991025-scenario-b"),
+    ),
+    case(
+        "pass-inventory-found",
+        EXAMPLE,
+        lambda d: d.append_copy(
+            INVENTORY,
+            4,
+            publication_url="https://example.org/exemplar/nou",
+            status="found",
+            exclusion_reason="",
+        ),
+    ),
 ]
 
 
@@ -647,10 +770,11 @@ def raise_invalid_votes(d: DataDir) -> None:
 def rename_document(d: DataDir, document_id: str) -> None:
     d.update(MANIFEST, 2, document_id=document_id)
     d.update(POLLS, 2, document_id=document_id)
+    d.update(INVENTORY, 2, document_id=document_id)
 
 
 def move_fieldwork_to_2098(d: DataDir) -> None:
-    d.update(POLLS, 2, fieldwork_start="2098-05-20", fieldwork_end="2098-05-24")
+    update_poll(d, 2, 2, fieldwork_start="2098-05-20", fieldwork_end="2098-05-24")
     rename_poll(d, EXAMPLE_POLL, "exemplar-parl-2099-cd-20980524")
 
 
