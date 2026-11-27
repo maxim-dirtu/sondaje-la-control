@@ -1,7 +1,7 @@
 ---
 id: T-016
 title: "Sponsor source: credit M-5.3 'client disclosed' only when the pollster discloses it"
-status: review
+status: done
 phase: 1
 depends_on: [T-012, T-013, T-014, T-015]
 owner: copilot-t016
