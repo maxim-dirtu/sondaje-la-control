@@ -64,7 +64,9 @@ VALUE_IN_TEXT_RE = re.compile(
 CLAUSE_BREAK_RE = re.compile(
     r"[,;:()]|\s[\u2013\u2014-]\s|\s(?:iar|și|şi|dar|urmat|urmată)\s", re.IGNORECASE
 )
-SENTENCE_RE = re.compile(r"[^.!?…]+(?:[.!?…]+|$)")
+SENTENCE_RE = re.compile(r"(?:[^.!?…]|(?<=\d)\.(?=\d))+(?:[.!?…]+|$)")
+DASH_BEFORE_RE = re.compile(r"\s*[-\u2013\u2014]\s*$")
+MAX_DASHED_LABEL_WORDS = 8
 
 
 @dataclass
@@ -225,6 +227,24 @@ def _clause_bounds(sentence: str, start: int, end: int) -> tuple[int, int]:
     return left, following.start() if following else len(sentence)
 
 
+def _dashed_label(sentence: str, start: int, values: list[re.Match[str]]) -> str:
+    """The label of a ``Name - 35%`` line: the text before the dash that directly precedes the
+    value, back to the previous value or the previous comma, semicolon, colon, or bracket.
+    Empty if there is no such dash, or if the text is not a short label."""
+    dash = DASH_BEFORE_RE.search(sentence, 0, start)
+    if dash is None:
+        return ""
+    left = max(
+        [v.end() for v in values if v.end() <= dash.start()]
+        + [m.end() for m in re.finditer(r"[,;:()]", sentence[: dash.start()])]
+        + [0]
+    )
+    label = sentence[left : dash.start()].strip(" \t\u00a0")
+    if not re.search(r"[^\W\d_]", label) or len(label.split()) > MAX_DASHED_LABEL_WORDS:
+        return ""
+    return label
+
+
 def text_rows(page: Page, matcher: EntityMatcher | None) -> list[DraftRow]:
     rows = []
     for b, block in enumerate(page.blocks, start=1):
@@ -251,14 +271,24 @@ def text_rows(page: Page, matcher: EntityMatcher | None) -> list[DraftRow]:
                 ]
                 chosen = before[-1] if before else after[0] if after else None
                 label = sentence[chosen[0] : chosen[1]] if chosen else ""
+                option_type = chosen[2].entity_type if chosen else ""
+                entity_id = chosen[2].entity_id if chosen else ""
+                dashed = _dashed_label(sentence, start, values)
+                if dashed:
+                    label = dashed
+                    found = matcher.find_all(dashed) if matcher else []
+                    if found:
+                        option_type, entity_id = found[0][2].entity_type, found[0][2].entity_id
+                    else:
+                        option_type, entity_id = guess_type(dashed, matcher)
                 rows.append(
                     DraftRow(
                         label=label,
                         value=normalize_value(value.group("value")),
                         qualifier="lt" if value.group("lt") else "",
                         where=f"block {b}: {sentence[:220]}",
-                        option_type=chosen[2].entity_type if chosen else "",
-                        entity_id=chosen[2].entity_id if chosen else "",
+                        option_type=option_type,
+                        entity_id=entity_id,
                     )
                 )
     return rows

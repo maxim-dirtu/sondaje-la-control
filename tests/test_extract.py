@@ -279,6 +279,32 @@ def test_html_tables_mode() -> None:
         extract_html(b"", "ocr", None)
 
 
+LINES_PAGE = """<html><body><p>Intenția de vot:</p>
+<p>George Simion - 50%</p><p>Nicuşor Dan – 45,5 %</p><p>Nu știu - sub 1%</p>
+<p>Altul - 3.5%</p>
+<p>PSD - 30%, AUR - 20%; Altele - 5%</p></body></html>"""
+
+
+def test_html_text_mode_reads_name_dash_value_lines() -> None:
+    _, rows = extract_html(LINES_PAGE.encode("utf-8"), "text", MATCHER)
+    assert [(r.label, r.value, r.qualifier, r.option_type, r.entity_id) for r in rows] == [
+        ("George Simion", "50", "", "candidate", "george-simion"),
+        ("Nicuşor Dan", "45.5", "", "candidate", "nicusor-dan"),
+        ("Nu știu", "1", "lt", "undecided", ""),
+        ("Altul", "3.5", "", "other", ""),
+        ("PSD", "30", "", "party", "psd"),
+        ("AUR", "20", "", "party", "aur"),
+        ("Altele", "5", "", "other", ""),
+    ]
+    assert rows[0].where.startswith("block 2: George Simion - 50%")
+
+
+def test_html_dash_after_a_long_sentence_is_not_taken_as_a_label() -> None:
+    page = "<p>Directorul institutului a explicat în detaliu că PSD a obținut - 30% din voturi.</p>"
+    _, rows = extract_html(page.encode("utf-8"), "text", MATCHER)
+    assert [(r.label, r.value) for r in rows] == [("", "30")]
+
+
 def test_write_draft_appends_with_restarting_order(tmp_path: Path) -> None:
     out = tmp_path / "draft.csv"
     write_draft(out, [DraftRow("PSD", "30", where="p.1")], poll_id="p", share_base="x")
