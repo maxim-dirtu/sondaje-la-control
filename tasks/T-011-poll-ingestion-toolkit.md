@@ -1,7 +1,7 @@
 ---
 id: T-011
 title: Poll ingestion toolkit
-status: review
+status: done
 phase: 1
 depends_on: [T-001, T-002, T-006]
 owner: copilot-t011
