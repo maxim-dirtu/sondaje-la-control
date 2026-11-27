@@ -1,7 +1,7 @@
 ---
 id: T-018
 title: Protocol and data-model clarifications from the first collection round
-status: review
+status: done
 phase: 1
 depends_on: [T-016]
 owner: copilot-agent
