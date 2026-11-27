@@ -251,7 +251,7 @@ TABLE_PAGE = """<html><body><table>
 
 def test_parse_html_metadata_and_blocks() -> None:
     page = parse_html(ARTICLE.encode("utf-8"))
-    assert page.title == "Sondaj: George Simion 53% – Nicuşor Dan 47%"
+    assert page.title == "Sondaj: George Simion 53% \u2013 Nicuşor Dan 47%"
     assert published_times(page) == ["2099-05-12T18:13:41+00:00", "2099-05-12T18:13:41Z"]
     assert page.images == [("https://example.org/grafic.jpg", "Grafic sondaj")]
     assert not any("99%" in b or "50%" in b or "icon" in b for b in page.blocks)

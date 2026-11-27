@@ -22,6 +22,7 @@ from collections.abc import Callable, Sequence
 
 from sondaje import __version__
 from sondaje.ingest.archive import register as register_archive
+from sondaje.ingest.double_entry import register as register_double_entry_diff
 from sondaje.ingest.extract_html import register as register_extract_html
 from sondaje.ingest.extract_pdf import register as register_extract_pdf
 from sondaje.ingest.results import register as register_ingest_results
@@ -37,6 +38,7 @@ COMMANDS: list[Registrar] = [
     register_archive,
     register_extract_pdf,
     register_extract_html,
+    register_double_entry_diff,
 ]
 """Registrars for every subcommand, in the order they appear in ``--help``."""
 
