@@ -1,7 +1,7 @@
 ---
 id: T-017
 title: Poll tooling fixes (archive, extract, double-entry-diff)
-status: review
+status: done
 phase: 1
 depends_on: [T-011]
 owner: Copilot agent (contributor)
