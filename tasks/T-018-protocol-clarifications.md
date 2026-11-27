@@ -1,14 +1,14 @@
 ---
 id: T-018
 title: Protocol and data-model clarifications from the first collection round
-status: todo
+status: in-progress
 phase: 1
 depends_on: [T-016]
-owner: null
-branch: null
+owner: copilot-agent
+branch: task/T-018-protocol-clarifications
 methodology: [M-1.4]
 created: 2026-11-27
-updated: 2026-11-27
+updated: 2026-11-28
 ---
 
 ## Goal
