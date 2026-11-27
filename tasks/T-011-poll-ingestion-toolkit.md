@@ -184,6 +184,24 @@ Shared tooling and a written protocol that let the per-pollster tasks capture
   lines to `src/sondaje/validation/__init__.py` there. I reverted it at once
   with `git checkout` in the main worktree (clean since); all later file
   writes used editor tools, Python, or absolute paths.
+- **2026-11-27 Demonstration 3 re-run (coordinator).** In the first run,
+  both passes ran on the same model. The owner's rule is that the two
+  transcription passes use different models, so the coordinator ran both
+  passes again: **pass A on Claude Opus 5.5** and **pass B on Claude Sonnet
+  5.5**. They ran in parallel in an isolated scratch folder outside the
+  repository, with only:
+  - the archived graphic (`sociopol-doc-004`) and article (`sociopol-doc-003`);
+  - a copy of POLL_INGESTION.md with this poll's values removed (the §0.3
+    "known case" and §11);
+  - DATA_MODEL.md and the entity, pollster and entity-map registries.
+
+  Neither pass could open the repository, the web, or the other pass.
+  `double-entry-diff` found **1 mismatch**: pass A wrote `question_wording` in
+  capitals, as the graphic prints it, and pass B in sentence case. Resolved
+  against the graphic for pass A (§0.1, §8: verbatim). The re-diff found
+  **0 mismatches**. Pass A also matches the committed rows of
+  `sociopol-parl-2024-cd-20241122` exactly (0 mismatches), so the data is
+  unchanged.
 
 ## Outcome
 **Delivered**
