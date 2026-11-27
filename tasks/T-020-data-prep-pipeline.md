@@ -1,14 +1,14 @@
 ---
 id: T-020
 title: Data preparation pipeline
-status: todo
+status: in-progress
 phase: 2
 depends_on: [T-002, T-003]
-owner: null
-branch: null
+owner: copilot-agent-T-020
+branch: task/T-020-data-prep-pipeline
 methodology: [M-1.1, M-1.2, M-1.3, M-1.4, M-1.5, M-1.6]
 created: 2026-11-22
-updated: 2026-11-22
+updated: 2026-11-27
 ---
 
 ## Goal
