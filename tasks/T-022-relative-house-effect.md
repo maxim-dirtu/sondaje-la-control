@@ -1,14 +1,14 @@
 ---
 id: T-022
 title: Relative house effect and relative accuracy
-status: todo
+status: in-progress
 phase: 2
 depends_on: [T-021]
-owner: null
-branch: null
+owner: github-copilot-cli
+branch: task/T-022-relative-house-effect
 methodology: [M-2.5, M-2.6]
 created: 2026-11-22
-updated: 2026-11-22
+updated: 2026-11-28
 ---
 
 ## Goal
