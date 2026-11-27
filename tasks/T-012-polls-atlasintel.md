@@ -206,7 +206,7 @@ options); labels are verbatim with comma-below diacritics; each source disagreem
   and the archive 21 documents.
 
 ## Outcome
-Status: review. 9 AtlasIntel surveys recorded as **11 polls** (13-15 Mar has three scenarios)
+Status: done (merged in #18). 9 AtlasIntel surveys recorded as **11 polls** (13-15 Mar has three scenarios)
 with **159 result rows**; inventory 23 rows (13 verified, 10 excluded); 19 archived documents;
 `uv run sondaje validate --against main` reports 0 errors (the only AtlasIntel warning is the
 expected R-83 for the 1-3 May poll). Commits: `T-012: set status in-progress, owner and branch`,

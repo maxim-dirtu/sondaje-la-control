@@ -172,7 +172,7 @@ Collection windows (fieldwork end date):
   opened.
 
 ## Outcome
-Status: **review**. Branch `task/T-014-polls-curs`; commits are listed in
+Status: **done** (merged in #16). Branch `task/T-014-polls-curs`; commits are listed in
 `git log main..task/T-014-polls-curs`. Data: `data/polls/curs/` (24 inventory
 rows, 10 archived documents, 10 polls, 66 result rows).
 
