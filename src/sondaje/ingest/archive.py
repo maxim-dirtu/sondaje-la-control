@@ -20,14 +20,18 @@ DATA_MODEL.md §5.2 and §6.10 (``archive_url``, ``sha256``, ``raw_path``, ``for
 
 import argparse
 import datetime as dt
+import gzip
 import hashlib
 import http.client
 import io
 import json
 import re
 import sys
+import time
+import urllib.error
 import urllib.parse
 import urllib.request
+import zlib
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
 from pathlib import Path, PurePosixPath
@@ -225,6 +229,16 @@ def lookup_snapshot(url: str, fetch: Fetcher) -> tuple[str | None, str]:
     return snapshot, f"existing snapshot dated {snapshot_date(snapshot)} (Wayback lookup)"
 
 
+def _gunzipped_sha256(content: bytes) -> str | None:
+    """SHA-256 of the decompressed bytes if ``content`` is gzip data, else ``None``."""
+    if content[:2] != b"\x1f\x8b":
+        return None
+    try:
+        return hashlib.sha256(gzip.decompress(content)).hexdigest()
+    except (OSError, EOFError, zlib.error):
+        return None
+
+
 def check_snapshot(snapshot: str, sha256: str, fetch: Fetcher) -> str:
     """Compare the snapshot's original bytes (``id_`` mode) with the downloaded file."""
     match = SNAPSHOT_RE.match(snapshot)
@@ -237,6 +251,11 @@ def check_snapshot(snapshot: str, sha256: str, fetch: Fetcher) -> str:
         return f"not checked (snapshot download failed: {exc})"
     if hashlib.sha256(content.content).hexdigest() == sha256:
         return "identical: the snapshot has the same bytes as the download"
+    if _gunzipped_sha256(content.content) == sha256:
+        return (
+            "identical: the snapshot has the same bytes as the download "
+            "(the Web Archive served it gzip-encoded; compared after decompressing)"
+        )
     return (
         "DIFFERENT: the snapshot's bytes differ from the download (usual for dynamic HTML "
         "pages; for a PDF or an image, open the snapshot and compare, and say so in notes)"

@@ -1,6 +1,7 @@
 """``sondaje archive``: download, hash, snapshot, manifest and inventory (no network)."""
 
 import datetime as dt
+import gzip
 import hashlib
 import io
 from pathlib import Path
@@ -201,6 +202,28 @@ def test_snapshot_with_different_bytes_is_reported(data_dir: Path) -> None:
     web.routes[RAW_SNAPSHOT] = Response(RAW_SNAPSHOT, PAGE + b"<!-- ad -->")
     result = archive(request(data_dir), web, TODAY)
     assert result.snapshot_check is not None and result.snapshot_check.startswith("DIFFERENT")
+
+
+def test_gzip_encoded_snapshot_is_compared_after_decompressing(data_dir: Path) -> None:
+    web = happy_web()
+    web.routes[RAW_SNAPSHOT] = Response(RAW_SNAPSHOT, gzip.compress(PAGE))
+    result = archive(request(data_dir), web, TODAY)
+    assert result.snapshot_check is not None
+    assert result.snapshot_check.startswith("identical")
+    assert "gzip" in result.snapshot_check
+
+
+@pytest.mark.parametrize(
+    "served", [gzip.compress(PAGE + b"<!-- ad -->"), b"\x1f\x8b not really gzip"]
+)
+def test_gzip_snapshot_with_other_bytes_and_broken_gzip_are_different(
+    data_dir: Path, served: bytes
+) -> None:
+    web = happy_web()
+    web.routes[RAW_SNAPSHOT] = Response(RAW_SNAPSHOT, served)
+    result = archive(request(data_dir), web, TODAY)
+    assert result.snapshot_check is not None
+    assert result.snapshot_check.startswith("DIFFERENT")
 
 
 def test_publication_must_be_in_the_inventory(data_dir: Path) -> None:
