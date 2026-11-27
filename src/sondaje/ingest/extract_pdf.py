@@ -55,6 +55,10 @@ LABEL_GAP = 10.0
 """Horizontal gap (pt) that separates two category labels of a column chart."""
 LABEL_BAND_LINES = 3.0
 """Category labels may wrap: the label band is this many text heights tall."""
+MIN_TEXT_LETTERS = 50
+"""A page range with fewer letters than this has no usable text layer."""
+SPLIT_WORDS_SHARE = 0.4
+"""A text layer where this share of the words are single characters is unreadable."""
 
 
 class ExtractError(Exception):
@@ -257,6 +261,35 @@ def extract_pdf(path: Path, pages: str | None = None, mode: str = "auto") -> lis
     return rows
 
 
+def text_layer_problem(path: Path, pages: str | None = None) -> str | None:
+    """Why the text layer of the chosen pages cannot be read, or ``None`` if it looks readable.
+
+    Two cases: no text at all (a scanned or image-only PDF), and text whose letters are
+    separate runs (spaced letters, split numbers), so words and values cannot be rebuilt."""
+    import pdfplumber
+
+    try:
+        with pdfplumber.open(path) as pdf:
+            words = [
+                word["text"]
+                for number in parse_pages(pages, len(pdf.pages))
+                for word in pdf.pages[number - 1].extract_words()
+            ]
+    except ExtractError:
+        raise
+    except Exception as exc:  # pdfminer raises several types for broken files
+        raise ExtractError(f"{path}: cannot open as PDF ({exc})") from exc
+    letters = sum(ch.isalpha() for word in words for ch in word)
+    if letters < MIN_TEXT_LETTERS:
+        return "the pages have no text layer (a scanned or image-only PDF)"
+    if sum(len(word) == 1 for word in words) / len(words) >= SPLIT_WORDS_SHARE:
+        return (
+            "the text layer is unreadable: most words are single characters (spaced letters, "
+            "split numbers), so labels and values cannot be rebuilt"
+        )
+    return None
+
+
 def render_pdf(path: Path, out_dir: Path, pages: str | None, resolution: int) -> list[Path]:
     """Render pages to PNG (for manual double entry from chart images)."""
     import pdfplumber
@@ -347,6 +380,21 @@ def run_extract(args: argparse.Namespace) -> int:
         sys.stdout.reconfigure(errors="backslashreplace")
     sys.stdout.write(f"{count} draft row(s) from {path}:\n{summary(rows)}\n")
     sys.stdout.write(f"wrote {out.as_posix()} (DRAFT: review every row against the original)\n")
+    try:
+        problem = text_layer_problem(path, args.pages)
+    except ExtractError as exc:
+        problem = str(exc)
+    advice = (
+        "Render the pages with `sondaje render-pdf` and enter the values by double entry "
+        "(docs/POLL_INGESTION.md section 7); OCR is not part of the toolkit.\n"
+    )
+    if problem is not None:
+        verdict = "no rows found" if not rows else "the rows above are probably wrong"
+        sys.stderr.write(f"extract-pdf: {verdict}: {problem}.\n  {advice}")
+    elif not rows:
+        sys.stderr.write(
+            "extract-pdf: no rows found; try another --mode, or enter the values by hand\n"
+        )
     return 0 if rows else 1
 
 
