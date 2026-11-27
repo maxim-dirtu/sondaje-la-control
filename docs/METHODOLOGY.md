@@ -219,14 +219,76 @@ Choices the formulas above leave open. Implemented by `sondaje.metrics.errors`.
 ## M-3 Campaign-long behaviour
 
 ### M-3.1 Market average
-For each `j`, a smoothed curve over all polls (LOESS or a weighted rolling
-mean; method recorded in output) as a function of `t`.
+For each election `E`, ballot regime, and entity `j`, the market average
+`market_j(t)` is the trend of the houses' polls as a function of the fieldwork
+end date `t`, with one additive offset per house:
+`100·s_{i,j} = market_j(t_i) + δ_{h(i),j} + ε_i`, with `Σ_h δ_{h,j} = 0`.
+Implemented by `sondaje.metrics.market` (T-023); the parameters are in the
+tunable-parameters table.
+
+- **Polls.** The campaign polls of M-3.2 that report `j`, as normalized shares
+  (M-1.1) in pp. Every poll counts once: no weight for sample size or recency.
+- **House offsets `δ`.** Fitted by backfitting with a Gaussian kernel mean
+  (local constant, `bandwidth_days` = 14, the kernel's standard deviation) as
+  the trend, solved exactly. The offsets sum to zero with **equal weight per
+  house**, so the market is the level of the average house, not of the house
+  that publishes most often. A kernel mean has no slope, so a difference
+  between houses that the polls cannot separate from a trend (for example,
+  houses with one poll each on different dates) is attributed to the houses,
+  not to a trend. The trend is learned from changes within a house and from
+  houses that polled at the same time.
+- **Curve.** Local linear regression with the same Gaussian kernel on the
+  house-adjusted polls `100·s_{i,j} − δ_{h(i),j}`. Local linear follows a
+  trend up to the first and last poll, where a kernel mean would lag. It is
+  used up to `max_extrapolation_days` = 7 days outside the date range of the
+  fitted polls; further out, the kernel mean is used (no trend extrapolation).
+  The method used at each date is recorded in the output.
+- **Support.** The market is defined at `t` only if a fitted poll ends within
+  `max_gap_days` = 28 days of `t`.
+- **Ballot regimes.** A poll from which M-1.5 dropped at least
+  `regime_min_dropped` = 10 pp for an `excluded` or `withdrawn` entity asked
+  about a ballot that changed later. Such polls form their own regime (for
+  example, the `pres-2025-r1` polls that included Călin Georgescu, whose
+  exclusion became final on 2025-03-11), and the market is fitted separately
+  per regime: it never smooths across a change of the ballot.
+- **Per entity.** Each `j` is smoothed separately. The market shares sum to 1
+  across entities only when every poll names the same entities (for example,
+  a round-2 head-to-head).
+- **"Others"** (M-1.2) holds different options in different polls, depending on
+  how many options a house names. Its market and house effect therefore also
+  reflect how a house publishes, not only how it measures.
+- **Target scope.** Polls of the `domestic` and `total` scope (M-1.4) are
+  pooled as published.
 
 ### M-3.2 Campaign house effect
-`che_{h,j,E} = weighted mean over t of ( s_{h,j}(t) − market_j(t) )`, computed
-over the full campaign window (default: 120 days before the election). The
-market average used for each poll **excludes that house's own polls**
-(leave-one-house-out).
+`che_{h,j,E} = (1/m) · Σ_i ( 100·s_{h,j}(t_i) − market_j^{(−h)}(t_i) )`, the
+mean over the `m` evaluated campaign polls of house `h` that report `j`, all
+ballot regimes together. `market^{(−h)}` is the M-3.1 market fitted **without
+that house's polls** (leave-one-house-out), in the poll's own regime. Every
+evaluated poll weighs the same (the M-1.3 recency weight is for final-poll
+metrics only).
+
+- **Campaign window.** Eligible polls (M-1.3 OI-3 and OI-4, M-1.7) whose
+  fieldwork ends at most `campaign_days` (default 120) days before election day.
+- **Evaluated polls.** A poll is evaluated only where `market^{(−h)}` is
+  defined (another house polled `j` within 28 days, in the same regime). This
+  covers a house that is the only one polling in a period. Both counts are
+  reported (`n_polls`, `n_evaluated`). With no evaluated poll, `che` is empty
+  (status `no_reference`).
+- **Uncertainty.** `se = max(se_sampling, se_spread)`.
+  `se_sampling`: `che` is a linear function of the house's polls and of the
+  reference polls; this is its sampling error, with
+  `Var(100·s_i) = 100²·s(1−s)/n · deff` (M-4.1, `n` from M-1.1 OI-5).
+  `se_spread`: the standard deviation of the `m` deviations divided by `√m`
+  (`m ≥ 2`). It also reflects how much the deviation changes over the
+  campaign. The interval is `che ± 1.645·se` (90%, as in M-4.4).
+- **Status.** `ok` with `m ≥ min_polls` (default 3), otherwise `few_polls`.
+  These estimates are shown with their interval and a "few polls" notice.
+- **Reading.** The reference is the average of the *other* houses, not the
+  result: a positive `che` means the house showed `j` higher than the other
+  houses did at the same time. Neither uncertainty term covers the choice of
+  the reference houses; in the MVP the reference is the other three houses
+  (I-013).
 
 ### M-3.3 Convergence flag
 The flag is raised when `|che|` over the early campaign is large and the gap
@@ -328,7 +390,12 @@ T-020 task Log.
 | `window_days` | 28 | M-1.3 | T-025 sensitivity analysis (incl. 21 and 35 days) |
 | `tau` | 7 | M-1.3 | T-025 |
 | `small_party_threshold` | 1% | M-1.2 | T-025 |
-| `campaign_days` | 120 | M-3.2 | T-023 |
+| `campaign_days` | 120 | M-3.2 | T-025 (kept at 120 by T-023) |
+| `bandwidth_days` | 14 days | M-3.1 | T-025 (incl. 7 and 21 days) |
+| `max_gap_days` | 28 days | M-3.1 | T-025 |
+| `max_extrapolation_days` | 7 days | M-3.1 | T-025 |
+| `regime_min_dropped` | 10 pp | M-3.1 | T-025 |
+| `min_polls` (campaign house effect) | 3 | M-3.2 | T-025 |
 | `deff` | 1.5 | M-4.1 | literature / T-040 |
 | `c1`, `c2` | 2 pp, 0.33 | M-3.3 | T-042 |
 | `herding_flag` | 0.5 | M-3.4 | T-041 |
