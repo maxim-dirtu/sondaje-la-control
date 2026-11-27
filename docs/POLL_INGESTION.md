@@ -50,8 +50,16 @@ estimate, infer, compute, or "fix" any of the following:
 - **Method**: `mode` (follow the conventions of DATA_MODEL §6.11; a pollster's
   usual mode is not enough), `question_type`, `question_wording` (verbatim or
   empty), `weighting_published`, `margin_of_error`.
-- **Sponsor**: `sponsor` and `sponsor_type` describe what the source states;
-  a client known only from another source goes in `notes`.
+- **Sponsor**: `sponsor` and `sponsor_type` describe the client as stated by
+  the pollster's publication or, when it names none, by a media outlet
+  (owner decision, 2026-11-27). A client stated only by the media is recorded
+  only when the outlet states it explicitly (e.g. "realizat la comanda ...")
+  or the client presents the poll itself. Archive that publication too, cite
+  it in `notes` with its `document_id`, and give its inventory row the poll's
+  `poll_id`. If the pollster's publication names a different client, the
+  pollster wins (§0.3) and the media claim goes in `notes`. A client that is
+  only rumoured or inferred (e.g. from the pollster's usual clients) is never
+  recorded.
 - **Entities**: an `entity_id` is set only when the label clearly names that
   registry entity; a person or party missing from the registry is added
   (append-only, with its own source), never mapped to a "close" entity.
@@ -369,6 +377,6 @@ them in their Outcome).
 
 | Format | Poll | Documents | Path |
 |---|---|---|---|
-| Text PDF | `verifield-pres-2025-r2-20250506` (Verifield, fieldwork 6 May 2025, n = 944) | `verifield-doc-001`: the Verifield report hosted by HotNews | `extract-pdf --mode auto` (chart pairing) on pages 3–5 → three bases; reviewed against the rendered pages. The HotNews article is an `excluded` / `duplicate` inventory row; its ±3% margin of error lost to the report's ±3.19% (§0.3). |
+| Text PDF | `verifield-pres-2025-r2-20250506` (Verifield, fieldwork 6 May 2025, n = 944) | `verifield-doc-001`: the Verifield report hosted by HotNews | `extract-pdf --mode auto` (chart pairing) on pages 3–5 → three bases; reviewed against the rendered pages. The HotNews article (`verifield-doc-002`) is archived as the source of the client, which the report does not name (`sponsor_type = candidate`, §0.1); its ±3% margin of error lost to the report's ±3.19% (§0.3). |
 | HTML | `sociopol-pres-2025-r2-20250512` (Sociopol, 10–12 May 2025, n = 1,024) | `sociopol-doc-001`: România TV article of 14 May 2025; `sociopol-doc-002`: the article of 12 May 2025 that first published the values | `extract-html` text mode; 2 of 16 draft rows kept ("George Simion 53% – Nicușor Dan 47%"). Media-only, `verified = false`. The 12 May article gives `published_date` and is a `duplicate` row. |
 | Image (double entry) | `sociopol-parl-2024-cd-20241122` (Sociopol, 20–22 Nov 2024, n = 1,000) | `sociopol-doc-004`: the România TV broadcast graphic; `sociopol-doc-003`: the article that embeds it (dates, n, mode, margin of error) | Two independent passes (two sub-agents on different models, given only the inputs and this protocol) over the graphic and the article, compared with `double-entry-diff`. It found 1 mismatch: the question wording was in capitals as printed in one pass and in sentence case in the other. It was resolved against the graphic (verbatim, §0.1), and the re-diff found 0 mismatches. The rows were then reviewed against the graphic. The graphic's USR 13% is used; the article text's 15% is in `notes`. |

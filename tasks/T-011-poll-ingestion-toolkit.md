@@ -61,8 +61,17 @@ Shared tooling and a written protocol that let the per-pollster tasks capture
   the registry.
 - **Share base for "expressed votes of likely voters"** (Verifield p. 5; INSCOP
   publishes the same base): recorded as `other_subset` with `notes`. If the
-  analysis needs it, a new `share_base` value would be a schema change
-  (owner question 1 below).
+  analysis needs it, a new `share_base` value would be a schema change. The
+  owner kept `other_subset` for now (2026-11-27).
+- **M-5.3 transparency and media-sourced sponsors** (coordinator, methodology
+  change): the M-5.3 mapping gives credit for a disclosed client when
+  `sponsor_type ≠ not_disclosed`. Since owner decision 2 (2026-11-27), that is
+  also true when only the media named the client (Verifield R2), so the
+  pollster would get credit for a disclosure it did not make. Proposal: add a
+  `sponsor_source` column (`pollster` | `media`) to `polls.csv`, or derive it
+  from `notes`, and give M-5.3 credit only for `pollster`. Until then, a
+  sponsor taken from the media does not change `polls.verified` (the values
+  are still checked against the report), and its source is cited in `notes`.
 - **AGENTS.md §8 command table** (coordinator): add `archive`, `extract-pdf`,
   `render-pdf`, `extract-html`, and `double-entry-diff`, and point to
   `docs/POLL_INGESTION.md`.
@@ -136,8 +145,10 @@ Shared tooling and a written protocol that let the per-pollster tasks capture
   (p. 4), and "% voturi exprimate a celor care se duc la vot – 61.6% din
   esantion" (p. 5), recorded as `other_subset` with notes (owner question 1).
   Crosstabs by round-1 vote (pp. 6–8) are not toplines and were not recorded.
-  `sponsor_type = not_disclosed`: the report names no client; HotNews states
-  that candidate Nicușor Dan commissioned it (in `notes`; owner question 2).
+  The sponsor was first recorded as `not_disclosed`, because the report names
+  no client and HotNews says candidate Nicușor Dan commissioned the poll.
+  After the owner's decision on question 2 it is `sponsor_type = candidate`,
+  sourced from the archived HotNews article (`verifield-doc-002`).
   Margin of error 3.19 from the report; HotNews says ±3% (pollster's report
   wins, ADR-0012 rule 5). Population not stated beyond "reprezentativ pe
   variabilele socio-demografice", so `population`/`population_geo` are empty
@@ -261,16 +272,14 @@ double-entry demo.
   limits; the tool reports both honestly, and HTML snapshot checks need a
   human look.
 
-**Open questions for the owner**
-1. Verifield's third base ("expressed votes of those who will vote", 61.6% of
-   the sample) is `other_subset` with notes. Keep that, or add a
-   `share_base` value for it (INSCOP publishes the same base)?
-2. When the pollster's report names no client but the media say a candidate
-   commissioned the poll (Verifield, 6 May 2025), the poll is
-   `not_disclosed` with the media statement in `notes` (strict reading of
-   §6.11: columns describe the source used). Is that the intended reading for
-   M-5.1d, given that the affiliation registry already records the relation?
-3. Two published shares that sum to 100 with no undecided shown (Sociopol
-   round 2): `expressed_option` with `topline_coverage = full`. OK?
-4. Labels are verbatim except that cedilla letters are written with a comma
-   below (ş → ș), per DATA_MODEL §1.7. OK?
+**Owner decisions (2026-11-27, in chat with the coordinator)**
+1. **Kept**: Verifield's third base stays `other_subset`, with notes.
+2. **Changed**: when the pollster's report names no client, a client stated
+   explicitly by a media outlet is recorded as the sponsor. Verifield R2 is now
+   `sponsor_type = candidate`, `sponsor = Nicușor Dan`. The HotNews article is
+   archived as `verifield-doc-002`, and its inventory row moved from
+   `excluded`/`duplicate` to `verified`. POLL_INGESTION.md §0.1 now states the
+   rule.
+3. **Confirmed**: two shares summing to 100, with no undecided shown, are
+   recorded as `expressed_option` with `topline_coverage = full`.
+4. **Confirmed**: cedilla letters are written with a comma below (ş → ș).
