@@ -594,7 +594,9 @@ protocol ([POLL_INGESTION.md](POLL_INGESTION.md)). The inventory is the
 collection task's checklist and its evidence of completeness: every
 publication that was found is either used (`extracted` / `verified`) or
 `excluded` with a reason. A publication that covers two elections has one row
-per election. Key: (`publication_url`, `election_id`).
+per election, and one that reports two surveys for the same election (e.g. an
+article that also quotes the previous wave) has one row per poll. Key:
+(`publication_url`, `election_id`, `poll_id`).
 
 | Column | Type | Req | Allowed values / format | Example | Description |
 |---|---|---|---|---|---|

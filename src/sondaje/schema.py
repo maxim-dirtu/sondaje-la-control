@@ -433,7 +433,7 @@ INVENTORY = Table(
     filename="inventory.csv",
     locations=_POLL,
     section="6.13",
-    key=("publication_url", "election_id"),
+    key=("publication_url", "election_id", "poll_id"),
     columns=(
         _col("publication_url", T.URL),
         _col("election_id", T.SLUG, COND, references=ELECTION_REF),

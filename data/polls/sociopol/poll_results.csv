@@ -1,3 +1,10 @@
 poll_id,share_base,option_order,option_label,option_type,entity_id,share_raw,share_qualifier,source_url,source_type,retrieved_at,verified,notes
+sociopol-parl-2024-cd-20241122,expressed_option,1,PSD,party,psd,30,,https://www.romaniatv.net/wp-content/uploads/2024/11/sondaj-3.jpg,media,2026-11-27,false,
+sociopol-parl-2024-cd-20241122,expressed_option,2,AUR,party,aur,20,,https://www.romaniatv.net/wp-content/uploads/2024/11/sondaj-3.jpg,media,2026-11-27,false,
+sociopol-parl-2024-cd-20241122,expressed_option,3,PNL,party,pnl,15,,https://www.romaniatv.net/wp-content/uploads/2024/11/sondaj-3.jpg,media,2026-11-27,false,
+sociopol-parl-2024-cd-20241122,expressed_option,4,USR,party,usr,13,,https://www.romaniatv.net/wp-content/uploads/2024/11/sondaj-3.jpg,media,2026-11-27,false,The article text gives USR 15%; the broadcast graphic shows 13% (graphic value used).
+sociopol-parl-2024-cd-20241122,expressed_option,5,SOS RO,party,sos,6,,https://www.romaniatv.net/wp-content/uploads/2024/11/sondaj-3.jpg,media,2026-11-27,false,
+sociopol-parl-2024-cd-20241122,expressed_option,6,UDMR,party,udmr,5,,https://www.romaniatv.net/wp-content/uploads/2024/11/sondaj-3.jpg,media,2026-11-27,false,
+sociopol-parl-2024-cd-20241122,expressed_option,7,ALȚII,other,,11,,https://www.romaniatv.net/wp-content/uploads/2024/11/sondaj-3.jpg,media,2026-11-27,false,
 sociopol-pres-2025-r2-20250512,expressed_option,1,George Simion,candidate,george-simion,53,,https://www.romaniatv.net/exclusiv-mirel-palada-director-sociopol-cursa-dintre-nicusor-dan-si-george-simion-e-din-ce-in-ce-mai-stransa_8926885.html,media,2026-11-27,false,
 sociopol-pres-2025-r2-20250512,expressed_option,2,Nicușor Dan,candidate,nicusor-dan,47,,https://www.romaniatv.net/exclusiv-mirel-palada-director-sociopol-cursa-dintre-nicusor-dan-si-george-simion-e-din-ce-in-ce-mai-stransa_8926885.html,media,2026-11-27,false,
