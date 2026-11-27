@@ -12,6 +12,7 @@ from sondaje.validation import (
     rules_dates,
     rules_elections,
     rules_files,
+    rules_inventory,
     rules_polls,
     rules_provenance,
     rules_registries,
@@ -50,6 +51,7 @@ def validate(data_dir: Path, config: ValidationConfig, against: str | None = Non
     rules_registries.run(dataset, reporter)
     rules_elections.run(dataset, reporter)
     rules_polls.run(dataset, reporter)
+    rules_inventory.run(dataset, reporter)
     rules_dates.run(dataset, config, reporter)
     rules_sums.run(dataset, config, reporter)
     if against is not None:

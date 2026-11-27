@@ -5,6 +5,7 @@ description = "Investigative case study of Romanian political pollsters, measure
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "pdfplumber>=0.11.11",
     "pypdf>=7.1.1",
 ]
 

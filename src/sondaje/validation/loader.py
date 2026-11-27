@@ -7,7 +7,6 @@ from pathlib import Path
 
 from sondaje.schema import (
     PROVENANCE_COLUMNS,
-    RESERVED_FILES,
     Location,
     Required,
     Table,
@@ -56,11 +55,6 @@ def discover(root: Path, reporter: Reporter) -> Dataset:
             table = tables_at(location).get(filename)
             if table is not None:
                 files[table.name] = DataFile(table, location, directory_id, shown, path)
-                continue
-            if filename in RESERVED_FILES.get(location, ()):
-                reporter.warning(
-                    shown, None, "R-05", "reserved file (DATA_MODEL.md §6.13); not validated"
-                )
                 continue
         reporter.error(shown, None, "R-05", "unexpected file (not listed in DATA_MODEL.md §2.1)")
     # Directories that hold only ignored files (e.g. a lone .gitkeep) still count as directories.
