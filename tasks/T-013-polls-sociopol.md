@@ -1,14 +1,14 @@
 ---
 id: T-013
 title: "Polls: Sociopol (MVP elections)"
-status: todo
+status: in-progress
 phase: 1
 depends_on: [T-011]
-owner: null
-branch: null
+owner: copilot-agent (Opus)
+branch: task/T-013-polls-sociopol
 methodology: [M-1.1, M-1.3, M-1.4, M-1.5, M-1.7, M-5.3]
 created: 2026-11-22
-updated: 2026-11-22
+updated: 2026-11-27
 ---
 
 ## Goal
