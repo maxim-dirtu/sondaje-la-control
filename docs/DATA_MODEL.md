@@ -1,6 +1,6 @@
 # Data Model and CSV Schemas
 
-**Schema version:** 1.2 · **Owner:** T-001 (amended by T-007, T-011) · **Last updated:** 2026-11-27
+**Schema version:** 1.3 · **Owner:** T-001 (amended by T-007, T-011, T-016) · **Last updated:** 2026-11-27
 
 This document is the contract for everything under `data/`. Collection tasks
 (T-004, T-005, T-010, the pollster tasks T-012+) write files that follow it,
@@ -517,7 +517,7 @@ Key: `poll_id`.
 | `target_scope` | enum | yes | `domestic` · `total` · `diaspora` | `domestic` | Result scope the poll is compared to (M-1.4): `domestic` unless the poll explicitly covers the diaspora. Must agree with `population_geo` (R-64). |
 | `question_type` | enum | no | `prompted_list` · `open` · `other` | `prompted_list` | Whether options were read/shown (`prompted_list`) or not (`open`). |
 | `question_wording` | text | no | original language, verbatim | `Dacă duminica viitoare …` | Exact wording, if published. |
-| `sponsor` | text | cond | original language | `Televiziunea Exemplu` | Client/sponsor as published. Required unless `sponsor_type` is `self` or `not_disclosed`; must be empty for `not_disclosed` (R-65). |
+| `sponsor` | text | cond | original language | `Televiziunea Exemplu` | Client/sponsor as published by the pollster or, when it names none, as stated explicitly by a media outlet ([POLL_INGESTION §0.1](POLL_INGESTION.md)). Required unless `sponsor_type` is `self` or `not_disclosed`; must be empty for `not_disclosed` (R-65). |
 | `sponsor_type` | enum | yes | `self` · `media` · `party` · `candidate` · `public_institution` · `civil_society` · `business` · `other` · `not_disclosed` | `media` | `self`: the publication states the pollster funded it; `not_disclosed`: no client/sponsor information published. |
 | `weighting_published` | bool | yes | `true` · `false` | `true` | The publication describes the weighting. |
 | `moe_published` | bool | yes | `true` · `false` | `true` | The publication states a margin of error. |
@@ -525,15 +525,40 @@ Key: `poll_id`.
 | `topline_coverage` | enum | yes | `full` · `partial` | `full` | `full`: every option the publication shows was captured **and** the publication shows a complete topline (all options, incl. undecided/non-response where asked). `partial`: the source shows only some options (e.g. an article listing the leading parties). |
 | `document_id` | slug | yes | FK → `archive_manifest.document_id` in the same directory | `exemplar-doc-001` | The archived document the values were extracted from. |
 | `extraction_method` | enum | yes | `pdf_text` · `html` · `manual_double_entry` | `pdf_text` | §5.2. Must fit the document format (R-67). |
+| `sponsor_source` | enum | cond | `pollster` · `media` | `pollster` | Who named the client/sponsor. Set iff `sponsor_type ≠ not_disclosed` (R-65). Conventions below the table. |
 | provenance block | | | §5.1 | | `source_url` equals the document's `source_url` (R-68). |
 
 M-5.3 transparency items are read from these columns: sample size
 (`sample_size` not empty), fieldwork dates (`fieldwork_start` and
 `fieldwork_end` not empty), mode (`mode` not empty), exact question wording
 (`question_wording` not empty), weighting (`weighting_published`), margin of
-error (`moe_published`), client/sponsor (`sponsor_type ≠ not_disclosed`).
+error (`moe_published`), client/sponsor (`sponsor_source = pollster`).
 They describe what the **source used** published. If the media article lacks
 an item that the pollster's own report has, use the pollster's report.
+The client/sponsor item is the exception: a client named only by the media
+(`sponsor_source = media`) earns no M-5.3 credit, because the pollster did not
+disclose it. M-5.1d (party-commissioned polls) reads `sponsor_type` whatever
+the `sponsor_source`.
+
+`sponsor_source` conventions:
+- `pollster`: the pollster itself names the client, in its own material for
+  the poll: its report, slide, chart, methodology or technical-data page,
+  website or social post, even when a media outlet hosts or republishes that
+  material. Co-branding by the pollster counts (e.g. the client's logo or a
+  joint title such as "Sondaj Atlas-HotNews" on the pollster's report). So
+  does a statement of the pollster or its representative quoted verbatim by
+  the media (e.g. the director saying on air "Este comandat de …").
+- `media`: the client is named only by a media outlet, or by the client
+  itself when it presents the poll (POLL_INGESTION §0.1), in its own words:
+  e.g. the client outlet's "realizat la comanda România TV", a broadcaster's
+  on-screen technical data, a client's slide that credits the pollster as
+  source, or a "potrivit surselor" report. The document is archived and cited
+  in `notes` with its `document_id` (R-79 warns when `notes` is empty).
+- When the pollster's material names the client, the value is `pollster`
+  even if the media also names it. When they disagree, the pollster wins
+  (POLL_INGESTION §0.3).
+- Empty iff `sponsor_type = not_disclosed`. For `self`, it records who
+  stated that the pollster funded the poll.
 
 `mode` conventions:
 - `mode` records how the **answers were collected** (the interview channel),
