@@ -1,14 +1,14 @@
 ---
 id: T-023
 title: Market average and campaign house effect
-status: todo
+status: in-progress
 phase: 2
 depends_on: [T-020]
-owner: null
-branch: null
+owner: copilot-t023
+branch: task/T-023-campaign-house-effect
 methodology: [M-3.1, M-3.2]
 created: 2026-11-22
-updated: 2026-11-22
+updated: 2026-11-28
 ---
 
 ## Goal
