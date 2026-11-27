@@ -58,6 +58,16 @@ poll.
   candidate → supporting-party mapping (I-016). When a candidate has several
   supporting parties, the error is attributed to the candidate only, until a
   rule is specified.
+- **Parties on another party's list** (`ran_on_list_of` in the entity map,
+  DATA_MODEL 1.1): a party that filed no lists of its own, and whose
+  candidates ran on another contestant's lists under a party-level
+  arrangement, is treated like an alliance member. Its poll share is added to
+  the host contestant's share before normalization (M-1.1). The adjustment is
+  logged.
+- **Poll shares for entities with no result entity** (`not_registered`, for
+  example ADU in 2024): only that share is dropped, and the remaining shares
+  are renormalized. The poll is kept, and the adjustment is logged. (Owner
+  decision, 2026-11-22.)
 
 ### M-1.6 Independence unit
 Polls from the same house for the same election are **not independent**. The

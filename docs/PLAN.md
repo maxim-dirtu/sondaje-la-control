@@ -1,6 +1,6 @@
 # Project Plan
 
-**Last updated:** 2026-11-22 · **Current phase:** 0 (Foundations)
+**Last updated:** 2026-11-22 · **Current phase:** 1 (Data collection). Phase 0 is complete.
 
 The task files in [tasks/](../tasks/) are the source of truth for status. This
 document defines **what** gets built and **in which order**. It does not track
@@ -72,11 +72,16 @@ are approved.
 |---|---|---|
 | T-010 | Results ingestion from AEP: all 3 MVP elections | T-002, T-003, T-004 |
 | T-011 | Poll ingestion toolkit (archive, extraction, double-entry protocol) | T-001, T-002, T-006 |
-| T-012…T-015 | Polls: one task per selected pollster, covering all 3 elections (created from [the template](../tasks/_TEMPLATE-pollster-data.md) after T-006) | T-003, T-004, T-005, T-011 |
+| T-012 | Polls: AtlasIntel (all 3 elections) | T-011 |
+| T-013 | Polls: Sociopol (all 3 elections; media-only sources) | T-011 |
+| T-014 | Polls: CURS (all 3 elections) | T-011 |
+| T-015 | Polls: Verifield (all 3 elections; campaign house) | T-011 |
+
+The selection and its rules are in [ADR-0012](decisions/0012-mvp-pollsters.md).
 
 **Milestone M1:** the 3 elections have validated results, and every selected
-pollster has validated full-topline polls with archived originals. T-010 runs in
-parallel with everything. The pollster tasks run in parallel with each other.
+pollster has validated full-topline polls with archived originals. The four
+pollster tasks run in parallel with each other, after T-011.
 
 ### Phase 2: Core metrics
 | ID | Task | Depends on |
