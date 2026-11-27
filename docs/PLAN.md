@@ -76,8 +76,13 @@ are approved.
 | T-013 | Polls: Sociopol (all 3 elections; media-only sources) | T-011 |
 | T-014 | Polls: CURS (all 3 elections) | T-011 |
 | T-015 | Polls: Verifield (all 3 elections; campaign house) | T-011 |
+| T-016 | Sponsor source: credit M-5.3 "client disclosed" only when the pollster discloses it | T-012–T-015 |
 
 The selection and its rules are in [ADR-0012](decisions/0012-mvp-pollsters.md).
+T-011 committed three demonstration polls (Verifield round 2; Sociopol
+round 2 and parliamentary 20–22 Nov 2024). T-013 and T-015 continue those
+files and do not collect them again. The protocol is
+[POLL_INGESTION.md](POLL_INGESTION.md).
 
 **Milestone M1:** the 3 elections have validated results, and every selected
 pollster has validated full-topline polls with archived originals. The four
@@ -149,4 +154,4 @@ pollsters, more elections, and less manual work.
 | Q2 | License for code (e.g. MIT) and data (e.g. CC BY 4.0) | T-052 |
 | Q3 | Confirm proposed ADRs 0003–0006 | none (they are working defaults) |
 | Q4 | Publish pollster grades by name from day one, or only after the right-of-reply period? | T-053 |
-| Q5 | Approve the MVP pollster selection | T-011, the pollster data tasks |
+| Q5 | ~~Approve the MVP pollster selection~~ Answered 2026-11-22: ADR-0012 | none |
