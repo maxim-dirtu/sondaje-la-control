@@ -140,6 +140,10 @@ command from the repository root (or your worktree root).
 | Apply formatting | `uv run ruff format .` |
 | CLI help | `uv run sondaje --help` |
 | Validate all data in `data/` | `uv run sondaje validate` (add `--against main` to also check that registries are append-only; `--strict` makes warnings fail) |
+| Archive a poll publication (download, SHA-256, Web Archive snapshot, manifest + inventory) | `uv run sondaje archive --pollster <id> <url>` |
+| Draft poll results from a text PDF / an HTML page (always reviewed before use) | `uv run sondaje extract-pdf ...` / `uv run sondaje extract-html ...` |
+| Render PDF pages to PNG for double entry | `uv run sondaje render-pdf ...` |
+| Compare two independent transcriptions (exit 1 on any mismatch) | `uv run sondaje double-entry-diff <pass-a> <pass-b>` |
 | Add a runtime / dev dependency | `uv add <pkg>` / `uv add --dev <pkg>` (commit `uv.lock`) |
 
 Before handing off, all four checks must pass:
@@ -149,4 +153,5 @@ uv sync; uv run pytest; uv run ruff check .; uv run ruff format --check .
 ```
 
 New CLI subcommands are registered in `src/sondaje/cli.py` (see its
-docstring). `.venv/`, `build/`, and `data/raw/` are git-ignored.
+docstring). Poll collection follows [docs/POLL_INGESTION.md](docs/POLL_INGESTION.md).
+`.venv/`, `build/`, and `data/raw/` are git-ignored.
