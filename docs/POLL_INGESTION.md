@@ -1,6 +1,6 @@
 # Poll ingestion protocol
 
-**Owner:** T-011 · **Last updated:** 2026-11-27 · **Applies to:** the pollster data
+**Owner:** T-011 · **Last updated:** 2026-11-28 · **Applies to:** the pollster data
 tasks (T-012 AtlasIntel, T-013 Sociopol, T-014 CURS, T-015 Verifield, and later
 ones).
 
@@ -46,10 +46,10 @@ estimate, infer, compute, or "fix" any of the following:
   `notes`.
 - **Sample**: `sample_size`, `sample_size_expressed`, `population`,
   `population_geo` (a poll covers the diaspora only when the publication says
-  so for the sample, not for turnout).
+  so for the sample, not for turnout; §0.5 items 3 and 7).
 - **Method**: `mode` (follow the conventions of DATA_MODEL §6.11; a pollster's
-  usual mode is not enough), `question_type`, `question_wording` (verbatim or
-  empty), `weighting_published`, `margin_of_error`.
+  usual mode is not enough), `question_type` (§0.5 item 5), `question_wording`
+  (verbatim or empty), `weighting_published`, `margin_of_error`.
 - **Sponsor**: `sponsor` and `sponsor_type` describe the client as stated by
   the pollster's publication or, when it names none, by a media outlet
   (owner decision, 2026-11-27). A client stated only by the media is recorded
@@ -116,7 +116,8 @@ estimate, infer, compute, or "fix" any of the following:
   `published_date`. Do not drop it; the pipeline excludes it from metrics
   (validation warns with R-83, which is expected).
 - **Diaspora** (ADR-0012 rule 3, M-1.4): set `population_geo` from the report
-  (or its partner, when the report is silent) and `target_scope` to match:
+  (or its partner, when the report is silent; evidence rules in §0.5 item 3)
+  and `target_scope` to match:
   `residents_and_diaspora` → `total`; `residents` or empty → `domestic`.
 - **Round 2** (`pres-2025-r2`): only polls with fieldwork after round 1
   (R-84). A head-to-head asked before 2025-05-04 is not a round-2 poll.
@@ -130,6 +131,96 @@ estimate, infer, compute, or "fix" any of the following:
 - **Drafts and passes are not data.** They live under `build/` (git-ignored).
   Raw downloads live under `data/raw/` (git-ignored). Only reviewed rows are
   committed.
+
+### 0.5 Conventions decided case by case
+
+The owner decided these cases while the first four pollsters were collected
+(2026-11-27; PRs #13, #16–#19). They are written down so that the next round
+applies them the same way and does not reopen them. The column rules are also
+in DATA_MODEL §6.11–§6.13. A case that none of them covers goes in the task
+Log and *Follow-ups*; do not settle it alone.
+
+1. **Headline of a multi-list survey.** When one survey asks the same election
+   with different candidate lists, the list that matches the ballot as it stood
+   during fieldwork is the poll with `headline = true`; the other lists are
+   polls with `headline = false` and a `scenario`. Neither the order of the
+   report nor the list the outlet leads with decides it. Examples: CURS, 21–25
+   Jan 2025: the Georgescu list is the headline and the Simion list is
+   `scenario-b`; AtlasIntel, 13–15 Mar 2025 (fieldwork after Georgescu's
+   candidacy was invalidated): the list without Georgescu is the headline, and
+   the report's hypothetical Georgescu scenario is not. Say in `notes` why the
+   headline was chosen. If the publications do not show what the ballot was
+   during fieldwork, log it and ask; do not infer it.
+2. **Co-branding is a client statement.** Co-branding by the pollster counts
+   (e.g. the client's logo or a joint title such as "Sondaj Atlas-HotNews" on the
+   pollster's own report), even when the report has no "commissioned by"
+   wording: the outlet is the client (`sponsor` is the outlet, `sponsor_type` is
+   `media`) and `sponsor_source` is `pollster` (§0.1). Say in `notes` that the
+   client comes from the branding. A media outlet's logo on its own broadcast
+   graphic is not co-branding by the pollster (`sponsor_source` is `media` when
+   that is the only mention).
+3. **Diaspora evidence (M-1.4).** `population_geo = residents_and_diaspora`
+   (with `target_scope = total`) needs an explicit statement that the *sample*
+   includes the diaspora. Published diaspora subgroup results of the same poll
+   (same fieldwork and n) are such a statement, even when the article that
+   carries the topline is silent. Archive the publication with the subgroup
+   results as evidence: an inventory row of its own with the poll's `poll_id`,
+   `notes` saying that the subgroup results are not recorded and why it is
+   archived, and cite its `document_id` in the poll's `notes` (AtlasIntel,
+   17–22 Apr and 28 Apr–1 May 2025: `atlasintel-doc-020`, `-021`). Without
+   such evidence the poll stays `domestic` (AtlasIntel, 10–13 Apr 2025). A
+   turnout figure that includes the diaspora is not evidence about the sample.
+4. **Share bases.**
+   - The **only** base a publication prints is "valid answers of those who will
+     vote" (Sociopol: "% din răspunsurile valide ale celor care estimăm că ar
+     merge la vot"; Verifield, 24–28 Mar 2025: "voturi exprimate a celor care se
+     duc la vot"): `expressed_option`, with the printed wording quoted in
+     `notes`.
+   - A **second** such base printed next to an expressed-votes base (Verifield,
+     6 May 2025: expressed votes, then expressed votes of those who say they will
+     vote): `other_subset`, with the printed wording in `notes` (R-69).
+   - The base restricts the shares; it is not the poll's `population` (item 7).
+5. **`question_type = prompted_list`** only when the published wording itself
+   presents the options as a list ("dintre următorii", "din următorii",
+   "următoarele partide sau alianțe"). Leave it empty when the wording only
+   points at candidates ("aceștia ar fi candidații"), when the wording is not
+   published, or when the house is known to show a list: the pollster's usual
+   practice is not enough (§0.1).
+6. **Mode and labels from graphics.**
+   - "Telephone interviews" ("interviuri telefonice") without the word CATI:
+     `mode = cati`; say so in `notes` ("the source does not say CATI").
+   - A graphic that shows candidates only as photos: take each label from the
+     caption of the graphic or from the text of an archived publication of the
+     same poll that names the candidates with the same shares; say in `notes`
+     which document the labels come from. Never name a candidate from the photo
+     alone.
+7. **`population`** is the universe that this poll's publication states for the
+   sample. `adults`: the adult population, the electorate, or all voters with
+   the right to vote ("populația adultă", "Electoratul din România").
+   `likely_voters`: only when the publication says respondents were screened
+   or the sample restricted to those likely to vote. A statement about the
+   pollster's samples in general (an interview quote such as "AtlasIntel samples
+   are representative of likely voters") or the pollster's usual practice is not
+   a statement about this poll: quote it in `notes` and do not record it. If the
+   poll's publication states no universe, `population` is empty. The label of a
+   chart base ("[Toți alegătorii]") is not a universe. The pollster's report
+   wins over a media report of it (§0.3). One rule for every house, so that the
+   field is comparable across polls.
+8. **Subnational polls** (a sample of one city or region, e.g. CURS Bucharest
+   reports) are **excluded** as `out_of_scope` in the MVP (owner decision,
+   2026-11-27): `population_geo` has no value for them, and the national
+   results are not the right comparison. The inventory row says the area in
+   `notes`. A later phase can add them with a schema change (DATA_MODEL §9: a
+   column or `population_geo` value for the area covered), area-level official
+   results as the comparison target, and a methodology change (M-1.4) that
+   defines it. The `out_of_scope` inventory rows are then the checklist (they
+   are not archived yet).
+9. **Polls without fieldwork dates** (Verifield, Aug 2024) are recorded: both
+   dates stay empty, `poll_id` uses `published_date` (R-70, DATA_MODEL §4.4),
+   and validation warns with R-86. Such a poll is outside the M-1.3 windows: it
+   enters no windowed metric (METHODOLOGY M-1.3, OI-4), it stays in the data and
+   is shown, and the missing dates lower its transparency score (M-5.3). The
+   publication date is never used as a substitute for the fieldwork (§0.1).
 
 ## 1. Set up the pollster directory
 
@@ -187,7 +278,8 @@ List **every** publication you looked at, also the ones you will not use:
 a media report of a poll whose own report you use is `excluded` /
 `duplicate` (with `poll_id` once the poll exists); an exit poll is
 `exit_poll`; a poll outside the window is `out_of_window`; an attitudes
-survey or a pre-round-1 head-to-head is `out_of_scope`. The status column
+survey, a subnational survey (§0.5 item 8) or a pre-round-1 head-to-head is
+`out_of_scope`. The status column
 rules are R-73 (validation enforces them).
 
 ## 4. Archive each publication
@@ -355,12 +447,12 @@ raw file or the snapshot), value by value:
       `30.0`); `<1%` is `share_raw = 1`, `share_qualifier = lt`;
 - [ ] each base the publication shows has its own rows and the right
       `share_base` (`all_respondents`, `expressed_option`, `likely_voters`, or
-      `other_subset` with `notes` quoting the base description);
+      `other_subset` with `notes` quoting the base description; §0.5 item 4);
 - [ ] labels are verbatim (comma-below diacritics); `entity_id` and
       `option_type` are right, and the same label maps to the same entity in
       every poll of this pollster and election (R-62);
 - [ ] the dates, `sample_size`, `mode`, population, question, sponsor, MoE,
-      and weighting are as stated, and empty where not stated (§0.1);
+      and weighting are as stated, and empty where not stated (§0.1, §0.5);
 - [ ] crosstabs (subgroups) and hypothetical scenarios are not mixed into the
       topline (a second scenario of the same survey is a separate poll with
       `headline = false`, DATA_MODEL §6.11);

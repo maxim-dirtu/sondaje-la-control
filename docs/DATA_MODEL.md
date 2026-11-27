@@ -1,6 +1,6 @@
 # Data Model and CSV Schemas
 
-**Schema version:** 1.3 · **Owner:** T-001 (amended by T-007, T-011, T-016) · **Last updated:** 2026-11-28
+**Schema version:** 1.3 · **Owner:** T-001 (amended by T-007, T-011, T-016, T-018: conventions only, no schema change) · **Last updated:** 2026-11-28
 
 This document is the contract for everything under `data/`. Collection tasks
 (T-004, T-005, T-010, the pollster tasks T-012+) write files that follow it,
@@ -496,7 +496,8 @@ One row per **poll**: one voting-intention question (one scenario) for one
 election, from one survey. A survey that asks two questions for the same
 election (e.g. two candidate lists) produces two polls, exactly one of which
 is the `headline` poll. Questions for elections that are not in the registry
-are not recorded. Exit polls (fieldwork on election day) are out of scope.
+are not recorded. Subnational surveys (one city or region) and exit polls
+(fieldwork on election day) are out of scope.
 Key: `poll_id`.
 
 | Column | Type | Req | Allowed values / format | Example | Description |
@@ -504,18 +505,18 @@ Key: `poll_id`.
 | `poll_id` | slug | yes | §4.4 | `exemplar-parl-2024-cd-20241124` | |
 | `pollster_id` | slug | yes | FK → `pollsters`; equals the directory name | `exemplar` | The firm that conducted the fieldwork. |
 | `election_id` | slug | yes | FK → `elections` | `parl-2024-cd` | The election the question is about. |
-| `headline` | bool | yes | `true` · `false` | `true` | `true` for the poll the pollster presents as its main result; exactly one per survey (R-63). |
+| `headline` | bool | yes | `true` · `false` | `true` | `true` for the poll the pollster presents as its main result; exactly one per survey (R-63). With several candidate lists, the headline is the list that matches the ballot as it stood during fieldwork ([POLL_INGESTION §0.5](POLL_INGESTION.md) item 1). |
 | `scenario` | text | cond | English | `Candidate list without X` | Describes the question variant. Required when `headline = false`. |
 | `fieldwork_start` | date | no | `YYYY-MM-DD` | `2024-11-18` | First day of fieldwork, as published. |
-| `fieldwork_end` | date | no | `YYYY-MM-DD` | `2024-11-24` | Last day of fieldwork, as published. Used for M-1.3 windows. |
+| `fieldwork_end` | date | no | `YYYY-MM-DD` | `2024-11-24` | Last day of fieldwork, as published. Used for M-1.3 windows. A poll with no fieldwork dates is recorded with both empty (R-86 warns); it is outside every M-1.3 window ([POLL_INGESTION §0.5](POLL_INGESTION.md) item 9). |
 | `published_date` | date | yes | `YYYY-MM-DD` | `2024-11-26` | First publication date of the results. |
 | `sample_size` | int | no | ≥ 1 | `1100` | Total respondents (`n`), as published. |
 | `sample_size_expressed` | int | no | ≥ 1, ≤ `sample_size` | `792` | Respondents in the `expressed_option` base, if published. |
 | `mode` | enum | no | `cati` · `cawi` · `capi` · `papi` · `face_to_face` · `mixed` · `other` | `cati` | Data collection mode (the interview channel), as published. `face_to_face`: in-person interviews when the publication does not say whether CAPI or PAPI was used. `mixed`/`other`: details in `notes`. Conventions below the table. |
-| `population` | enum | no | `adults` · `likely_voters` · `other` | `adults` | Sampled population: all adults with the right to vote, or respondents filtered as likely to vote. |
-| `population_geo` | enum | no | `residents` · `residents_and_diaspora` · `diaspora` | `residents` | Geographic coverage, as published. Empty if not stated. |
+| `population` | enum | no | `adults` · `likely_voters` · `other` | `adults` | Sampled population, as this poll's publication states its universe: all adults with the right to vote (`adults`), or respondents screened as likely to vote (`likely_voters`). Empty if the publication states none. Conventions below the table. |
+| `population_geo` | enum | no | `residents` · `residents_and_diaspora` · `diaspora` | `residents` | Geographic coverage, as published. Empty if not stated. `residents_and_diaspora` needs an explicit statement about the sample; published diaspora subgroup results of the same poll are one ([POLL_INGESTION §0.5](POLL_INGESTION.md) item 3). |
 | `target_scope` | enum | yes | `domestic` · `total` · `diaspora` | `domestic` | Result scope the poll is compared to (M-1.4): `domestic` unless the poll explicitly covers the diaspora. Must agree with `population_geo` (R-64). |
-| `question_type` | enum | no | `prompted_list` · `open` · `other` | `prompted_list` | Whether options were read/shown (`prompted_list`) or not (`open`). |
+| `question_type` | enum | no | `prompted_list` · `open` · `other` | `prompted_list` | Whether options were read/shown (`prompted_list`) or not (`open`). `prompted_list` only when the published wording itself presents the options as a list; otherwise empty ([POLL_INGESTION §0.5](POLL_INGESTION.md) item 5). |
 | `question_wording` | text | no | original language, verbatim | `Dacă duminica viitoare …` | Exact wording, if published. |
 | `sponsor` | text | cond | original language | `Televiziunea Exemplu` | Client/sponsor as published by the pollster or, when it names none, as stated explicitly by a media outlet ([POLL_INGESTION §0.1](POLL_INGESTION.md)). Required unless `sponsor_type` is `self` or `not_disclosed`; must be empty for `not_disclosed` (R-65). |
 | `sponsor_type` | enum | yes | `self` · `media` · `party` · `candidate` · `public_institution` · `civil_society` · `business` · `other` · `not_disclosed` | `media` | `self`: the publication states the pollster funded it; `not_disclosed`: no client/sponsor information published, neither by the pollster nor in a media statement that [POLL_INGESTION §0.1](POLL_INGESTION.md) accepts. |
@@ -545,7 +546,8 @@ the client (`sponsor_source = media`) earns no M-5.3 credit. M-5.1d
   the poll: its report, slide, chart, methodology or technical-data page,
   website or social post, even when a media outlet hosts or republishes that
   material. Co-branding by the pollster counts (e.g. the client's logo or a
-  joint title such as "Sondaj Atlas-HotNews" on the pollster's report). So
+  joint title such as "Sondaj Atlas-HotNews" on the pollster's report; the
+  outlet is then the client, POLL_INGESTION §0.5 item 2). So
   does a statement of the pollster or its representative quoted verbatim by
   the media (e.g. the director saying on air "Este comandat de …").
 - `media`: the client is named only by someone other than the pollster, in
@@ -576,7 +578,23 @@ the client (`sponsor_source = media`) earns no M-5.3 credit. M-5.1d
   published for M-5.3, because the publication describes the collection.
 - Several channels in one poll (e.g. CATI plus CAWI): `mixed`, with the
   channels and, if published, their shares in `notes`.
+- "Telephone interviews" ("interviuri telefonice") without the word CATI:
+  `cati`; `notes` says that the source does not use the word.
 - The same conventions apply to the items of `pollsters.typical_modes`.
+
+`population` conventions (one rule for every house):
+- `adults`: the poll's publication states the universe as the adult
+  population, the electorate, or all voters with the right to vote.
+  `likely_voters`: it says that respondents were screened, or the sample
+  restricted, to those likely to vote.
+- A statement about the pollster's samples in general (e.g. an interview quote
+  that its samples are representative of likely voters), or its usual practice,
+  is not a statement about this poll; it goes in `notes` and the column stays
+  as the poll's own publication says (empty if it states no universe).
+- The label of a chart base ("Toți alegătorii") is not a universe. A share
+  base restricted to those who will vote is a `share_base` (§6.12), not the
+  `population`.
+- The pollster's report wins over a media report of it (POLL_INGESTION §0.3).
 
 ### 6.12 `polls/<pollster_id>/poll_results.csv`
 
@@ -586,7 +604,7 @@ Key: (`poll_id`, `share_base`, `option_order`).
 | Column | Type | Req | Allowed values / format | Example | Description |
 |---|---|---|---|---|---|
 | `poll_id` | slug | yes | FK → `polls.poll_id` in the same directory | `exemplar-parl-2024-cd-20241124` | |
-| `share_base` | enum | yes | `all_respondents` · `expressed_option` · `likely_voters` · `other_subset` | `all_respondents` | Who the percentage is computed over: all respondents; only those who named a party/candidate; only respondents who say they will vote; or another subset (explained in `notes`, R-69). Many reports publish two bases; each gets its own rows. |
+| `share_base` | enum | yes | `all_respondents` · `expressed_option` · `likely_voters` · `other_subset` | `all_respondents` | Who the percentage is computed over: all respondents; only those who named a party/candidate; only respondents who say they will vote; or another subset (explained in `notes`, R-69). Many reports publish two bases; each gets its own rows. A base printed as "valid answers of those who will vote" is `expressed_option` when it is the only base published (quote the printed wording in `notes`) and `other_subset` when it is a second base next to an expressed-votes base ([POLL_INGESTION §0.5](POLL_INGESTION.md) item 4). |
 | `option_order` | int | yes | 1, 2, … within (`poll_id`, `share_base`) | `1` | Position in the published table. Contiguous from 1 (R-60). |
 | `option_label` | text | yes | original language, verbatim | `Partidul Exemplu` | The label as published. |
 | `option_type` | enum | yes | see below | `party` | Kind of option. |
@@ -657,7 +675,7 @@ status:
 | Value | Meaning |
 |---|---|
 | `out_of_window` | The fieldwork falls outside the collection window of the task (e.g. more than 120 days before the election). |
-| `out_of_scope` | No voting-intention question for a registered election: an attitudes survey, an election not in the registry, or a round-2 pairing asked before round 1 (R-84). |
+| `out_of_scope` | No voting-intention question for a registered election: an attitudes survey, an election not in the registry, a round-2 pairing asked before round 1 (R-84), or a subnational survey (one city or region; `notes` names the area; POLL_INGESTION §0.5 item 8). |
 | `exit_poll` | Fieldwork on election day (R-81). |
 | `duplicate` | The same survey is captured through another row of this inventory (e.g. a media report of a poll whose own report is used); `poll_id` may name that poll. |
 | `no_topline` | No vote shares are published (e.g. only a ranking or a verbal statement without numbers). A publication with only some shares is not excluded: it is recorded with `topline_coverage = partial`. |
