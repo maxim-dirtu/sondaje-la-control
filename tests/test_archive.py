@@ -183,7 +183,23 @@ def test_no_snapshot_means_nothing_is_written(data_dir: Path) -> None:
     assert "found no snapshot" in str(exc.value)
     assert manifest(data_dir) == []
     assert inventory(data_dir)[0]["status"] == "found"
-    assert (data_dir / "raw/polls/exemplar/exemplar-doc-001.html").is_file()
+    assert not (data_dir / "raw").exists()
+
+
+def test_failed_snapshot_does_not_overwrite_an_existing_raw_file(data_dir: Path) -> None:
+    archive(request(data_dir), happy_web(), TODAY)
+    raw = data_dir / "raw/polls/exemplar/exemplar-doc-001.html"
+    web = FakeWeb(
+        {
+            URL: Response(URL, PAGE.replace(b"30%", b"31%")),
+            SAVE: OSError("timed out"),
+            LOOKUP: Response(LOOKUP, b'{"archived_snapshots": {}}'),
+        }
+    )
+    with pytest.raises(ArchiveError, match="no Web Archive snapshot"):
+        archive(request(data_dir), web, TODAY)
+    assert raw.read_bytes() == PAGE
+    assert manifest(data_dir)[0]["sha256"] == hashlib.sha256(PAGE).hexdigest()
 
 
 def test_snapshot_of_another_url_is_not_accepted(data_dir: Path) -> None:

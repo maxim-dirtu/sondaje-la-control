@@ -5,14 +5,19 @@ DATA_MODEL.md §5.2 and §6.10 (``archive_url``, ``sha256``, ``raw_path``, ``for
 
 1. The publication must already be listed in ``data/polls/<pollster_id>/inventory.csv``
    (§6.13); archiving never invents an inventory row.
-2. The file is downloaded (or read from ``--file`` when it had to be saved by hand) to
-   ``data/raw/polls/<pollster_id>/<document_id>.<ext>`` (git-ignored) and hashed (SHA-256).
+2. The file is downloaded (or read from ``--file`` when it had to be saved by hand), hashed
+   (SHA-256), and saved to ``data/raw/polls/<pollster_id>/<document_id>.<ext>`` (git-ignored)
+   once a snapshot is secured (step 3). A Google Drive ``view`` link is resolved to the direct
+   download, which is also what gets snapshotted. Requests that fail with HTTP 429, a server
+   error, a refused connection, or a timeout are retried (``--retries``).
 3. A Web Archive snapshot is requested through Save Page Now. If that fails, an existing
    snapshot is looked up through the Wayback availability API. ``--archive-url`` supplies a
    snapshot made by other means. **No archive URL is ever made up**: when no snapshot can be
-   created, found, or supplied, the command stops with an error and writes nothing.
-4. The snapshot's bytes are downloaded and compared with the download, and the result is
-   reported (dynamic HTML pages usually differ; PDFs and images should not).
+   created, found, or supplied, the command stops with an error and writes nothing (not even
+   the raw file).
+4. The snapshot's bytes are downloaded (gzip-encoded captures are decompressed) and compared
+   with the download, and the result is reported (dynamic HTML pages usually differ; PDFs and
+   images should not). Running the command again on unchanged bytes repeats the check.
 5. The pollster's ``archive_manifest.csv`` row is appended (or updated, keyed by
    ``source_url``), and every inventory row for the URL gets the ``document_id``; rows with
    status ``found`` move to ``archived``.
@@ -450,8 +455,6 @@ def archive(
     )
     raw_name = document_id + raw_suffix(document_format, content, request.url)
     raw_file = request.data_dir / "raw" / "polls" / request.pollster_id / raw_name
-    raw_file.parent.mkdir(parents=True, exist_ok=True)
-    raw_file.write_bytes(content)
     unchanged = existing is not None and existing["sha256"] == digest
 
     attempts: list[str] = []
@@ -472,10 +475,12 @@ def archive(
         raise ArchiveError(
             "no Web Archive snapshot could be created or found ("
             + "; ".join(attempts)
-            + f"). The download is kept at {raw_file.as_posix()} (sha256 {digest}), but nothing "
-            "was written to the manifest or the inventory. Retry later, or make a snapshot by "
-            "other means and pass it with --archive-url; never enter a URL that was not checked"
+            + f"). Nothing was saved or written (sha256 of the download: {digest}); no raw file "
+            "is left under data/raw/. Retry later, or make a snapshot by other means and pass "
+            "it with --archive-url; never enter a URL that was not checked"
         )
+    raw_file.parent.mkdir(parents=True, exist_ok=True)
+    raw_file.write_bytes(content)
     snapshot_check = (
         check_snapshot(snapshot, digest, fetch)
         if request.check and request.archive_url is None and not unchanged
