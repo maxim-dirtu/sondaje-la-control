@@ -188,14 +188,21 @@ uv run sondaje archive <publication_url> --pollster <pollster_id> --source-type 
 
 The command:
 1. refuses URLs that are not in the inventory (step 3 first);
-2. downloads the file to `data/raw/polls/<pollster_id>/<document_id>.<ext>`
-   and computes its SHA-256;
+2. downloads the file and computes its SHA-256. A Google Drive `view` link
+   (`drive.google.com/file/d/<id>/view`) is resolved to its direct download
+   (`drive.google.com/uc?export=download&id=<id>`), which is also what gets
+   snapshotted; the manifest `source_url` stays the link as listed. A request
+   that fails with HTTP 429, a server error, a refused connection, or a
+   timeout is retried (`--retries`, default 2, waits of 10 s and 20 s);
 3. detects the `format` (`pdf_text` when the PDF has a text layer, `pdf_image`
    otherwise, `html`, `image`, ...; override with `--format`);
 4. requests a Web Archive snapshot (Save Page Now); if that fails, looks up
    the closest existing snapshot;
-5. downloads the snapshot and compares its bytes with the download;
-6. appends (or updates) the `archive_manifest.csv` row and sets the
+5. saves the file to `data/raw/polls/<pollster_id>/<document_id>.<ext>`. This
+   happens only once a snapshot is secured, so a failed run leaves no raw file;
+6. downloads the snapshot and compares its bytes with the download (a
+   gzip-encoded capture is decompressed first);
+7. appends (or updates) the `archive_manifest.csv` row and sets the
    inventory rows of the URL to `archived` with the new `document_id`.
 
 Read its report:
@@ -205,19 +212,29 @@ Read its report:
   what you checked in the manifest `notes` (e.g. "Snapshot HTML differs in
   bytes (dynamic page); article text checked 2026-11-27"). For a PDF or an
   image, a difference means the file changed: find out why before using it.
+- **`snapshot check: NOT CHECKED`**: the snapshot could not be downloaded
+  (connection refused, HTTP 429), even after the retries. The snapshot URL is
+  recorded but unverified (typical after a fallback to an existing capture).
+  Run the same command again later: on unchanged bytes it repeats the check
+  and keeps the manifest row. Or open the snapshot and compare by hand, and
+  say so in `notes`. For a manual comparison with `curl`, use `--compressed`
+  (the Web Archive may serve gzip bytes).
 - **A snapshot date long before today** means Save Page Now returned an
   existing capture. Keep it if the check passes; say so in `notes`.
 - **Error "no Web Archive snapshot could be created or found"**: nothing was
-  written. Retry later. If it keeps failing, make a snapshot by other means
-  (e.g. archive.today), open it, check it, and pass it with
-  `--archive-url <url>`. Until then the inventory row stays `found`, with the
-  reason in `notes`. Never invent an archive URL.
-- **Download refused** (some sites block scripts): save the file with a
-  browser and pass it with `--file <path>`; say so in the manifest `notes`.
+  written, not even the raw file. Retry later. If it keeps failing, make a
+  snapshot by other means (e.g. archive.today), open it, check it, and pass it
+  with `--archive-url <url>`. Until then the inventory row stays `found`, with
+  the reason in `notes`. Never invent an archive URL.
+- **Download refused** (some sites block scripts), or **"Google Drive returned
+  a web page, not the file"** (a private file, a quota limit, or a file too
+  large for Drive's virus-scan check): save the file with a browser and pass
+  it with `--file <path>`; say so in the manifest `notes`.
 
 Re-running `archive` on the same URL updates the same `document_id`: same
-bytes keep the old `retrieved_at` and snapshot; new bytes get today's date
-and a new snapshot (and you must re-check the values extracted from it).
+bytes keep the old `retrieved_at` and snapshot (and the snapshot check is
+repeated); new bytes get today's date and a new snapshot (and you must
+re-check the values extracted from it).
 
 ## 5. Choose the extraction path
 
@@ -232,8 +249,10 @@ against the document `format`.
 | Prose where the tool cannot pair labels and values ("53% la 47% în favoarea lui ...") | double entry (§7) | `manual_double_entry` |
 
 If `extract-pdf` finds no values on a page of a `pdf_text` document, the
-values are in images: render the page and use double entry. When in doubt,
-use double entry; it fits every format.
+values are in images, or the text layer is unreadable (e.g. letters printed as
+separate text runs, as in the Sociopol PDFs): render the page and use double
+entry. `extract-pdf` says which case it found and points to `render-pdf`.
+When in doubt, use double entry; it fits every format.
 
 ## 6. Extract (text PDF, HTML)
 
@@ -251,12 +270,16 @@ uv run sondaje extract-pdf --pollster verifield --document verifield-doc-001 --e
   falls back to `chart` (value labels paired with category labels by
   position); `tables` reads ruled tables. Each draft row's `notes` say where
   it was found (page, line, or chart; `CHECK` when the counts of values and
-  labels differ).
+  labels differ). When it finds no rows, or its text layer looks unreadable
+  (most words single characters, or no text at all), it prints why and points
+  to `render-pdf` and double entry (§7); do not trust rows from such a page.
 - `extract-html` prints the page title, the declared publication time (use it
   for `published_date`), and the images on the page (find broadcast graphics
   here). In `text` mode every percentage on the page becomes a draft row with
   its sentence: delete the rows that are not options of this poll, and check
-  that no option is missing.
+  that no option is missing. A `Name - 50%` line (a dash directly before the
+  value, a short label before it) takes the text before the dash as its
+  label.
 - `--election` limits the entity guesses to contestants of that election
   (candidates for a presidential round).
 - `render-pdf` writes PNG images of PDF pages (for the review in §8 and for
@@ -294,7 +317,9 @@ by a tool.
    uv run sondaje double-entry-diff build\double-entry\<poll_id>\pass-a build\double-entry\<poll_id>\pass-b
    ```
    It lists every missing or extra poll, base, or option (options are matched
-   by their exact label), and every differing cell (`retrieved_at` and
+   by their exact label; when a label repeats in a base, such as two "Altul"
+   rows, the repeats are matched by `option_order`, then by position), and
+   every differing cell (`retrieved_at` and
    `notes` are ignored). Exit code 0 = the passes agree, 1 = mismatches.
 5. **Resolve every mismatch against the archived original**, never by
    choosing a pass or splitting the difference. Correct the pass that is
