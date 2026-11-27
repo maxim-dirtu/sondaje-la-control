@@ -57,11 +57,12 @@ and judge whether the explanations work for a non-expert.
 | 6 | **Campaign houses** (e.g. Verifield: final window in one election only): the card says which elections count for the final-poll metrics and which only for the campaign view | ADR-0012 | Not in the mock-ups |
 | 7 | Remove the "Date fictive" banner from screens that use real data. Keep it on any screen that still uses fixtures | T-031 | Banner is on every page |
 | 8 | Check the **desktop two-column layout** (wider than 960 px), which the T-031 agent could not screenshot | T-031 follow-up | `components.css` |
+| 9 | **Every number links to its source** (I-019). A small external-link icon (↗) next to each poll value and each official result opens a popover. For polls it shows the original publication (`source_url`), the archived copy (`archive_url`), and the verification level (the pollster's own report vs media only; wording by T-051). For results it links the AEP/BEC source. The links are generated from `polls.document_id` → `archive_manifest.csv`, never typed by hand. Polls with sources in several documents (e.g. a graphic plus the article that gives the fieldwork dates) list every document. Also add an internal **sources page**: every archived document with both links, its SHA-256, its inventory status and the polls it feeds | Owner, 2026-11-27 | The mock-ups only have a "Sursa" column and a CSV download |
 
 ## Acceptance criteria
 - [ ] All screens read real MVP data produced by the pipeline. None contains
       hard-coded figures.
-- [ ] Each of the 8 fixes above is done, or declined with a reason in the Log.
+- [ ] Each of the 9 fixes above is done, or declined with a reason in the Log.
 - [ ] No screen uses accusatory wording ([ADR-0003](../docs/decisions/0003-neutral-language.md)).
       Every deviation shows its magnitude and its uncertainty.
 - [ ] The low-certainty, "no grade yet" and "not available yet" states are
@@ -72,5 +73,9 @@ and judge whether the explanations work for a non-expert.
 ## Follow-ups
 
 ## Log
+- 2026-11-27 (coordinator): fix 9 (source links and the sources page) added
+  at the owner's request (I-019). The owner chose a popover that shows both
+  links and the verification level. The internal lookup is built here, not as
+  a separate CLI task.
 
 ## Outcome
