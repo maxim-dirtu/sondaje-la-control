@@ -481,6 +481,31 @@ CASES = [
         lambda d: d.update(POLLS, 2, sponsor_type="not_disclosed"),
         ("R-65", E),
     ),
+    case(
+        "R-65-missing-sponsor-source",
+        EXAMPLE,
+        lambda d: d.update(POLLS, 2, sponsor_source=""),
+        ("R-65", E),
+    ),
+    case(
+        "R-65-undisclosed-with-sponsor-source",
+        PRESIDENTIAL,
+        lambda d: d.update(POLLS, 4, sponsor_source="media", notes="Named by a news site."),
+        ("R-65", E),
+    ),
+    case(
+        "R-65-self-needs-sponsor-source",
+        EXAMPLE,
+        lambda d: d.update(POLLS, 2, sponsor="", sponsor_type="self", sponsor_source=""),
+        ("R-65", E),
+    ),
+    case(
+        "R-03-sponsor-source",
+        EXAMPLE,
+        lambda d: d.update(POLLS, 2, sponsor_source="client"),
+        ("R-03", E),
+    ),
+    case("R-79", EXAMPLE, lambda d: d.update(POLLS, 2, sponsor_source="media"), ("R-79", W)),
     case("R-66-moe", EXAMPLE, lambda d: d.update(POLLS, 2, moe_published="false"), ("R-66", E)),
     case(
         "R-66-sample",
@@ -705,6 +730,18 @@ CASES = [
         lambda d: add_guest(d, host="gama"),
     ),
     case("pass-mode-face-to-face", EXAMPLE, lambda d: d.update(POLLS, 2, mode="face_to_face")),
+    case(
+        "pass-R-79-media-sponsor-cited",
+        EXAMPLE,
+        lambda d: d.update(
+            POLLS, 2, sponsor_source="media", notes="Client named by the outlet (doc-002)."
+        ),
+    ),
+    case(
+        "pass-self-sponsor-source",
+        EXAMPLE,
+        lambda d: d.update(POLLS, 2, sponsor="", sponsor_type="self"),
+    ),
     case(
         "pass-typical-modes-face-to-face",
         EXAMPLE,

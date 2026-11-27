@@ -11,7 +11,7 @@ from dataclasses import dataclass
 from decimal import Decimal
 from enum import StrEnum
 
-SCHEMA_VERSION = "1.2"
+SCHEMA_VERSION = "1.3"
 """DATA_MODEL.md schema version implemented here."""
 
 
@@ -124,6 +124,7 @@ SPONSOR_TYPES = (
     "other",
     "not_disclosed",
 )
+SPONSOR_SOURCES = ("pollster", "media")
 TOPLINE_COVERAGES = ("full", "partial")
 EXTRACTION_METHODS = ("pdf_text", "html", "manual_double_entry")
 SHARE_BASES = ("all_respondents", "expressed_option", "likely_voters", "other_subset")
@@ -405,6 +406,7 @@ POLLS = Table(
         _col("topline_coverage", T.ENUM, YES, TOPLINE_COVERAGES),
         _col("document_id", T.SLUG, references="archive_manifest.document_id"),
         _col("extraction_method", T.ENUM, YES, EXTRACTION_METHODS),
+        _col("sponsor_source", T.ENUM, COND, SPONSOR_SOURCES),
         *PROVENANCE,
     ),
 )

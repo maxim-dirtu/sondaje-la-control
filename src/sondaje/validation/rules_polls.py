@@ -1,4 +1,4 @@
-"""Poll-file rules: R-60…R-72."""
+"""Poll-file rules: R-60…R-72 and R-79 (the inventory rules are in rules_inventory)."""
 
 import re
 from collections import defaultdict
@@ -142,7 +142,7 @@ def check_polls(
     manifest_file: DataFile | None,
     reporter: Reporter,
 ) -> None:
-    """R-60 (poll without results), R-63…R-68, R-70 on ``polls.csv``."""
+    """R-60 (poll without results), R-63…R-68, R-70, R-79 on ``polls.csv``."""
     shown = polls_file.display_path
     polls_with_results = {
         poll_id
@@ -192,6 +192,21 @@ def check_polls(
                 )
             if sponsor_type == "not_disclosed" and not row.is_empty("sponsor"):
                 reporter.error(shown, line, "R-65", "sponsor must be empty when not_disclosed")
+            if sponsor_type == "not_disclosed" and not row.is_empty("sponsor_source"):
+                reporter.error(
+                    shown, line, "R-65", "sponsor_source must be empty when not_disclosed"
+                )
+            if sponsor_type != "not_disclosed" and row.is_empty("sponsor_source"):
+                reporter.error(
+                    shown, line, "R-65", f"sponsor_type {sponsor_type!r} needs a sponsor_source"
+                )
+        if row.get_str("sponsor_source") == "media" and row.is_empty("notes"):
+            reporter.warning(
+                shown,
+                line,
+                "R-79",
+                "sponsor_source = media needs notes that cite the media document",
+            )
         if not row.is_empty("margin_of_error") and row.get_bool("moe_published") is False:
             reporter.error(shown, line, "R-66", "margin_of_error is set but moe_published = false")
         size, expressed = row.get_int("sample_size"), row.get_int("sample_size_expressed")
