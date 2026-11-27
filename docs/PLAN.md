@@ -1,6 +1,6 @@
 # Project Plan
 
-**Last updated:** 2026-11-27 · **Current phase:** 1 (Data collection). Phase 0 is complete.
+**Last updated:** 2026-11-27 · **Current phase:** 2 (Core metrics). Phases 0 and 1 (M1) are complete; T-016…T-018 finish the collection round.
 
 The task files in [tasks/](../tasks/) are the source of truth for status. This
 document defines **what** gets built and **in which order**. It does not track
@@ -77,6 +77,8 @@ are approved.
 | T-014 | Polls: CURS (all 3 elections) | T-011 |
 | T-015 | Polls: Verifield (all 3 elections; campaign house) | T-011 |
 | T-016 | Sponsor source: credit M-5.3 "client disclosed" only when the pollster discloses it | T-012–T-015 |
+| T-017 | Poll tooling fixes (archive, extract, double-entry-diff) from the collection round | T-011 |
+| T-018 | Protocol and data-model clarifications (owner decisions from the collection round) | T-016 |
 
 The selection and its rules are in [ADR-0012](decisions/0012-mvp-pollsters.md).
 T-011 committed three demonstration polls (Verifield round 2; Sociopol
@@ -87,6 +89,8 @@ files and do not collect them again. The protocol is
 **Milestone M1:** the 3 elections have validated results, and every selected
 pollster has validated full-topline polls with archived originals. The four
 pollster tasks run in parallel with each other, after T-011.
+**Reached 2026-11-27:** 45 polls (AtlasIntel 11, CURS 10, Sociopol 19,
+Verifield 5) across the three elections.
 
 ### Phase 2: Core metrics
 | ID | Task | Depends on |
