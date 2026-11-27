@@ -1,7 +1,7 @@
 ---
 id: T-020
 title: Data preparation pipeline
-status: review
+status: done
 phase: 2
 depends_on: [T-002, T-003]
 owner: github-copilot-cli
