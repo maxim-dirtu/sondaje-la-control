@@ -1,6 +1,6 @@
 # Data Model and CSV Schemas
 
-**Schema version:** 1.3 · **Owner:** T-001 (amended by T-007, T-011, T-016) · **Last updated:** 2026-11-27
+**Schema version:** 1.3 · **Owner:** T-001 (amended by T-007, T-011, T-016) · **Last updated:** 2026-11-28
 
 This document is the contract for everything under `data/`. Collection tasks
 (T-004, T-005, T-010, the pollster tasks T-012+) write files that follow it,
@@ -518,14 +518,14 @@ Key: `poll_id`.
 | `question_type` | enum | no | `prompted_list` · `open` · `other` | `prompted_list` | Whether options were read/shown (`prompted_list`) or not (`open`). |
 | `question_wording` | text | no | original language, verbatim | `Dacă duminica viitoare …` | Exact wording, if published. |
 | `sponsor` | text | cond | original language | `Televiziunea Exemplu` | Client/sponsor as published by the pollster or, when it names none, as stated explicitly by a media outlet ([POLL_INGESTION §0.1](POLL_INGESTION.md)). Required unless `sponsor_type` is `self` or `not_disclosed`; must be empty for `not_disclosed` (R-65). |
-| `sponsor_type` | enum | yes | `self` · `media` · `party` · `candidate` · `public_institution` · `civil_society` · `business` · `other` · `not_disclosed` | `media` | `self`: the publication states the pollster funded it; `not_disclosed`: no client/sponsor information published. |
+| `sponsor_type` | enum | yes | `self` · `media` · `party` · `candidate` · `public_institution` · `civil_society` · `business` · `other` · `not_disclosed` | `media` | `self`: the publication states the pollster funded it; `not_disclosed`: no client/sponsor information published, neither by the pollster nor in a media statement that [POLL_INGESTION §0.1](POLL_INGESTION.md) accepts. |
 | `weighting_published` | bool | yes | `true` · `false` | `true` | The publication describes the weighting. |
 | `moe_published` | bool | yes | `true` · `false` | `true` | The publication states a margin of error. |
 | `margin_of_error` | decimal | no | pp, as published | `3` | Margin of error in percentage points (e.g. `±3%` → `3`). Allowed only if `moe_published = true` (R-66). |
 | `topline_coverage` | enum | yes | `full` · `partial` | `full` | `full`: every option the publication shows was captured **and** the publication shows a complete topline (all options, incl. undecided/non-response where asked). `partial`: the source shows only some options (e.g. an article listing the leading parties). |
 | `document_id` | slug | yes | FK → `archive_manifest.document_id` in the same directory | `exemplar-doc-001` | The archived document the values were extracted from. |
 | `extraction_method` | enum | yes | `pdf_text` · `html` · `manual_double_entry` | `pdf_text` | §5.2. Must fit the document format (R-67). |
-| `sponsor_source` | enum | cond | `pollster` · `media` | `pollster` | Who named the client/sponsor. Set iff `sponsor_type ≠ not_disclosed` (R-65). Conventions below the table. |
+| `sponsor_source` | enum | cond | `pollster` · `media` | `pollster` | Who named the client/sponsor: the pollster itself, or only someone else (a media outlet, or the client presenting the poll). Set iff `sponsor_type ≠ not_disclosed` (R-65). Conventions below the table. |
 | provenance block | | | §5.1 | | `source_url` equals the document's `source_url` (R-68). |
 
 M-5.3 transparency items are read from these columns: sample size
@@ -535,10 +535,10 @@ M-5.3 transparency items are read from these columns: sample size
 error (`moe_published`), client/sponsor (`sponsor_source = pollster`).
 They describe what the **source used** published. If the media article lacks
 an item that the pollster's own report has, use the pollster's report.
-The client/sponsor item is the exception: a client named only by the media
-(`sponsor_source = media`) earns no M-5.3 credit, because the pollster did not
-disclose it. M-5.1d (party-commissioned polls) reads `sponsor_type` whatever
-the `sponsor_source`.
+The client/sponsor item is the exception: it is credited only when the
+pollster itself disclosed the client. A client named only by the media or by
+the client (`sponsor_source = media`) earns no M-5.3 credit. M-5.1d
+(party-commissioned polls) reads `sponsor_type` whatever the `sponsor_source`.
 
 `sponsor_source` conventions:
 - `pollster`: the pollster itself names the client, in its own material for
@@ -548,15 +548,17 @@ the `sponsor_source`.
   joint title such as "Sondaj Atlas-HotNews" on the pollster's report). So
   does a statement of the pollster or its representative quoted verbatim by
   the media (e.g. the director saying on air "Este comandat de …").
-- `media`: the client is named only by a media outlet, or by the client
-  itself when it presents the poll (POLL_INGESTION §0.1), in its own words:
-  e.g. the client outlet's "realizat la comanda România TV", a broadcaster's
-  on-screen technical data, a client's slide that credits the pollster as
-  source, or a "potrivit surselor" report. The document is archived and cited
-  in `notes` with its `document_id` (R-79 warns when `notes` is empty).
+- `media`: the client is named only by someone other than the pollster, in
+  their own words: a media outlet, the client itself when it presents the
+  poll (POLL_INGESTION §0.1), or a third party quoting them. Examples: the
+  client outlet's "realizat la comanda România TV", a broadcaster's on-screen
+  technical data (also when a regulator's decision quotes it), or a client's
+  slide that credits the pollster as source. The document is archived and
+  cited in `notes` with its `document_id` (R-79 warns when `notes` is empty).
 - When the pollster's material names the client, the value is `pollster`
   even if the media also names it. When they disagree, the pollster wins
-  (POLL_INGESTION §0.3).
+  (POLL_INGESTION §0.3). The pollster's usual practice (e.g. its other
+  reports naming the same client) is not enough for `pollster`.
 - Empty iff `sponsor_type = not_disclosed`. For `self`, it records who
   stated that the pollster funded the poll.
 
@@ -699,7 +701,7 @@ elections/<election_id>/archive_manifest.csv  and  polls/<pollster_id>/archive_m
 document_id,title,published_date,format,archive_url,sha256,raw_path,source_url,source_type,retrieved_at,notes
 
 polls/<pollster_id>/polls.csv
-poll_id,pollster_id,election_id,headline,scenario,fieldwork_start,fieldwork_end,published_date,sample_size,sample_size_expressed,mode,population,population_geo,target_scope,question_type,question_wording,sponsor,sponsor_type,weighting_published,moe_published,margin_of_error,topline_coverage,document_id,extraction_method,source_url,source_type,retrieved_at,verified,notes
+poll_id,pollster_id,election_id,headline,scenario,fieldwork_start,fieldwork_end,published_date,sample_size,sample_size_expressed,mode,population,population_geo,target_scope,question_type,question_wording,sponsor,sponsor_type,weighting_published,moe_published,margin_of_error,topline_coverage,document_id,extraction_method,sponsor_source,source_url,source_type,retrieved_at,verified,notes
 
 polls/<pollster_id>/poll_results.csv
 poll_id,share_base,option_order,option_label,option_type,entity_id,share_raw,share_qualifier,source_url,source_type,retrieved_at,verified,notes
@@ -808,7 +810,7 @@ Parameters (T-003 exposes them as constants):
 | R-62 | E | Within one (`pollster_id`, `election_id`), the same `option_label` always maps to the same `entity_id` (including an empty one: a label left without entity in one poll and mapped in another is an error). Within one (`poll_id`, `share_base`), an `entity_id` appears at most once. |
 | R-63 | E | Polls sharing (`document_id`, `election_id`, `fieldwork_start`, `fieldwork_end`) form one survey: exactly one of them has `headline = true`. `headline = false` requires a non-empty `scenario`. The cells are compared as written, so polls with empty fieldwork dates from the same document form one survey. |
 | R-64 | E | `population_geo` ↔ `target_scope`: `residents` → `domestic`; `residents_and_diaspora` → `total`; `diaspora` → `diaspora`. Empty `population_geo` → `target_scope = domestic`, unless `notes` explains otherwise (then W). |
-| R-65 | E | `sponsor` is not empty unless `sponsor_type` ∈ {`self`, `not_disclosed`}; `sponsor` is empty when `sponsor_type = not_disclosed`. |
+| R-65 | E | `sponsor` is not empty unless `sponsor_type` ∈ {`self`, `not_disclosed`}; `sponsor` is empty when `sponsor_type = not_disclosed`. `sponsor_source` is set iff `sponsor_type ≠ not_disclosed`. |
 | R-66 | E | `margin_of_error` is set only if `moe_published = true`. `sample_size_expressed ≤ sample_size` when both are set. |
 | R-67 | E | `extraction_method` fits the document `format`: `pdf_text` needs `pdf_text`; `html` needs `html`; `manual_double_entry` fits any format. |
 | R-68 | E | `polls.source_url` equals `source_url` of its `document_id` in the same directory. |
@@ -822,6 +824,7 @@ Parameters (T-003 exposes them as constants):
 | R-76 | W | An `archive_manifest.csv` document of a pollster that no `inventory` row references. |
 | R-77 | W | `inventory`: `found_via = other` or `exclusion_reason = other` without `notes`. |
 | R-78 | W | `inventory`: an `extracted` or `verified` row whose `fieldwork_start` or `fieldwork_end` differs from its poll's (when both are set). `published_date` is not compared: a later publication of a poll has its own date. |
+| R-79 | W | `polls`: `sponsor_source = media` without `notes` (the notes cite the document that names the client, §6.11). |
 
 ### 7.6 Dates
 
@@ -859,9 +862,9 @@ Parameters (T-003 exposes them as constants):
 | M-3.1–M-3.3 | `t`, all campaign polls | `polls.fieldwork_start/end`, `published_date`, `headline` (avoids counting two scenarios of one survey) |
 | M-3.4 | `n` per poll | `polls.sample_size` (and `sample_size_expressed`) |
 | M-4.1 | `n`, `r_j` | `polls.sample_size`, results |
-| M-5.1d | party-commissioned polls; affiliations | `polls.sponsor_type ∈ {party, candidate}`, `pollster_affiliations.csv` |
+| M-5.1d | party-commissioned polls; affiliations | `polls.sponsor_type ∈ {party, candidate}` (any `sponsor_source`), `pollster_affiliations.csv` |
 | M-5.1e | elections covered | distinct `polls.election_id` per pollster |
-| M-5.3 | sample size, fieldwork dates, mode, wording, weighting, MoE, sponsor | §6.11 (mapping listed under the table) |
+| M-5.3 | sample size, fieldwork dates, mode, wording, weighting, MoE, sponsor | §6.11 (mapping listed under the table; sponsor: `sponsor_source = pollster`) |
 
 ## 9. Changing the schema
 
@@ -881,6 +884,7 @@ Parameters (T-003 exposes them as constants):
 | 1.0 | T-001 | initial | Frozen at Milestone M0. |
 | 1.1 | T-007 | minor (additive) | New `entity_map.relation` value `ran_on_list_of` (§6.6) with rules R-45 and R-46, and R-40 extended to it. New `mode` value `face_to_face` and `mode` conventions (§6.11). New warning R-35 (affiliation counterpart not linked to its entity). Person-ID rules: which given name, full family name, one person in two roles (§4.2). Meaning of `verified` in the pollster registries (§5.3). §7: output format, `--against REF`, one finding per problem, and the readings T-003 implemented (R-01, R-03, R-05, R-20, R-34, R-43, R-53, R-62, R-63, R-81). Migration: no header changed; `parl-2024-cd/entity_map.csv` row `pmp` set to `ran_on_list_of` → `fd`; `counterpart_entity_id` filled in six `pollster_affiliations.csv` rows. |
 | 1.2 | T-011 | minor (additive) | New file `polls/<pollster_id>/inventory.csv` (§6.13, the poll inventory; header in §6.14), which every pollster directory must have (R-05; the "reserved; not validated" warning is gone). New rules R-73…R-78 (§7.5). The worked example (§10) gains an inventory. Migration: none (no pollster directory existed). |
+| 1.3 | T-016 | minor (additive) | New column `polls.sponsor_source` (`pollster` · `media`, §6.11; header in §6.14): who named the client. The M-5.3 client/sponsor item now reads `sponsor_source = pollster` (M-5.1d still reads `sponsor_type`). R-65 extended (set iff `sponsor_type ≠ not_disclosed`); new warning R-79 (`media` without `notes`). `sponsor` and `sponsor_type` describe a client stated by the media too (POLL_INGESTION §0.1). The worked example (§10) gains the column. Migration: the column was added to the 45 polls of `atlasintel`, `curs`, `sociopol` and `verifield` (values decided per poll from its sources, T-016 Log); no other cell changed. |
 
 ## 10. Worked example (fictitious)
 
@@ -987,8 +991,8 @@ exemplar-doc-001,"Barometru politic, mai 2099",2099-05-26,pdf_text,https://web.a
 
 `data/polls/exemplar/polls.csv`
 ```csv
-poll_id,pollster_id,election_id,headline,scenario,fieldwork_start,fieldwork_end,published_date,sample_size,sample_size_expressed,mode,population,population_geo,target_scope,question_type,question_wording,sponsor,sponsor_type,weighting_published,moe_published,margin_of_error,topline_coverage,document_id,extraction_method,source_url,source_type,retrieved_at,verified,notes
-exemplar-parl-2099-cd-20990524,exemplar,parl-2099-cd,true,,2099-05-20,2099-05-24,2099-05-26,1100,792,cati,adults,residents,domestic,prompted_list,"Dacă duminica viitoare ar avea loc alegeri pentru Camera Deputaților, cu ce partid sau alianță ați vota?",Televiziunea Exemplu,media,true,true,3,full,exemplar-doc-001,pdf_text,https://example.org/exemplar/raport-2099-05.pdf,pollster,2099-05-27,true,
+poll_id,pollster_id,election_id,headline,scenario,fieldwork_start,fieldwork_end,published_date,sample_size,sample_size_expressed,mode,population,population_geo,target_scope,question_type,question_wording,sponsor,sponsor_type,weighting_published,moe_published,margin_of_error,topline_coverage,document_id,extraction_method,sponsor_source,source_url,source_type,retrieved_at,verified,notes
+exemplar-parl-2099-cd-20990524,exemplar,parl-2099-cd,true,,2099-05-20,2099-05-24,2099-05-26,1100,792,cati,adults,residents,domestic,prompted_list,"Dacă duminica viitoare ar avea loc alegeri pentru Camera Deputaților, cu ce partid sau alianță ați vota?",Televiziunea Exemplu,media,true,true,3,full,exemplar-doc-001,pdf_text,pollster,https://example.org/exemplar/raport-2099-05.pdf,pollster,2099-05-27,true,
 ```
 
 `data/polls/exemplar/poll_results.csv`
@@ -1025,7 +1029,9 @@ sums to 100 and the `expressed_option` base to 101, both within ±2.0.
 R-41: `delta`, `epsilon`, `zeta` are not contestants in `results.csv`, and
 `gama` is. R-51/R-53: 2,000,000 + 100,000 = 2,100,000 for `alfa`, and the
 domestic votes sum to 4,745,000 = `valid_votes`. R-64: `residents` →
-`domestic`. R-68: the poll's `source_url` equals the document's. R-73–R-75:
+`domestic`. R-65: the report names its client, so `sponsor` is set and
+`sponsor_source = pollster` (the poll earns the M-5.3 client item). R-68: the
+poll's `source_url` equals the document's. R-73–R-75:
 the report's inventory row is `verified` with its document and poll, the
 media report is a `duplicate` of that poll, and the poll is covered.
 
