@@ -175,6 +175,12 @@ Proposals for the coordinator (no new task IDs created):
   `uv run ruff check .` (passed); `uv run ruff format --check .` (passed);
   `uv run sondaje validate --against main` (0 errors, 91 warnings, none
   R-65/R-79).
+- **2026-11-28 Owner decisions (coordinator).** Open question 1
+  (`sociopol-pres-2025-r1-20250411`): `media`, unchanged. Open question 2
+  (`verifield-parl-2024-cd-20240828`): an unattributed "potrivit surselor" is
+  a rumour under §0.1, so the poll is now `sponsor_type = not_disclosed`,
+  with `sponsor` and `sponsor_source` empty. Libertatea's claim stays in
+  `notes`. The counts are now 10 `pollster`, 20 `media`, 15 empty.
 
 ## Outcome
 **Done.** `polls.csv` gains `sponsor_source` (schema 1.3): `pollster` when the
@@ -183,8 +189,8 @@ statement of its director), `media` when only an outlet or the client does,
 empty for `not_disclosed`. M-5.3 credits the client item only for
 `pollster`; M-5.1d keeps reading `sponsor_type`. R-65 enforces the pairing,
 R-79 warns on a `media` value without citing notes. All 45 polls migrated
-(10 `pollster`, 21 `media`, 14 empty), plus the test fixtures and the §10
-worked example.
+(10 `pollster`, 20 `media`, 15 empty, after the owner's decisions), plus the
+test fixtures and the §10 worked example.
 
 **Key commits:** `0d593c2` start; `ea0d53f` column and rules; `2622179`
 migration; `2a2981b` docs and tests; final commit with Log/Outcome.
