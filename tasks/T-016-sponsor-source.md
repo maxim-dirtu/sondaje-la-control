@@ -1,11 +1,11 @@
 ---
 id: T-016
 title: "Sponsor source: credit M-5.3 'client disclosed' only when the pollster discloses it"
-status: todo
+status: in-progress
 phase: 1
 depends_on: [T-012, T-013, T-014, T-015]
-owner: null
-branch: null
+owner: copilot-agent
+branch: task/T-016-sponsor-source
 methodology: [M-5.3, M-5.1d]
 created: 2026-11-27
 updated: 2026-11-27
