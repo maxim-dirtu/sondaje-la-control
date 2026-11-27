@@ -377,16 +377,31 @@ def test_download_failure_is_reported(data_dir: Path) -> None:
 
 def test_rearchiving_unchanged_bytes_keeps_the_row(data_dir: Path) -> None:
     archive(request(data_dir), happy_web(), TODAY)
-    web = FakeWeb({URL: Response(URL, PAGE)})
+    web = FakeWeb({URL: Response(URL, PAGE), RAW_SNAPSHOT: Response(RAW_SNAPSHOT, PAGE)})
     result = archive(request(data_dir, title=None), web, dt.date(2099, 7, 1))
     assert result.status == "unchanged"
-    assert web.calls == [URL]
+    assert web.calls == [URL, RAW_SNAPSHOT]
     [row] = manifest(data_dir)
     assert (row["retrieved_at"], row["title"], row["archive_url"]) == (
         "2099-06-01",
         "Barometru, mai 2099",
         SNAPSHOT,
     )
+
+
+def test_rerun_after_a_failed_snapshot_download_repeats_the_check(data_dir: Path) -> None:
+    first = happy_web()
+    first.routes[RAW_SNAPSHOT] = ConnectionRefusedError("[WinError 10061] refused")
+    result = archive(request(data_dir), first, TODAY)
+    assert result.snapshot_check is not None and result.snapshot_check.startswith("NOT CHECKED")
+    second = happy_web()
+    result = archive(request(data_dir), second, TODAY)
+    assert result.status == "unchanged"
+    assert result.snapshot_origin.startswith("kept from the manifest")
+    assert result.snapshot_check is not None and result.snapshot_check.startswith("identical")
+    assert second.calls == [URL, RAW_SNAPSHOT]
+    skipped = archive(request(data_dir, check=False), happy_web(), TODAY)
+    assert skipped.snapshot_check is None
 
 
 def test_changed_bytes_update_the_same_document(data_dir: Path) -> None:

@@ -483,7 +483,7 @@ def archive(
     raw_file.write_bytes(content)
     snapshot_check = (
         check_snapshot(snapshot, digest, fetch)
-        if request.check and request.archive_url is None and not unchanged
+        if request.check and request.archive_url is None
         else None
     )
 
