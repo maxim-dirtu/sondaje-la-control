@@ -1,8 +1,11 @@
 """``sondaje archive``: download, hash, snapshot, manifest and inventory (no network)."""
 
 import datetime as dt
+import gzip
 import hashlib
 import io
+import urllib.error
+from email.message import Message
 from pathlib import Path
 
 import pytest
@@ -10,11 +13,14 @@ import pytest
 from sondaje.cli import main
 from sondaje.ingest import archive as archive_module
 from sondaje.ingest.archive import (
+    SAVE_ENDPOINT,
     ArchiveError,
     ArchiveRequest,
     Response,
     archive,
     detect_format,
+    direct_download_url,
+    format_result,
     snapshot_url,
 )
 from sondaje.ingest.csvio import read_rows, write_rows
@@ -32,15 +38,19 @@ LOOKUP = (
 
 
 class FakeWeb:
-    """Answers requests from a URL → response (or exception) table and records them."""
+    """Answers requests from a URL → response (or exception) table and records them.
 
-    def __init__(self, routes: dict[str, Response | Exception]) -> None:
+    A list is a sequence of answers, one per request (the last one repeats)."""
+
+    def __init__(self, routes: dict[str, Response | Exception | list[Response | Exception]]):
         self.routes = routes
         self.calls: list[str] = []
 
     def __call__(self, url: str, timeout: float) -> Response:
         self.calls.append(url)
         answer = self.routes.get(url, OSError(f"no route for {url}"))
+        if isinstance(answer, list):
+            answer = answer.pop(0) if len(answer) > 1 else answer[0]
         if isinstance(answer, Exception):
             raise answer
         return answer
@@ -83,6 +93,7 @@ def request(data_dir: Path, **changes: object) -> ArchiveRequest:
         "data_dir": data_dir,
         "source_type": "pollster",
         "title": "Barometru, mai 2099",
+        "retries": 0,
     }
     values.update(changes)
     return ArchiveRequest(**values)  # type: ignore[arg-type]
@@ -172,7 +183,23 @@ def test_no_snapshot_means_nothing_is_written(data_dir: Path) -> None:
     assert "found no snapshot" in str(exc.value)
     assert manifest(data_dir) == []
     assert inventory(data_dir)[0]["status"] == "found"
-    assert (data_dir / "raw/polls/exemplar/exemplar-doc-001.html").is_file()
+    assert not (data_dir / "raw").exists()
+
+
+def test_failed_snapshot_does_not_overwrite_an_existing_raw_file(data_dir: Path) -> None:
+    archive(request(data_dir), happy_web(), TODAY)
+    raw = data_dir / "raw/polls/exemplar/exemplar-doc-001.html"
+    web = FakeWeb(
+        {
+            URL: Response(URL, PAGE.replace(b"30%", b"31%")),
+            SAVE: OSError("timed out"),
+            LOOKUP: Response(LOOKUP, b'{"archived_snapshots": {}}'),
+        }
+    )
+    with pytest.raises(ArchiveError, match="no Web Archive snapshot"):
+        archive(request(data_dir), web, TODAY)
+    assert raw.read_bytes() == PAGE
+    assert manifest(data_dir)[0]["sha256"] == hashlib.sha256(PAGE).hexdigest()
 
 
 def test_snapshot_of_another_url_is_not_accepted(data_dir: Path) -> None:
@@ -203,6 +230,131 @@ def test_snapshot_with_different_bytes_is_reported(data_dir: Path) -> None:
     assert result.snapshot_check is not None and result.snapshot_check.startswith("DIFFERENT")
 
 
+def test_gzip_encoded_snapshot_is_compared_after_decompressing(data_dir: Path) -> None:
+    web = happy_web()
+    web.routes[RAW_SNAPSHOT] = Response(RAW_SNAPSHOT, gzip.compress(PAGE))
+    result = archive(request(data_dir), web, TODAY)
+    assert result.snapshot_check is not None
+    assert result.snapshot_check.startswith("identical")
+    assert "gzip" in result.snapshot_check
+
+
+@pytest.mark.parametrize(
+    "served", [gzip.compress(PAGE + b"<!-- ad -->"), b"\x1f\x8b not really gzip"]
+)
+def test_gzip_snapshot_with_other_bytes_and_broken_gzip_are_different(
+    data_dir: Path, served: bytes
+) -> None:
+    web = happy_web()
+    web.routes[RAW_SNAPSHOT] = Response(RAW_SNAPSHOT, served)
+    result = archive(request(data_dir), web, TODAY)
+    assert result.snapshot_check is not None
+    assert result.snapshot_check.startswith("DIFFERENT")
+
+
+def http_error(code: int) -> urllib.error.HTTPError:
+    return urllib.error.HTTPError("https://x.org", code, f"HTTP {code}", Message(), None)
+
+
+def test_save_page_now_rate_limit_is_retried_with_backoff(data_dir: Path) -> None:
+    web = happy_web()
+    web.routes[SAVE] = [http_error(429), OSError("connection refused"), Response(SNAPSHOT, b"")]
+    waits: list[float] = []
+    result = archive(request(data_dir, retries=2), web, TODAY, sleep=waits.append)
+    assert result.archive_url == SNAPSHOT
+    assert result.attempts[0].startswith("Save Page Now returned a snapshot")
+    assert web.calls == [URL, SAVE, SAVE, SAVE, RAW_SNAPSHOT]
+    assert waits == [10.0, 20.0]
+
+
+def test_retries_are_limited_and_the_check_failure_is_explicit(data_dir: Path) -> None:
+    web = happy_web()
+    web.routes[RAW_SNAPSHOT] = ConnectionRefusedError("[WinError 10061] refused")
+    waits: list[float] = []
+    result = archive(request(data_dir, retries=1), web, TODAY, sleep=waits.append)
+    assert web.calls.count(RAW_SNAPSHOT) == 2
+    assert waits == [10.0]
+    assert result.snapshot_check is not None
+    assert result.snapshot_check.startswith("NOT CHECKED")
+    assert "WinError 10061" in result.snapshot_check
+    assert manifest(data_dir)[0]["archive_url"] == SNAPSHOT
+
+
+@pytest.mark.parametrize("error", [http_error(403), http_error(404), ValueError("bad URL")])
+def test_permanent_failures_are_not_retried(data_dir: Path, error: Exception) -> None:
+    web = FakeWeb({URL: error})
+    with pytest.raises(ArchiveError, match="download failed"):
+        archive(request(data_dir, retries=3), web, TODAY, sleep=pytest.fail)
+    assert web.calls == [URL]
+
+
+def test_download_is_retried_after_a_server_error(data_dir: Path) -> None:
+    web = happy_web()
+    web.routes[URL] = [http_error(503), Response(URL, PAGE)]
+    result = archive(request(data_dir, retries=1), web, TODAY, sleep=lambda _: None)
+    assert result.status == "new"
+    assert web.calls[:2] == [URL, URL]
+
+
+def test_negative_retries_are_rejected(data_dir: Path) -> None:
+    with pytest.raises(ArchiveError, match="--retries"):
+        archive(request(data_dir, retries=-1), happy_web(), TODAY)
+
+
+VIEW = "https://drive.google.com/file/d/1AbC_d-9/view?usp=sharing"
+DIRECT = "https://drive.google.com/uc?export=download&id=1AbC_d-9"
+PNG = b"\x89PNG\r\n\x1a\n" + b"\x00" * 16
+
+
+def drive_web(downloaded: bytes) -> FakeWeb:
+    snapshot = f"https://web.archive.org/web/20990601120000/{DIRECT}"
+    raw = f"https://web.archive.org/web/20990601120000id_/{DIRECT}"
+    return FakeWeb(
+        {
+            DIRECT: Response(DIRECT, downloaded),
+            SAVE_ENDPOINT + DIRECT: Response(snapshot, b""),
+            raw: Response(raw, downloaded),
+        }
+    )
+
+
+def test_google_drive_view_link_is_resolved_to_the_direct_download(data_dir: Path) -> None:
+    write_rows(data_dir / "polls/exemplar/inventory.csv", INVENTORY, [inventory_row(VIEW)])
+    web = drive_web(PNG)
+    result = archive(request(data_dir, url=VIEW), web, TODAY)
+    assert result.download_url == DIRECT
+    assert web.calls[0] == DIRECT and VIEW not in web.calls
+    assert result.archive_url == f"https://web.archive.org/web/20990601120000/{DIRECT}"
+    assert result.snapshot_check is not None and result.snapshot_check.startswith("identical")
+    [row] = manifest(data_dir)
+    assert row["source_url"] == VIEW and row["format"] == "image"
+    assert inventory(data_dir)[0]["publication_url"] == VIEW
+    assert "resolved to " + DIRECT in format_result(result)
+
+
+def test_google_drive_viewer_page_is_not_archived_as_the_file(data_dir: Path) -> None:
+    write_rows(data_dir / "polls/exemplar/inventory.csv", INVENTORY, [inventory_row(VIEW)])
+    web = drive_web(b"<!DOCTYPE html><html><body>Quota exceeded</body></html>")
+    with pytest.raises(ArchiveError, match="Google Drive returned a web page"):
+        archive(request(data_dir, url=VIEW), web, TODAY)
+    assert manifest(data_dir) == []
+
+
+@pytest.mark.parametrize(
+    ("url", "expected"),
+    [
+        ("https://drive.google.com/file/d/1AbC_d-9/view", DIRECT),
+        ("https://drive.google.com/file/d/1AbC_d-9", DIRECT),
+        ("https://drive.google.com/open?id=1AbC_d-9", DIRECT),
+        ("https://drive.google.com/uc?export=download&id=1AbC_d-9", None),
+        ("https://drive.google.com/drive/folders/1AbC_d-9", None),
+        ("https://example.org/file/d/1AbC_d-9/view", None),
+    ],
+)
+def test_direct_download_url(url: str, expected: str | None) -> None:
+    assert direct_download_url(url) == (expected or url)
+
+
 def test_publication_must_be_in_the_inventory(data_dir: Path) -> None:
     web = happy_web()
     other = "https://example.org/other.pdf"
@@ -225,16 +377,31 @@ def test_download_failure_is_reported(data_dir: Path) -> None:
 
 def test_rearchiving_unchanged_bytes_keeps_the_row(data_dir: Path) -> None:
     archive(request(data_dir), happy_web(), TODAY)
-    web = FakeWeb({URL: Response(URL, PAGE)})
+    web = FakeWeb({URL: Response(URL, PAGE), RAW_SNAPSHOT: Response(RAW_SNAPSHOT, PAGE)})
     result = archive(request(data_dir, title=None), web, dt.date(2099, 7, 1))
     assert result.status == "unchanged"
-    assert web.calls == [URL]
+    assert web.calls == [URL, RAW_SNAPSHOT]
     [row] = manifest(data_dir)
     assert (row["retrieved_at"], row["title"], row["archive_url"]) == (
         "2099-06-01",
         "Barometru, mai 2099",
         SNAPSHOT,
     )
+
+
+def test_rerun_after_a_failed_snapshot_download_repeats_the_check(data_dir: Path) -> None:
+    first = happy_web()
+    first.routes[RAW_SNAPSHOT] = ConnectionRefusedError("[WinError 10061] refused")
+    result = archive(request(data_dir), first, TODAY)
+    assert result.snapshot_check is not None and result.snapshot_check.startswith("NOT CHECKED")
+    second = happy_web()
+    result = archive(request(data_dir), second, TODAY)
+    assert result.status == "unchanged"
+    assert result.snapshot_origin.startswith("kept from the manifest")
+    assert result.snapshot_check is not None and result.snapshot_check.startswith("identical")
+    assert second.calls == [URL, RAW_SNAPSHOT]
+    skipped = archive(request(data_dir, check=False), happy_web(), TODAY)
+    assert skipped.snapshot_check is None
 
 
 def test_changed_bytes_update_the_same_document(data_dir: Path) -> None:

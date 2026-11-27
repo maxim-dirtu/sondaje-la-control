@@ -258,6 +258,11 @@ so grade A cannot be reached yet ([ADR-0010](decisions/0010-grades-and-card-fram
 Each item scores 1 if published for the poll: sample size, fieldwork dates,
 mode (CATI/CAWI/CAPI/mixed), exact question wording, weighting description,
 margin of error, client/sponsor. The house score is the mean over its polls.
+The client/sponsor item scores 1 only when the **pollster itself** discloses
+the client (in its own material for the poll, DATA_MODEL §6.11
+`sponsor_source = pollster`). A client named only by the media or by the
+client is recorded (POLL_INGESTION §0.1) but scores 0 here. M-5.1d uses every
+recorded client, whoever named it.
 
 ### M-5.4 Weight calibration
 The weights must be validated out-of-sample: score computed on elections before
