@@ -1,14 +1,14 @@
 ---
 id: T-017
 title: Poll tooling fixes (archive, extract, double-entry-diff)
-status: todo
+status: in-progress
 phase: 1
 depends_on: [T-011]
-owner: null
-branch: null
+owner: Copilot agent (contributor)
+branch: task/T-017-poll-tooling-fixes
 methodology: []
 created: 2026-11-27
-updated: 2026-11-27
+updated: 2026-11-28
 ---
 
 ## Goal
