@@ -1,14 +1,14 @@
 ---
 id: T-021
 title: Error metrics
-status: todo
+status: in-progress
 phase: 2
 depends_on: [T-020]
-owner: null
-branch: null
+owner: github-copilot-cli
+branch: task/T-021-error-metrics
 methodology: [M-2.1, M-2.2, M-2.3, M-2.4]
 created: 2026-11-22
-updated: 2026-11-22
+updated: 2026-11-28
 ---
 
 ## Goal
