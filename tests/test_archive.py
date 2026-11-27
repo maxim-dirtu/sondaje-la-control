@@ -13,11 +13,14 @@ import pytest
 from sondaje.cli import main
 from sondaje.ingest import archive as archive_module
 from sondaje.ingest.archive import (
+    SAVE_ENDPOINT,
     ArchiveError,
     ArchiveRequest,
     Response,
     archive,
     detect_format,
+    direct_download_url,
+    format_result,
     snapshot_url,
 )
 from sondaje.ingest.csvio import read_rows, write_rows
@@ -280,6 +283,60 @@ def test_download_is_retried_after_a_server_error(data_dir: Path) -> None:
 def test_negative_retries_are_rejected(data_dir: Path) -> None:
     with pytest.raises(ArchiveError, match="--retries"):
         archive(request(data_dir, retries=-1), happy_web(), TODAY)
+
+
+VIEW = "https://drive.google.com/file/d/1AbC_d-9/view?usp=sharing"
+DIRECT = "https://drive.google.com/uc?export=download&id=1AbC_d-9"
+PNG = b"\x89PNG\r\n\x1a\n" + b"\x00" * 16
+
+
+def drive_web(downloaded: bytes) -> FakeWeb:
+    snapshot = f"https://web.archive.org/web/20990601120000/{DIRECT}"
+    raw = f"https://web.archive.org/web/20990601120000id_/{DIRECT}"
+    return FakeWeb(
+        {
+            DIRECT: Response(DIRECT, downloaded),
+            SAVE_ENDPOINT + DIRECT: Response(snapshot, b""),
+            raw: Response(raw, downloaded),
+        }
+    )
+
+
+def test_google_drive_view_link_is_resolved_to_the_direct_download(data_dir: Path) -> None:
+    write_rows(data_dir / "polls/exemplar/inventory.csv", INVENTORY, [inventory_row(VIEW)])
+    web = drive_web(PNG)
+    result = archive(request(data_dir, url=VIEW), web, TODAY)
+    assert result.download_url == DIRECT
+    assert web.calls[0] == DIRECT and VIEW not in web.calls
+    assert result.archive_url == f"https://web.archive.org/web/20990601120000/{DIRECT}"
+    assert result.snapshot_check is not None and result.snapshot_check.startswith("identical")
+    [row] = manifest(data_dir)
+    assert row["source_url"] == VIEW and row["format"] == "image"
+    assert inventory(data_dir)[0]["publication_url"] == VIEW
+    assert "resolved to " + DIRECT in format_result(result)
+
+
+def test_google_drive_viewer_page_is_not_archived_as_the_file(data_dir: Path) -> None:
+    write_rows(data_dir / "polls/exemplar/inventory.csv", INVENTORY, [inventory_row(VIEW)])
+    web = drive_web(b"<!DOCTYPE html><html><body>Quota exceeded</body></html>")
+    with pytest.raises(ArchiveError, match="Google Drive returned a web page"):
+        archive(request(data_dir, url=VIEW), web, TODAY)
+    assert manifest(data_dir) == []
+
+
+@pytest.mark.parametrize(
+    ("url", "expected"),
+    [
+        ("https://drive.google.com/file/d/1AbC_d-9/view", DIRECT),
+        ("https://drive.google.com/file/d/1AbC_d-9", DIRECT),
+        ("https://drive.google.com/open?id=1AbC_d-9", DIRECT),
+        ("https://drive.google.com/uc?export=download&id=1AbC_d-9", None),
+        ("https://drive.google.com/drive/folders/1AbC_d-9", None),
+        ("https://example.org/file/d/1AbC_d-9/view", None),
+    ],
+)
+def test_direct_download_url(url: str, expected: str | None) -> None:
+    assert direct_download_url(url) == (expected or url)
 
 
 def test_publication_must_be_in_the_inventory(data_dir: Path) -> None:

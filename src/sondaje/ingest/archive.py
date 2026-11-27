@@ -54,6 +54,7 @@ DOWNLOAD_TIMEOUT = 120.0
 SAVE_TIMEOUT = 300.0
 LOOKUP_TIMEOUT = 60.0
 URL_RE = re.compile(r"^https?://\S+$")
+DRIVE_FILE_RE = re.compile(r"^/file/d/([\w-]+)(?:/|$)")
 SLUG_RE = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 RAW_PREFIX = "data/raw/polls"
@@ -193,6 +194,21 @@ def raw_suffix(document_format: str, content: bytes, url: str) -> str:
 # --- Web Archive ----------------------------------------------------------------------------------
 
 
+def direct_download_url(url: str) -> str:
+    """The direct-download URL of a Google Drive ``view`` link (an HTML viewer, not the file);
+    any other URL is returned unchanged."""
+    parts = urllib.parse.urlsplit(url)
+    if (parts.hostname or "").lower() != "drive.google.com":
+        return url
+    match = DRIVE_FILE_RE.match(parts.path)
+    if match is None and parts.path.rstrip("/") == "/open":
+        ids = urllib.parse.parse_qs(parts.query).get("id")
+        match = re.fullmatch(r"([\w-]+)", ids[0]) if ids else None
+    if match is None:
+        return url
+    return f"https://drive.google.com/uc?export=download&id={match.group(1)}"
+
+
 def _comparable(url: str) -> str:
     """A URL without scheme, ``www.``, default port, and trailing slash (for comparisons)."""
     parts = urllib.parse.urlsplit(url.strip())
@@ -330,6 +346,9 @@ class ArchiveResult:
     snapshot_check: str | None
     inventory_updated: int
     attempts: list[str] = field(default_factory=list)
+    download_url: str | None = None
+    """For a Google Drive ``view`` link: the direct-download URL that was downloaded and
+    snapshotted (the manifest's ``source_url`` stays the link as published)."""
 
 
 def _clean(value: str | None) -> str | None:
@@ -400,11 +419,12 @@ def archive(
     if not source_type:
         raise ArchiveError("--source-type is required for a new document")
 
+    fetch_url = direct_download_url(request.url)
     if request.file is not None:
         content = request.file.read_bytes()
     else:
         try:
-            content = fetch(request.url, DOWNLOAD_TIMEOUT).content
+            content = fetch(fetch_url, DOWNLOAD_TIMEOUT).content
         except FETCH_ERRORS as exc:
             raise ArchiveError(
                 f"download failed: {exc}. If the site blocks scripts, save the file with a "
@@ -414,6 +434,17 @@ def archive(
         raise ArchiveError("the download is empty")
     digest = hashlib.sha256(content).hexdigest()
     document_format = request.document_format or detect_format(content, request.url)
+    if (
+        fetch_url != request.url
+        and request.file is None
+        and request.document_format is None
+        and document_format == "html"
+    ):
+        raise ArchiveError(
+            f"Google Drive returned a web page, not the file, for {fetch_url} (a private file, "
+            "a quota limit, or a file too large for the virus-scan check). Save the file with a "
+            "browser and pass it with --file"
+        )
     document_id = (
         existing["document_id"] if existing else _next_document_id(request.pollster_id, manifest)
     )
@@ -432,10 +463,10 @@ def archive(
         snapshot, origin = existing["archive_url"], "kept from the manifest (same SHA-256)"
     else:
         if request.save:
-            snapshot, origin = save_snapshot(request.url, fetch)
+            snapshot, origin = save_snapshot(fetch_url, fetch)
             attempts.append(origin)
         if snapshot is None:
-            snapshot, origin = lookup_snapshot(request.url, fetch)
+            snapshot, origin = lookup_snapshot(fetch_url, fetch)
             attempts.append(origin)
     if snapshot is None:
         raise ArchiveError(
@@ -498,6 +529,7 @@ def archive(
         snapshot_check=snapshot_check,
         inventory_updated=updated,
         attempts=attempts,
+        download_url=fetch_url if fetch_url != request.url else None,
     )
 
 
@@ -563,6 +595,10 @@ def format_result(result: ArchiveResult) -> str:
     detected = "detected" if result.format_detected else "given or kept"
     lines = [
         f"{result.document_id} ({result.status})",
+    ]
+    if result.download_url is not None:
+        lines.append(f"  Google Drive view link resolved to {result.download_url}")
+    lines += [
         f"  saved {result.size} bytes to {result.raw_path}",
         f"  format {result.document_format} ({detected}); sha256 {result.sha256}",
     ]
