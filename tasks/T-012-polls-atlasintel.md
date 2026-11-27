@@ -80,19 +80,23 @@ Proposals for the coordinator (shared files and tooling are out of this task's s
    (10-13 Apr, 17-22 Apr, 28 Apr-1 May) are `domestic` because their articles do not
    say so, but HotNews published diaspora subgroup results of the 17-22 Apr and
    28 Apr-1 May polls, and the RO Wikipedia page notes that the 17-22 Apr sample
-   includes the diaspora. The owner should decide whether that is enough to set
-   `residents_and_diaspora` for them (it changes which official result they are
-   compared with).
+   includes the diaspora. **Owner decision (2026-11-27): applied.** 17-22 Apr
+   and 28 Apr-1 May are now `residents_and_diaspora` / `total`. Their diaspora
+   articles are archived as evidence (`atlasintel-doc-020`, `-021`) and linked
+   in the inventory. 10-13 Apr stays `domestic`, because no diaspora results
+   were published for it.
 3. **Data model (§6.11), sponsor from co-branding:** for the 26-28 Nov and 1-3 May
    polls the report carries the HotNews logo and the title `Atlas-HotNews`
    but no "commissioned by" wording; they are recorded as `HotNews` / `media`.
+   **Owner decision (2026-11-27): confirmed.**
    A one-line rule in POLL_INGESTION §0.1 on whether co-branding counts as a client
    statement would avoid case-by-case calls.
 4. **Data model (§6.11), headline of a multi-scenario survey:** the 13-15 Mar report
    asks three round-1 scenarios; the headline was chosen as the scenario HotNews
    leads with (without Georgescu, with Simion), because the report labels the
-   Georgescu scenario hypothetical. A rule for the headline of such surveys is
-   missing.
+   Georgescu scenario hypothetical. **Owner decision (2026-11-27): confirmed**
+   (the headline is the ballot as it stood during fieldwork). A rule for the
+   headline of such surveys is missing.
 5. **Data model (§6.11), `population`:** the HotNews articles quote AtlasIntel that its
    samples are likely voters, while the reports say "Electoratul din România" and label
    the chart `[Toți alegătorii]`. Each poll follows its own publication (`likely_voters`
@@ -193,6 +197,13 @@ options); labels are verbatim with comma-below diacritics; each source disagreem
 - `published_date` of the reports is the date of the AtlasIntel listing or of the first partner
   article; no report prints a date. For 28 Apr-1 May the pollster-selection report mentions
   "1-2 May"; the first publication found is the HotNews article of 2025-05-02 06:04 (+03:00).
+
+- **2026-11-27, owner decisions (coordinator):** diaspora (question 2),
+  co-branding (question 3) and headline (question 4) under *Follow-ups*, all
+  applied or confirmed. Two diaspora-subgroup articles were archived, and
+  their inventory rows (one new, one previously `excluded`/`out_of_scope`)
+  are now `verified` and linked to their polls. The inventory has 24 rows
+  and the archive 21 documents.
 
 ## Outcome
 Status: review. 9 AtlasIntel surveys recorded as **11 polls** (13-15 Mar has three scenarios)
