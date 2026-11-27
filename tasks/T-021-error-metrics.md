@@ -1,7 +1,7 @@
 ---
 id: T-021
 title: Error metrics
-status: review
+status: done
 phase: 2
 depends_on: [T-020]
 owner: github-copilot-cli
