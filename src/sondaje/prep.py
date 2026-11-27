@@ -287,7 +287,7 @@ def effective_sample_size(
     """``n``: the number of respondents behind the normalized shares (OI-5 resolution, M-1.1).
 
     1. ``sample_size_expressed`` when published;
-    2. otherwise ``sample_size`` × the share of all respondents who named a vote option, when the
+    2. otherwise ``sample_size`` * the share of all respondents who named a vote option, when the
        poll publishes an ``all_respondents`` base ("<x" values per OI-2, capped at 100%);
     3. otherwise ``sample_size`` (an upper bound of the true ``n``);
     4. ``NaN`` when no sample size is published.
@@ -307,7 +307,7 @@ def effective_sample_size(
 
 
 def recency_weight(days_before: int | None, config: MethodologyConfig) -> float:
-    """``w = exp(−days_before_election / τ)`` (M-1.3); ``NaN`` when the date is unknown."""
+    """``w = exp(-days_before_election / tau)`` (M-1.3); ``NaN`` when the date is unknown."""
     if days_before is None:
         return math.nan
     return math.exp(-days_before / config.tau)
@@ -576,7 +576,7 @@ def prepare(data_dir: Path, config: MethodologyConfig | None = None) -> Prepared
     toplines, OI-5 ``n``), M-1.2 (comparison set, "others"), M-1.3 (window, recency weight,
     final poll, OI-3 scenarios, OI-4 missing dates), M-1.4 (target scope), M-1.5 (alliances,
     parties on another party's list, withdrawals and exclusions, rounds, candidate → party),
-    M-1.6 (``unit_id`` = house × election), and M-1.7 (polls published on or after election
+    M-1.6 (``unit_id`` = (house, election)), and M-1.7 (polls published on or after election
     day). Every adjustment is returned in :attr:`Prepared.adjustments` and logged at INFO level.
 
     Raises :class:`PrepError` when the data does not load cleanly, a poll refers to an unknown
