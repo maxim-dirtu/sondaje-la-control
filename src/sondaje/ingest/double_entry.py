@@ -10,7 +10,8 @@ reports **every** difference between the two passes:
   population, sponsor, wording, ...);
 * a share base present in one pass only;
 * an option (matched by its verbatim ``option_label``) present in one pass only, i.e. a
-  missing or extra option or a label typed differently;
+  missing or extra option or a label typed differently. When a label repeats within a base
+  (two "Altul" rows), the repeats are matched by ``option_order``, then by position;
 * every differing cell of an option present in both (``share_raw``, ``share_qualifier``,
   ``option_order``, ``option_type``, ``entity_id``, provenance).
 
@@ -161,6 +162,40 @@ def _options(
     return groups
 
 
+def _pair_duplicates(
+    options_a: dict[tuple[str, int], dict[str, str]],
+    options_b: dict[tuple[str, int], dict[str, str]],
+) -> dict[tuple[str, int], dict[str, str]]:
+    """``options_b`` keyed like ``options_a`` where a label repeats (two "Altul" rows): the
+    rows with the same ``option_order`` are paired first, then the rest in file order, so that
+    a missing or reordered duplicate is not reported as a value mismatch of its twin. Labels
+    that occur once keep the plain label match."""
+    repeated = {label for label, occurrence in (*options_a, *options_b) if occurrence}
+    paired = {key: row for key, row in options_b.items() if key[0] not in repeated}
+    for label in repeated:
+        keys_a = [key for key in options_a if key[0] == label]
+        keys_b = [key for key in options_b if key[0] == label]
+        free = list(keys_a)
+        mapping: dict[tuple[str, int], tuple[str, int]] = {}
+        for key_b in keys_b:
+            order = options_b[key_b].get("option_order", "")
+            match = next((k for k in free if order and options_a[k]["option_order"] == order), None)
+            if match is not None:
+                mapping[key_b] = match
+                free.remove(match)
+        extra = len(keys_a)
+        for key_b in keys_b:
+            if key_b not in mapping:
+                if free:
+                    mapping[key_b] = free.pop(0)
+                else:
+                    mapping[key_b] = (label, extra)
+                    extra += 1
+        for key_b in keys_b:
+            paired[mapping[key_b]] = options_b[key_b]
+    return paired
+
+
 def _describe(row: dict[str, str]) -> str:
     value = ("<" if row.get("share_qualifier") == "lt" else "") + row.get("share_raw", "")
     return f"order {row.get('option_order', '')}, share_raw {value}"
@@ -206,6 +241,7 @@ def compare_results(
             )
             continue
         options_a, options_b = groups_a[key], groups_b[key]
+        options_b = _pair_duplicates(options_a, options_b)
         for option in options_a:
             label = option[0] + (f" (#{option[1] + 1})" if option[1] else "")
             if option not in options_b:

@@ -113,6 +113,63 @@ def test_missing_base_poll_and_file(passes: tuple[DataDir, DataDir], tmp_path: P
     assert any("only in pass A" in line for line in diff(a, make_pass(tmp_path, "pass-c")))
 
 
+ALL = f"poll_results.csv: poll {POLL}, base all_respondents: "
+
+
+@pytest.fixture
+def twins(passes: tuple[DataDir, DataDir]) -> tuple[DataDir, DataDir]:
+    """Both passes have two rows labelled "Altul" (lines 6 and 7: order 5 / share 3, order 6 /
+    share 4), as in the Verifield slide of October 2024."""
+    for data in passes:
+        data.update("poll_results.csv", 6, option_label="Altul", option_type="other", entity_id="")
+        data.update("poll_results.csv", 7, option_label="Altul")
+    return passes
+
+
+def test_duplicate_labels_agree_and_a_value_mismatch_names_the_repeat(
+    twins: tuple[DataDir, DataDir],
+) -> None:
+    a, b = twins
+    assert diff(a, b) == []
+    b.update("poll_results.csv", 7, share_raw="5")
+    assert diff(a, b) == [ALL + "option 'Altul (#2)': share_raw: A='4' B='5'"]
+    b.update("poll_results.csv", 6, share_raw="1")
+    assert diff(a, b) == [
+        ALL + "option 'Altul': share_raw: A='3' B='1'",
+        ALL + "option 'Altul (#2)': share_raw: A='4' B='5'",
+    ]
+
+
+def test_duplicate_labels_are_matched_by_option_order_not_file_order(
+    twins: tuple[DataDir, DataDir],
+) -> None:
+    a, b = twins
+    b.update("poll_results.csv", 6, option_order="6", share_raw="4")
+    b.update("poll_results.csv", 7, option_order="5", share_raw="3")
+    assert diff(a, b) == []
+
+
+def test_a_missing_duplicate_is_reported_once(twins: tuple[DataDir, DataDir]) -> None:
+    a, b = twins
+    b.delete("poll_results.csv", 6)
+    assert diff(a, b) == [ALL + "option 'Altul' only in pass A (order 5, share_raw 3)"]
+
+
+def test_an_extra_duplicate_is_reported_once(twins: tuple[DataDir, DataDir]) -> None:
+    a, b = twins
+    b.append_copy("poll_results.csv", 7)
+    found = diff(a, b)
+    assert found == [ALL + "option 'Altul (#3)' only in pass B (order 6, share_raw 4)"]
+
+
+def test_duplicates_without_a_matching_order_pair_by_position(
+    twins: tuple[DataDir, DataDir],
+) -> None:
+    a, b = twins
+    b.update("poll_results.csv", 6, option_order="9")
+    assert diff(a, b) == [ALL + "option 'Altul': option_order: A='5' B='9'"]
+
+
 def test_single_files_can_be_compared(passes: tuple[DataDir, DataDir]) -> None:
     a, b = passes
     b.update("poll_results.csv", 5, share_raw="30")
