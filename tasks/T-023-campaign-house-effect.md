@@ -1,7 +1,7 @@
 ---
 id: T-023
 title: Market average and campaign house effect
-status: review
+status: done
 phase: 2
 depends_on: [T-020]
 owner: copilot-t023
