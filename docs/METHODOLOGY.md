@@ -169,14 +169,18 @@ mean underestimation.
 On this scale, errors on small and large parties are comparable.
 
 ### M-2.5 Relative house effect (final polls)
-`he_{h,j,E} = e_{h,j,E} − ē_{·,j,E}`, where `ē_{·,j,E}` is the recency-weighted
-mean signed error of **all houses** for `j` at election `E`. This separates the
-house's own error from an industry-wide miss. In the MVP, "all houses" means the
-houses in the dataset. Whether to use a broader reference market is open (I-013).
+`he_{h,j,E} = e_{h,j,E} − ē_{−h,j,E}`, where `ē_{−h,j,E}` is the recency-weighted
+mean signed error for `j` at election `E` of the final polls of the **other**
+houses (leave-one-house-out, as in M-3.2; weights `w` from M-1.3). Both errors
+are taken on the common comparison set of `E` (M-2.8). This separates the
+house's own error from an industry-wide miss. In the MVP, "the other houses"
+means the houses in the dataset. Whether to use a broader reference market is
+open (I-013).
 
 ### M-2.6 Relative accuracy
-`RA_{h,E} = MAE_{h,E} − median_h'(MAE_{h',E})`. Negative values mean the house
-was better than the typical pollster.
+`RA_{h,E} = MAE_{h,E} − median_{h'≠h}(MAE_{h',E})`, with every `MAE` taken on
+the common comparison set of `E` (M-2.8). Negative values mean the house was
+closer to the result than the median of the other houses.
 
 ### M-2.7 Conventions and edge cases (T-021)
 Choices the formulas above leave open. Implemented by `sondaje.metrics.errors`.
@@ -193,8 +197,8 @@ Choices the formulas above leave open. Implemented by `sondaje.metrics.errors`.
   the "others" of both sides (M-1.2), so no entity is missing at this stage. A
   prepared row without `s` or `r` is an input error, and is never filled in.
   Houses may name different numbers of parties, so `k` differs between polls of
-  the same election and `MAE` is not computed over one common set. T-022 decides
-  whether a common comparison set is needed for comparisons between houses.
+  the same election and `MAE` is not computed over one common set. Comparisons
+  between houses (M-2.5, M-2.6) therefore use a common comparison set (M-2.8).
 - **Total error.** Because both sides sum to 1 over the comparison set, the
   `e_j` of a poll sum to 0, and `TE` equals the sum of its overestimates (and of
   its underestimates).
@@ -213,6 +217,73 @@ Choices the formulas above leave open. Implemented by `sondaje.metrics.errors`.
   `f`.
 - **Units.** `e`, `MAE`, and `TE` are in pp; `A'` and `B` are dimensionless
   (natural log).
+
+### M-2.8 Comparisons between houses (T-022)
+Choices M-2.5 and M-2.6 leave open. Implemented by `sondaje.metrics.relative`.
+The results are **descriptive**: they carry no significance test until M-4
+(T-024), and a difference between houses can be sampling noise.
+
+- **Inputs.** The final poll of each (house, election) (M-1.3, M-1.7), with
+  its errors from M-2.1 (never recomputed). Each house counts once (M-1.6). A
+  house without a final poll in `E` is absent from `E`, both as the house
+  compared and in the reference (for example Verifield in `parl-2024-cd` and
+  `pres-2025-r1`, [ADR-0012](decisions/0012-mvp-pollsters.md)).
+- **Common comparison set.** *Problem:* each poll has its own comparison set
+  (M-1.2), so `k` and the content of "others" differ between houses of the same
+  election (`parl-2024-cd` final polls: `k` = 12, 8 and 7). A house that names
+  more small parties gets a lower `MAE`, because it averages over more small
+  errors, and its "others" holds less. *Options:* (a) each poll's own set, as in
+  M-2.7; (b) per entity, the houses that name it, without "others"; (c) one
+  common set per election; (d) `TE` on each poll's own set. *Choice:* (c). The
+  common set of `E` is the named entities that **every** house with a final
+  poll in `E` compares on its own, plus one common "others" that holds,
+  on both sides, everything else: the entities some house does not name or
+  rolls into its "others" (*merged entities*), and each poll's own "others".
+  A common entity keeps its M-2.1 row unchanged. The common "others" has
+  `s` and `r` equal to the sums over the rows outside the common set, so both
+  sides still sum to 1, nothing is renormalized, and its `e` is the sum of the
+  merged errors. It counts in `k_common` when any house has a non-zero share on
+  either side. *Reason:* every house is then measured on the same entities, and
+  "others" means the same thing for every house, so both `he` and `MAE` are
+  comparable. (a) is not comparable; (b) leaves "others" out, builds each
+  entity's market from a different subset of houses, and cannot compare an
+  entity that a house rolls into "others"; (d) still depends on how much each
+  house merges into "others", because merging cancels errors of opposite sign.
+  *Effect:* a merged entity has no house effect (real data: FD, POT, SENS,
+  REPER and DREPT in `parl-2024-cd`, `k_common` = 7). Within an election
+  `k_common` is the same for every house, so `MAE = 2·TE / k_common` and `MAE`
+  and `TE` rank the houses the same way. Across elections they differ (T-025,
+  M-5.1a). Each house's `MAE` on the common set (`mae_common`) can differ from
+  its M-2.7 `MAE` (in `parl-2024-cd`, AtlasIntel goes from 2.02 to 3.23 pp).
+- **Different targets.** Houses compared with different results (domestic or
+  total, M-1.4) are compared through their errors, each against its own target.
+  No share is compared across targets.
+- **Leave one house out.** *Options:* the reference includes the house itself
+  (the formula of version 0.1), or it holds only the other houses. *Choice:*
+  the other houses, for both `he` (M-2.5) and `RA` (M-2.6). *Reason:* with the
+  house in its own reference, its effect shrinks by its own weight share (by
+  half with two equally weighted houses), so a house that deviates by +3 pp
+  from all the others does not get +3 pp back. This matches M-3.2. *Effect:* a
+  house whose errors are the others' market plus a constant offset gets that
+  offset back exactly. With equal weights, the house effects of an entity sum
+  to 0 over the houses; with recency weights they need not. With **two
+  houses**, `he` is the gap between them and the two are mirror images: they
+  do not show which house deviates, and the output says so. With **one
+  house**, there is no reference: `he` and `RA` are empty.
+- **Market weights.** The other houses' errors are weighted by the recency
+  weight `w` of their final polls (M-1.3), as M-2.5 specifies. A final poll far
+  from the vote barely counts (`parl-2024-cd`: CURS, 26 days, `w` = 0.02;
+  Sociopol, 9 days, 0.28; AtlasIntel, 3 days, 0.65). Equal weights are a
+  sensitivity option (`--weighting equal`, T-025). The weights never touch the
+  house's own error, so a house whose final poll is early also carries the
+  movement of opinion after its poll in its `he` and `RA` (M-3 looks at the
+  whole campaign).
+- **Median.** `RA` uses the unweighted median of the other houses' `MAE`, as
+  M-2.6 specifies. With an even number of other houses it is the mean of the
+  two middle values. In the MVP, three houses (`parl-2024-cd`,
+  `pres-2025-r1`) give a reference that is the mean of the other two; four
+  houses (`pres-2025-r2`) give the middle one of the other three.
+- **Units.** `he`, `market_e`, `mae_common`, `te_common`, and `RA` are in pp.
 
 ---
 
@@ -390,6 +461,7 @@ T-020 task Log.
 | `window_days` | 28 | M-1.3 | T-025 sensitivity analysis (incl. 21 and 35 days) |
 | `tau` | 7 | M-1.3 | T-025 |
 | `small_party_threshold` | 1% | M-1.2 | T-025 |
+| market weights (`weighting`) | recency | M-2.8 | T-025 (sensitivity: equal) |
 | `campaign_days` | 120 | M-3.2 | T-025 (kept at 120 by T-023) |
 | `bandwidth_days` | 14 days | M-3.1 | T-025 (incl. 7 and 21 days) |
 | `max_gap_days` | 28 days | M-3.1 | T-025 |
