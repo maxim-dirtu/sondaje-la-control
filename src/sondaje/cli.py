@@ -28,6 +28,7 @@ from sondaje.ingest.extract_pdf import register as register_extract_pdf
 from sondaje.ingest.results import register as register_ingest_results
 from sondaje.metrics.errors import register as register_errors
 from sondaje.metrics.market import register as register_market
+from sondaje.metrics.relative import register as register_relative
 from sondaje.prep import register as register_prep
 from sondaje.validation.command import register as register_validate
 
@@ -45,6 +46,7 @@ COMMANDS: list[Registrar] = [
     register_prep,
     register_errors,
     register_market,
+    register_relative,
 ]
 """Registrars for every subcommand, in the order they appear in ``--help``."""
 
