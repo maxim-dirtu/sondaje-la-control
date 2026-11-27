@@ -1,7 +1,7 @@
 ---
 id: T-012
 title: "Polls: AtlasIntel (MVP elections)"
-status: review
+status: done
 phase: 1
 depends_on: [T-011]
 owner: Copilot (contributor agent)
