@@ -4,11 +4,11 @@ title: Data preparation pipeline
 status: in-progress
 phase: 2
 depends_on: [T-002, T-003]
-owner: copilot-agent-T-020
+owner: github-copilot-cli
 branch: task/T-020-data-prep-pipeline
-methodology: [M-1.1, M-1.2, M-1.3, M-1.4, M-1.5, M-1.6]
+methodology: [M-1.1, M-1.2, M-1.3, M-1.4, M-1.5, M-1.6, M-1.7]
 created: 2026-11-22
-updated: 2026-11-27
+updated: 2026-11-28
 ---
 
 ## Goal
