@@ -22,24 +22,84 @@ All errors are expressed in **percentage points (pp)** unless stated otherwise.
 
 ## M-1 Data preparation
 
+Implemented by `sondaje.prep` (T-020): one call turns the canonical CSVs into
+one row per (poll, compared entity), plus one row per poll with its
+eligibility flags, plus a log of every adjustment. Every poll is kept, including
+the ones excluded from the metrics, so that they can be shown. The tunable
+values named below (`share_base_priority`, `lt_fraction`, …) live in one
+configuration object (`sondaje.config.MethodologyConfig`).
+
 ### M-1.1 Normalization to valid votes
 Polls report undecided/refuse/other, but results do not. Remove those categories
 and rescale:
 `s_j = raw_j / Σ_i raw_i` over named parties/candidates (+ "others" if the
 result also contains an "others" bucket built the same way).
 
+- **Vote options** are the options of type `party`, `alliance`, `candidate`,
+  `independent` (named) and `other` ("others"). Every other `option_type`
+  (undecided, non-response, would not vote, none, blank or invalid, other
+  non-vote answers) is removed.
+- **Share base (OI-1).** When a poll publishes several share bases, the first
+  one in this order that has at least one vote option is used:
+  `expressed_option`, `all_respondents` (normalized), `likely_voters`,
+  `other_subset` (`share_base_priority`). `expressed_option` is the pollster's
+  own figure over valid answers, the one the public sees. `all_respondents`
+  describes the same respondents, so after normalization it differs only by
+  rounding. `likely_voters` and `other_subset` add a filter that is described
+  only in `notes` and differs between houses, so they are used only when
+  nothing else is published.
+- **Values published as "<x" (OI-2)** (`share_qualifier = lt`) enter as
+  `x · lt_fraction`, default `lt_fraction = 0.5` (that is, x/2). The poll and
+  the affected row are flagged (`has_lt`), and each value is logged. T-025 tests
+  `lt_fraction` = 0 and 1 as sensitivity.
+- **Partial toplines.** When `topline_coverage = partial` and the base is
+  `expressed_option`, the unpublished remainder (100 minus the sum of the
+  published vote shares, when positive) is added to "others" before
+  normalization, and the adjustment is logged. Spreading it over the published
+  options would inflate them. With any other base the remainder may hold
+  non-vote answers, so the published options are normalized as they are.
+- **Sample size `n` (OI-5)**, used from M-3.4 and M-4.1 onward, is the number of
+  respondents behind the normalized shares: `sample_size_expressed` when
+  published; otherwise `sample_size` × the share of all respondents who named
+  a vote option, when the poll publishes an `all_respondents` base ("<x"
+  values as above); otherwise `sample_size`, which overstates `n` (so it
+  understates sampling error). The method used is stored per poll
+  (`n_method`). `n` is empty when no sample size is published.
+
 ### M-1.2 Comparison set
 Compare only entities present in both the poll and the result. Entities below a
 threshold (default 1% in the result) are merged into "others". This prevents
 small-party noise from dominating the log-odds metrics.
 
+- The threshold applies to the result share in the poll's target scope
+  (M-1.4). A contestant exactly at the threshold is kept.
+- "Others" is built the same way on both sides, so both sides sum to 1. In the
+  **result**, it holds every contestant that is not compared on its own: those
+  below the threshold, and those the poll does not name. In the **poll**, it
+  holds the `other` options, the named contestants below the threshold, and
+  the partial-topline remainder (M-1.1). A poll without an `other` option
+  therefore has `s_others = 0`.
+- The "others" row is part of the comparison (and counts in `k`) whenever
+  either side is above zero. Each merge into "others" is logged.
+
 ### M-1.3 Accuracy window and recency weight
 - Only polls with fieldwork **ending ≤ 28 days** before election day are used for
   accuracy metrics (parameter `window_days`, default 28; owner decision
   2026-11-22, [ADR-0012](decisions/0012-mvp-pollsters.md); previously 21).
+  `days_before_election` = election day − `fieldwork_end`, in days; a poll
+  exactly 28 days out is inside the window.
 - Weight: `w = exp(−days_before_election / τ)`, `τ = 7` by default.
 - The "final poll" of a house is its latest poll inside the window that is
-  eligible under M-1.7.
+  eligible under M-1.7. "Latest" means the latest `fieldwork_end`; ties go to
+  the later `published_date`, then to the larger `poll_id`.
+- **Scenarios (OI-3).** A poll with `headline = false` (a scenario or a second
+  question of the same survey) is excluded from every metric, so that a survey
+  counts once. It is kept, prepared, and shown for transparency.
+- **No fieldwork end (OI-4).** A poll without a published `fieldwork_end` has
+  no date `t`, so it is excluded from every metric: all of them are windowed
+  (this window, and the campaign window of M-3). `fieldwork_start` and
+  `published_date` are not used as a substitute. The poll is kept and shown, and
+  the missing dates lower its transparency score (M-5.3).
 
 ### M-1.4 Domestic vs. total result
 Most Romanian polls sample the resident population only. The default comparison
@@ -68,10 +128,18 @@ poll.
   example ADU in 2024): only that share is dropped, and the remaining shares
   are renormalized. The poll is kept, and the adjustment is logged. (Owner
   decision, 2026-11-22.)
+- The `entity_map` relations apply to every poll of the election, whatever
+  their `effective_date`: the poll is compared with the ballot as it was on
+  election day. Shares that map to the same contestant are added.
+- A candidate's "supporting party" is the party or alliance that nominated or
+  endorsed the candidate (`candidate_support.csv`). It is recorded only when
+  there is exactly one; with none or several, the error stays with the
+  candidate.
 
 ### M-1.6 Independence unit
 Polls from the same house for the same election are **not independent**. The
-statistical unit for cross-election inference is the pair `(house, election)`.
+statistical unit for cross-election inference is the pair `(house, election)`
+(`unit_id` in the prepared tables).
 
 ### M-1.7 Publication timing
 A poll whose first publication (`published_date`) is **on or after election
@@ -211,17 +279,9 @@ interval combines the M-4.1 sampling error with the posterior uncertainty of
 
 ## Open specification issues
 
-These are raised by T-001 and must be resolved, by updating the relevant
-section, before or during T-020. Each has a suggested default; the final choice
-is recorded in the task Log and in the section itself.
-
-| ID | Section | Question | Suggested default |
-|---|---|---|---|
-| OI-1 | M-1.1 | A poll may publish several share bases (`all_respondents`, `expressed_option`, …). Which one is used? | `expressed_option` if published (it is the pollster's own headline figure, the one the public sees); otherwise `all_respondents`, normalized |
-| OI-2 | M-1.1 | How do values published as "<x%" (`share_qualifier = lt`) enter the normalization? | Use x/2, flag the poll, and test the sensitivity in T-025 |
-| OI-3 | M-1.3 | Non-headline scenarios (`headline = false`) | Excluded from the metrics, kept for transparency |
-| OI-4 | M-1.3, M-3 | A poll with no published `fieldwork_end` | Excluded from windowed metrics. It lowers the transparency score (M-5.3) |
-| OI-5 | M-4.1 | Is `n` equal to `sample_size` or to `sample_size_expressed` when shares are on the expressed base? | `sample_size_expressed` if published; otherwise `sample_size` × the expressed share |
+None are open. OI-1…OI-5, raised by T-001, were resolved in T-020: OI-1, OI-2
+and OI-5 in M-1.1, OI-3 and OI-4 in M-1.3. The options and reasons are in the
+T-020 task Log.
 
 ---
 

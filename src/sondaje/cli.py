@@ -26,6 +26,7 @@ from sondaje.ingest.double_entry import register as register_double_entry_diff
 from sondaje.ingest.extract_html import register as register_extract_html
 from sondaje.ingest.extract_pdf import register as register_extract_pdf
 from sondaje.ingest.results import register as register_ingest_results
+from sondaje.prep import register as register_prep
 from sondaje.validation.command import register as register_validate
 
 type Subparsers = argparse._SubParsersAction[argparse.ArgumentParser]
@@ -39,6 +40,7 @@ COMMANDS: list[Registrar] = [
     register_extract_pdf,
     register_extract_html,
     register_double_entry_diff,
+    register_prep,
 ]
 """Registrars for every subcommand, in the order they appear in ``--help``."""
 
