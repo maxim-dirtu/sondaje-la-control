@@ -49,8 +49,8 @@ the visuals; it does not give final verdicts.
 ## Phases & tasks
 
 Legend: tasks without dependencies inside the same phase can run **in parallel**.
-Task files exist for Phases 0–2 and T-031. Later phases are refined into task
-files when they start.
+Task files exist for Phases 0–2, T-030, and T-031. Later phases are refined
+into task files when they start.
 
 ### Phase 0: Foundations
 | ID | Task | Depends on |
@@ -100,7 +100,7 @@ Development can start on synthetic fixtures before M1 is reached.
 ### Phase 3: Internal prototype & UX
 | ID | Task | Depends on |
 |---|---|---|
-| T-030 | Prototype dashboard (leaderboard, house × party heatmap, pollster card, timeline) | T-025, T-031 |
+| T-030 | Prototype dashboard on real data (leaderboard, house × party heatmap, pollster card, timeline), **applying the post-mock-up decisions**: 28-day window, balanced card lead, provisional grades, notices for post-vote and unverified polls | T-025, T-031 |
 | T-031 | UX concept & design references (storyboards, wireframes, visual language) in [docs/ux/](ux/); mock-ups at [docs/ux/mockups/index.html](ux/mockups/index.html) | none: **can start now** |
 
 **Milestone M3:** the owner can explore every metric visually, through the UX

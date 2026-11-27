@@ -11,6 +11,8 @@ mainly to keep work traceable and conflict-free.
 3. Your task file in [tasks/](tasks/). Its scope and acceptance criteria are your contract
 4. [docs/METHODOLOGY.md](docs/METHODOLOGY.md) if you touch any calculation
 5. Any ADR in [docs/decisions/](docs/decisions/) referenced by your task
+6. **If you are the coordinator** (you assign tasks, review, and open PRs):
+   [docs/COORDINATOR.md](docs/COORDINATOR.md)
 
 ## 2. Language
 

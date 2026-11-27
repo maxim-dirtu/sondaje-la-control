@@ -29,6 +29,7 @@ public**. It is not a poll aggregator; see
 |---|---|
 | [AGENTS.md](AGENTS.md) | **Start here.** Working rules for humans and AI agents |
 | [docs/PLAN.md](docs/PLAN.md) | Roadmap: phases, milestones, task index |
+| [docs/COORDINATOR.md](docs/COORDINATOR.md) | Playbook for whoever coordinates: the task loop, owner preferences, tooling notes |
 | [docs/METHODOLOGY.md](docs/METHODOLOGY.md) | Specification of every metric (stable section IDs `M-x.y`) |
 | [docs/IDEAS.md](docs/IDEAS.md) | Idea log (`I-xxx`), promoted to tasks or ADRs |
 | [docs/decisions/](docs/decisions/) | Architecture/Product Decision Records (`ADR-xxxx`) |
