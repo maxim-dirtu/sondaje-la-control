@@ -1,7 +1,7 @@
 ---
 id: T-022
 title: Relative house effect and relative accuracy
-status: review
+status: done
 phase: 2
 depends_on: [T-021]
 owner: github-copilot-cli
