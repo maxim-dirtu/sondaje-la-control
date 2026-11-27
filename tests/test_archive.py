@@ -4,6 +4,8 @@ import datetime as dt
 import gzip
 import hashlib
 import io
+import urllib.error
+from email.message import Message
 from pathlib import Path
 
 import pytest
@@ -33,15 +35,19 @@ LOOKUP = (
 
 
 class FakeWeb:
-    """Answers requests from a URL → response (or exception) table and records them."""
+    """Answers requests from a URL → response (or exception) table and records them.
 
-    def __init__(self, routes: dict[str, Response | Exception]) -> None:
+    A list is a sequence of answers, one per request (the last one repeats)."""
+
+    def __init__(self, routes: dict[str, Response | Exception | list[Response | Exception]]):
         self.routes = routes
         self.calls: list[str] = []
 
     def __call__(self, url: str, timeout: float) -> Response:
         self.calls.append(url)
         answer = self.routes.get(url, OSError(f"no route for {url}"))
+        if isinstance(answer, list):
+            answer = answer.pop(0) if len(answer) > 1 else answer[0]
         if isinstance(answer, Exception):
             raise answer
         return answer
@@ -84,6 +90,7 @@ def request(data_dir: Path, **changes: object) -> ArchiveRequest:
         "data_dir": data_dir,
         "source_type": "pollster",
         "title": "Barometru, mai 2099",
+        "retries": 0,
     }
     values.update(changes)
     return ArchiveRequest(**values)  # type: ignore[arg-type]
@@ -224,6 +231,55 @@ def test_gzip_snapshot_with_other_bytes_and_broken_gzip_are_different(
     result = archive(request(data_dir), web, TODAY)
     assert result.snapshot_check is not None
     assert result.snapshot_check.startswith("DIFFERENT")
+
+
+def http_error(code: int) -> urllib.error.HTTPError:
+    return urllib.error.HTTPError("https://x.org", code, f"HTTP {code}", Message(), None)
+
+
+def test_save_page_now_rate_limit_is_retried_with_backoff(data_dir: Path) -> None:
+    web = happy_web()
+    web.routes[SAVE] = [http_error(429), OSError("connection refused"), Response(SNAPSHOT, b"")]
+    waits: list[float] = []
+    result = archive(request(data_dir, retries=2), web, TODAY, sleep=waits.append)
+    assert result.archive_url == SNAPSHOT
+    assert result.attempts[0].startswith("Save Page Now returned a snapshot")
+    assert web.calls == [URL, SAVE, SAVE, SAVE, RAW_SNAPSHOT]
+    assert waits == [10.0, 20.0]
+
+
+def test_retries_are_limited_and_the_check_failure_is_explicit(data_dir: Path) -> None:
+    web = happy_web()
+    web.routes[RAW_SNAPSHOT] = ConnectionRefusedError("[WinError 10061] refused")
+    waits: list[float] = []
+    result = archive(request(data_dir, retries=1), web, TODAY, sleep=waits.append)
+    assert web.calls.count(RAW_SNAPSHOT) == 2
+    assert waits == [10.0]
+    assert result.snapshot_check is not None
+    assert result.snapshot_check.startswith("NOT CHECKED")
+    assert "WinError 10061" in result.snapshot_check
+    assert manifest(data_dir)[0]["archive_url"] == SNAPSHOT
+
+
+@pytest.mark.parametrize("error", [http_error(403), http_error(404), ValueError("bad URL")])
+def test_permanent_failures_are_not_retried(data_dir: Path, error: Exception) -> None:
+    web = FakeWeb({URL: error})
+    with pytest.raises(ArchiveError, match="download failed"):
+        archive(request(data_dir, retries=3), web, TODAY, sleep=pytest.fail)
+    assert web.calls == [URL]
+
+
+def test_download_is_retried_after_a_server_error(data_dir: Path) -> None:
+    web = happy_web()
+    web.routes[URL] = [http_error(503), Response(URL, PAGE)]
+    result = archive(request(data_dir, retries=1), web, TODAY, sleep=lambda _: None)
+    assert result.status == "new"
+    assert web.calls[:2] == [URL, URL]
+
+
+def test_negative_retries_are_rejected(data_dir: Path) -> None:
+    with pytest.raises(ArchiveError, match="--retries"):
+        archive(request(data_dir, retries=-1), happy_web(), TODAY)
 
 
 def test_publication_must_be_in_the_inventory(data_dir: Path) -> None:

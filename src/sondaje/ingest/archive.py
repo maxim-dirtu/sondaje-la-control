@@ -93,6 +93,35 @@ def http_fetch(url: str, timeout: float) -> Response:
         return Response(response.geturl(), response.read(), dict(response.headers.items()))
 
 
+DEFAULT_RETRIES = 2
+RETRY_BASE_DELAY = 10.0
+"""Seconds before the first retry; the wait doubles with each further retry."""
+
+
+def is_retriable(exc: Exception) -> bool:
+    """Rate limiting (HTTP 429), server errors, refused or dropped connections and timeouts are
+    worth another try; a bad URL or another client error (403, 404, ...) is not."""
+    if isinstance(exc, urllib.error.HTTPError):
+        return exc.code == 429 or exc.code >= 500
+    return not isinstance(exc, ValueError)
+
+
+def retrying(fetch: Fetcher, retries: int, sleep: Callable[[float], None] = time.sleep) -> Fetcher:
+    """``fetch`` that retries a retriable failure up to ``retries`` times, with backoff."""
+
+    def fetch_with_retries(url: str, timeout: float) -> Response:
+        for attempt in range(retries + 1):
+            try:
+                return fetch(url, timeout)
+            except FETCH_ERRORS as exc:
+                if attempt >= retries or not is_retriable(exc):
+                    raise
+                sleep(RETRY_BASE_DELAY * 2**attempt)
+        raise AssertionError("unreachable")
+
+    return fetch_with_retries
+
+
 # --- Format detection ---------------------------------------------------------------------------
 
 
@@ -248,7 +277,10 @@ def check_snapshot(snapshot: str, sha256: str, fetch: Fetcher) -> str:
     try:
         content = fetch(f"https://web.archive.org/web/{timestamp}id_/{archived}", SAVE_TIMEOUT)
     except FETCH_ERRORS as exc:
-        return f"not checked (snapshot download failed: {exc})"
+        return (
+            f"NOT CHECKED: the snapshot download failed ({exc}). The snapshot is unverified: "
+            "open it and compare by hand, or run the same command again to repeat the check"
+        )
     if hashlib.sha256(content.content).hexdigest() == sha256:
         return "identical: the snapshot has the same bytes as the download"
     if _gunzipped_sha256(content.content) == sha256:
@@ -279,6 +311,8 @@ class ArchiveRequest:
     save: bool = True
     check: bool = True
     file: Path | None = None
+    retries: int = DEFAULT_RETRIES
+    """Retries of a download or Web Archive request that failed in a retriable way."""
 
 
 @dataclass
@@ -320,6 +354,8 @@ def _check_request(request: ArchiveRequest) -> None:
             ok = False
         if not ok:
             raise ArchiveError(f"--published-date must be YYYY-MM-DD: {request.published_date!r}")
+    if request.retries < 0:
+        raise ArchiveError("--retries must be 0 or more")
     if request.archive_url is not None and not URL_RE.match(request.archive_url):
         raise ArchiveError(f"--archive-url is not an absolute http(s) URL: {request.archive_url!r}")
 
@@ -334,10 +370,11 @@ def archive(
     request: ArchiveRequest,
     fetch: Fetcher | None = None,
     today: dt.date | None = None,
+    sleep: Callable[[float], None] = time.sleep,
 ) -> ArchiveResult:
     """Archive one publication (see the module docstring). Raises :class:`ArchiveError`."""
     _check_request(request)
-    fetch = fetch or http_fetch
+    fetch = retrying(fetch or http_fetch, request.retries, sleep)
     today = today or dt.date.today()
     directory = request.data_dir / "polls" / request.pollster_id
     manifest_path = directory / ARCHIVE_MANIFEST.filename
@@ -507,6 +544,16 @@ def register(subparsers: "Subparsers") -> None:
         "--file", type=Path, help="use this local copy instead of downloading (saved by hand)"
     )
     parser.add_argument(
+        "--retries",
+        type=int,
+        default=DEFAULT_RETRIES,
+        help=(
+            "retries (waits of 10 s, 20 s, ...) for a download or Web Archive request that "
+            "fails with HTTP 429, a server error, a refused connection or a timeout "
+            f"(default: {DEFAULT_RETRIES})"
+        ),
+    )
+    parser.add_argument(
         "--data-dir", type=Path, default=Path("data"), help="data directory (default: data)"
     )
     parser.set_defaults(handler=run)
@@ -546,6 +593,7 @@ def run(args: argparse.Namespace) -> int:
         save=not args.no_save,
         check=not args.no_check,
         file=args.file,
+        retries=args.retries,
     )
     try:
         result = archive(request)
