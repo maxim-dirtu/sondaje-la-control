@@ -458,6 +458,9 @@ T-020 task Log.
 
 | Parameter | Default | Section | Calibrated by |
 |---|---|---|---|
+| `share_base_priority` | expressed_option, all_respondents, likely_voters, other_subset | M-1.1 | T-025 (sensitivity: the other order) |
+| `lt_fraction` | 0.5 | M-1.1 | T-025 (incl. 0 and 1) |
+| `zero_floor` | none | M-2.7 | T-025 |
 | `window_days` | 28 | M-1.3 | T-025 sensitivity analysis (incl. 21 and 35 days) |
 | `tau` | 7 | M-1.3 | T-025 |
 | `small_party_threshold` | 1% | M-1.2 | T-025 |
