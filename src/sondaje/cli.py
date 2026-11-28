@@ -30,6 +30,7 @@ from sondaje.metrics.errors import register as register_errors
 from sondaje.metrics.market import register as register_market
 from sondaje.metrics.relative import register as register_relative
 from sondaje.prep import register as register_prep
+from sondaje.stats.significance import register as register_significance
 from sondaje.validation.command import register as register_validate
 
 type Subparsers = argparse._SubParsersAction[argparse.ArgumentParser]
@@ -47,6 +48,7 @@ COMMANDS: list[Registrar] = [
     register_errors,
     register_market,
     register_relative,
+    register_significance,
 ]
 """Registrars for every subcommand, in the order they appear in ``--help``."""
 
