@@ -1,7 +1,7 @@
 ---
 id: T-024
 title: Significance tests
-status: review
+status: done
 phase: 2
 depends_on: [T-022]
 owner: claude-opus (github-copilot-cli)
