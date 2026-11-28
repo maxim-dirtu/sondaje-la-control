@@ -140,6 +140,10 @@ command from the repository root (or your worktree root).
 | Apply formatting | `uv run ruff format .` |
 | CLI help | `uv run sondaje --help` |
 | Validate all data in `data/` | `uv run sondaje validate` (add `--against main` to also check that registries are append-only; `--strict` makes warnings fail) |
+| Prepare the data (M-1) | `uv run sondaje prep` (`--output build/prep` writes the CSVs) |
+| Error metrics (M-2.1 to M-2.4) | `uv run sondaje errors` (`--output build/errors`; `--zero-floor f` for the log-odds sensitivity) |
+| Relative house effect and accuracy (M-2.5, M-2.6) | `uv run sondaje relative` (`--output build/relative`; `--weighting recency\|equal`) |
+| Market average and campaign house effect (M-3.1, M-3.2) | `uv run sondaje market` (`--output build/m3`) |
 | Archive a poll publication (download, SHA-256, Web Archive snapshot, manifest + inventory) | `uv run sondaje archive --pollster <id> <url>` |
 | Draft poll results from a text PDF / an HTML page (always reviewed before use) | `uv run sondaje extract-pdf ...` / `uv run sondaje extract-html ...` |
 | Render PDF pages to PNG for double entry | `uv run sondaje render-pdf ...` |

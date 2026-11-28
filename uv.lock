@@ -678,6 +678,7 @@ name = "sondaje"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "numpy" },
     { name = "pandas" },
     { name = "pdfplumber" },
     { name = "pypdf" },
@@ -691,6 +692,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "numpy", specifier = ">=2.5.5" },
     { name = "pandas", specifier = ">=3.1.1" },
     { name = "pdfplumber", specifier = ">=0.11.11" },
     { name = "pypdf", specifier = ">=7.1.1" },
