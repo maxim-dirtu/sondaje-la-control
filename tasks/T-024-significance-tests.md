@@ -1,14 +1,14 @@
 ---
 id: T-024
 title: Significance tests
-status: todo
+status: in-progress
 phase: 2
 depends_on: [T-022]
-owner: null
-branch: null
+owner: claude-opus (github-copilot-cli)
+branch: task/T-024-significance-tests
 methodology: [M-4.1, M-4.2, M-4.3]
 created: 2026-11-22
-updated: 2026-11-22
+updated: 2026-11-28
 ---
 
 ## Goal
